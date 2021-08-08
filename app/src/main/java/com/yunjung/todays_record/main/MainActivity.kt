@@ -1,0 +1,43 @@
+package com.yunjung.todays_record.main
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.View
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import com.yunjung.todays_record.MainViewModel
+import com.yunjung.todays_record.R
+import com.yunjung.todays_record.databinding.ActivityMainBinding
+import com.yunjung.todays_record.studio.StudioFragment
+import androidx.appcompat.app.ActionBar as ActionBar1
+
+class MainActivity : AppCompatActivity(), View.OnClickListener {
+    // 데이터 바인딩 + 뷰모델(라이브 데이터 포함)
+    private lateinit var binding : ActivityMainBinding
+    lateinit var mainViewModel: MainViewModel
+    // 프래그먼트
+    private lateinit var studioFragment: StudioFragment
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)// binding 객체의 레이아웃 지정
+
+        // 현재의 액티비티를 라이프사이클의 오너로 명시
+        // (라이프 사이클을 감시하며 변화를 binding 객체에 적용할 수 있다.)
+        binding.lifecycleOwner = this
+        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        // 넘겨준 testViewModel이 binding객체의 레이아웃으로 넘어감
+        binding.viewModel = mainViewModel
+
+        //
+        binding.moveStudioMain.setOnClickListener(this)
+    }
+
+    override fun onClick(view: View?) {
+        studioFragment = StudioFragment.newIstance()
+        supportFragmentManager.beginTransaction().add(R.id.fragment_frame, studioFragment).commit()
+    }
+}
+

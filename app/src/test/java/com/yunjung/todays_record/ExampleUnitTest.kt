@@ -1,4 +1,4 @@
-package com.yunjung.record
+package com.yunjung.todays_record
 
 import org.junit.Test
 
