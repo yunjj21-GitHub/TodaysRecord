@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
 
         android:layout_width="match_parent"
-        android:layout_height="767dp"
+        android:layout_height="match_parent"
         android:background="@color/white"
         tools:context="com.yunjung.todays_record.main.MainActivity">
 
@@ -55,43 +55,50 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/moveStudioMain"
-            android:layout_width="160dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="40dp"
-            android:background="@drawable/main_button"
-            android:fontFamily="@font/spring"
-            android:text="사진관\n찾기"
-            android:textColor="#FFFFFF"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/moveBoothMain"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/moveBoothMain"
-            android:layout_width="160dp"
-            android:layout_height="40dp"
-            android:background="@drawable/main_button"
-            android:fontFamily="@font/spring"
-            android:text="사진부스\n찾기"
-            android:textColor="#FFFFFF"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/moveStudioMain"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/moveStudioMain"
-            app:layout_constraintTop_toTopOf="@+id/moveStudioMain" />
-
         <FrameLayout
             android:id="@+id/fragment_frame"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/moveStudioMain"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
-            tools:visibility="visible" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout3"
+            tools:visibility="visible">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/moveStudioMain"
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginTop="55dp"
+                    android:background="@drawable/main_button"
+                    android:fontFamily="@font/spring"
+                    android:text="사진관\n찾기"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/moveBoothMain"
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginRight="45dp"
+                    android:background="@drawable/main_button"
+                    android:fontFamily="@font/spring"
+                    android:text="사진부스\n찾기"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/moveStudioMain"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/moveStudioMain" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

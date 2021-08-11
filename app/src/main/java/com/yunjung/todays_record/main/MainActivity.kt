@@ -11,7 +11,7 @@ import com.yunjung.todays_record.databinding.ActivityMainBinding
 import com.yunjung.todays_record.studio.StudioFragment
 import androidx.appcompat.app.ActionBar as ActionBar1
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity(){
     // 데이터 바인딩 + 뷰모델(라이브 데이터 포함)
     private lateinit var binding : ActivityMainBinding
     lateinit var mainViewModel: MainViewModel
@@ -31,13 +31,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         // 넘겨준 testViewModel이 binding객체의 레이아웃으로 넘어감
         binding.viewModel = mainViewModel
 
-        //
-        binding.moveStudioMain.setOnClickListener(this)
-    }
-
-    override fun onClick(view: View?) {
-        studioFragment = StudioFragment.newIstance()
-        supportFragmentManager.beginTransaction().add(R.id.fragment_frame, studioFragment).commit()
+        binding.moveStudioMain.setOnClickListener {
+            studioFragment = StudioFragment.newIstance()
+            supportFragmentManager.beginTransaction().add(R.id.fragment_frame, studioFragment)
+                .commit()
+        }
     }
 }
 
