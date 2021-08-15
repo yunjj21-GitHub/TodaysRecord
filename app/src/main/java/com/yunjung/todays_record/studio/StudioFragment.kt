@@ -10,13 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todays_record.R
-import com.yunjung.todays_record.models.PhotoStudio
 import com.yunjung.todays_record.databinding.FragmentStudioBinding
 import com.yunjung.todays_record.recyclerview.RecyclerAdapter
 
 class StudioFragment : Fragment() {
     lateinit var binding : FragmentStudioBinding
-    var viewModel = ViewModelProvider(this).get(StudioViewModel::class.java)
+    lateinit var viewModel : StudioViewModel
 
     // 자기 자신의 인스턴스를 반환하는 메소드 (companion object : 동반자 객체)
     companion object{
@@ -36,9 +35,11 @@ class StudioFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this).get(StudioViewModel::class.java)
         binding.viewModel = viewModel
 
         initRecycler()
+        subscribeStudioList()
     }
 
     private fun initRecycler(){
@@ -48,7 +49,7 @@ class StudioFragment : Fragment() {
 
     private fun subscribeStudioList() {
         viewModel.photoStudioList.observe(viewLifecycleOwner, {
-            // (binding.recyclerViewStudio.adapter as RecyclerAdapter).submitList(it)
+            (binding.recyclerViewStudio.adapter as RecyclerAdapter).submitList(it)
         })
     }
 }
