@@ -8,6 +8,7 @@
             type="com.yunjung.todays_record.models.PhotoStudio" />
     </data>
     <androidx.cardview.widget.CardView
+        android:id="@+id/item_studio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -16,65 +17,41 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/studio_image"
+                android:id="@+id/studioImageView"
                 android:layout_width="100dp"
                 android:layout_height="120dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:background="#BABABA"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/avatars" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/studio_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:text="@{item.name}"
                 android:textColor="#000000"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/studio_image"
-                app:layout_constraintTop_toTopOf="@+id/studio_image" />
+                app:layout_constraintStart_toEndOf="@+id/studioImageView"
+                app:layout_constraintTop_toTopOf="@+id/studioImageView" />
 
             <TextView
                 android:id="@+id/cost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:text="@{item.cost}"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@{item.cost.toString()}"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/address"
-                app:layout_constraintStart_toEndOf="@+id/studio_image"
+                app:layout_constraintStart_toEndOf="@+id/studioImageView"
                 app:layout_constraintTop_toBottomOf="@+id/studio_name" />
-
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="@{item.address}"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/studio_image"
-                app:layout_constraintStart_toEndOf="@+id/studio_image" />
-
-            <View
-                android:id="@+id/divider14"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/studio_image" />
 
             <TextView
                 android:id="@+id/textView39"
@@ -87,6 +64,29 @@
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@+id/cost"
                 app:layout_constraintTop_toTopOf="@+id/cost" />
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@{item.address}"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/studioImageView"
+                app:layout_constraintTop_toBottomOf="@+id/cost" />
+
+            <View
+                android:id="@+id/divider14"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/studioImageView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>
