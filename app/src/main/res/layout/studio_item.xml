@@ -35,7 +35,7 @@
                 android:layout_marginLeft="8dp"
                 android:text="@{item.name}"
                 android:textColor="#000000"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/studioImageView"
                 app:layout_constraintTop_toTopOf="@+id/studioImageView" />
@@ -48,8 +48,9 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@{item.cost.toString()}"
-                android:textColor="#000000"
-                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#F44336"
+                android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/studioImageView"
                 app:layout_constraintTop_toBottomOf="@+id/studio_name" />
 
@@ -57,11 +58,10 @@
                 android:id="@+id/textView39"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp"
                 android:text="원"
-                android:textColor="#000000"
-                android:textSize="16sp"
+                android:textColor="#F44336"
+                android:textSize="14sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/cost"
                 app:layout_constraintTop_toTopOf="@+id/cost" />
 
@@ -69,13 +69,11 @@
                 android:id="@+id/address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@{item.address}"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/studioImageView"
+                android:textColor="#393939"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/cost"
                 app:layout_constraintTop_toBottomOf="@+id/cost" />
 
             <View
@@ -87,6 +85,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/studioImageView" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@{item.hashtag}"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/address"
+                app:layout_constraintTop_toBottomOf="@+id/address" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

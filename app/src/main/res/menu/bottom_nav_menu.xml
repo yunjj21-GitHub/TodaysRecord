@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="사진관찾기"
+        android:id="@+id/studio"
+        android:icon="@drawable/ic_studio_empty"/>
+    <item
+        android:title="사진부스찾기"
+        android:id="@+id/booth"
+        android:icon="@drawable/ic_booth_empty"/>
+    <item
+        android:title="나의기록"
+        android:id="@+id/myPage"
+        android:icon="@drawable/ic_mypage_empty"/>
+</menu>

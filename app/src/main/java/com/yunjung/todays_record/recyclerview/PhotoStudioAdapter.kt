@@ -16,7 +16,6 @@ class PhotoStudioAdapter :
     ListAdapter<PhotoStudio, PhotoStudioAdapter.PhotoStudioViewHolder>(PhotoStudioDiff){
     lateinit var binding : StudioItemBinding // 카드뷰를 포함한 레이아웃의 바인딩 객체
     lateinit var layoutInflater : LayoutInflater
-    private var mainActivity = MainActivity()
 
     // 뷰홀더 정의
     class PhotoStudioViewHolder(private val binding : StudioItemBinding) :
@@ -24,8 +23,9 @@ class PhotoStudioAdapter :
 
         // 초기화
         fun initBinding(photoStudio: PhotoStudio) {
-            binding.item = photoStudio // photoStudio가 binding객페의 레이아웃의 item변수로 넘어감
-            /* studioImageView 설정
+            binding.item = photoStudio // photoStudio가 binding객체의 레이아웃의 item변수로 넘어감
+
+        /* studioImageView 설정
             if(photoStudio.image != null){
                 binding.studioImageView.setImageResource(photoStudio.image!!) // !!연산자 : Null이 값으로 들어오면 exception을 발생
             }else{
@@ -48,10 +48,6 @@ class PhotoStudioAdapter :
         // position : 해당 뷰홀더가 리사이클러뷰에서 보여지는 위치 정보를 가지고 있음
         // getItem(position) : 위치에 해당하는 데이터를 가져옴
         holder.initBinding(getItem(position))
-
-        holder.itemView.setOnClickListener {
-            mainActivity.setDetailFragment()
-        }
     }
 }
 
