@@ -7,8 +7,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.yunjung.todays_record.R
 import com.yunjung.todays_record.databinding.FragmentDetailBinding
+import com.yunjung.todays_record.information.InformationFragment
+import com.yunjung.todays_record.review.ReviewFragment
+import com.yunjung.todays_record.viewpager.ViewpagerAdapter
 
 class DetailFragment : Fragment(){
     lateinit var binding : FragmentDetailBinding
@@ -38,6 +43,7 @@ class DetailFragment : Fragment(){
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         binding.viewModel = viewModel
 
+        // 찜 버튼 클릭 이벤트 설정
         binding.heartBtn.setOnClickListener {
             if(heartState == false) {
                 binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
@@ -47,5 +53,25 @@ class DetailFragment : Fragment(){
                 heartState = false
             }
         }
+
+        // 뷰페이저 적용
+        val pagerAdapter = ViewpagerAdapter(requireActivity())
+
+        pagerAdapter.addFragment(InformationFragment())
+        pagerAdapter.addFragment(ReviewFragment())
+
+        binding.viewPager.adapter = pagerAdapter
+
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+            }
+        })
+
+        // (뷰페이저 관련) TabLayout attach
+        TabLayoutMediator(binding.tabLayout, binding.viewPager){ tab, position ->
+            if(position == 0) tab.text = "상세정보"
+            else tab.text = "리뷰"
+        }.attach()
     }
 }
