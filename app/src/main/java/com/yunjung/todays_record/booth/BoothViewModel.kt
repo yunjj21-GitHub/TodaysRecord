@@ -1,10 +1,10 @@
-package com.yunjung.todays_record.mypage
+package com.yunjung.todays_record.booth
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class MypageViewModel  : ViewModel() {
+class BoothViewModel : ViewModel() {
     // 수정 가능한 라이브 데이터 (클래스 내부에서만 사용), 초기화 값 0
     private val _cur = MutableLiveData<Int>(0)
 

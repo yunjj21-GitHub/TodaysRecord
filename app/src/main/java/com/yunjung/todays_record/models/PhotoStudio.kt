@@ -5,5 +5,4 @@ package com.yunjung.todays_record.models
 data class PhotoStudio (var _id : Int? = null,
                         var name : String? = null,
                         var address : String? = null,
-                        var cost : Int? = null,
-                        var hashtag : String? = null)
+                        var cost : Int? = null)

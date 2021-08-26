@@ -13,6 +13,7 @@ import com.yunjung.todays_record.databinding.FragmentDetailBinding
 class DetailFragment : Fragment(){
     lateinit var binding : FragmentDetailBinding
     lateinit var viewModel: DetailViewModel
+    var heartState : Boolean = false
 
     companion object{
         fun newInstance() : DetailFragment{
@@ -36,5 +37,15 @@ class DetailFragment : Fragment(){
 
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         binding.viewModel = viewModel
+
+        binding.heartBtn.setOnClickListener {
+            if(heartState == false) {
+                binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
+                heartState = true
+            }else{
+                binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
+                heartState = false
+            }
+        }
     }
 }

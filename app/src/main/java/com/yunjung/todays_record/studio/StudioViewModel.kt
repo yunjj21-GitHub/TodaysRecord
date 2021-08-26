@@ -30,38 +30,38 @@ class StudioViewModel : ViewModel() {
     private val otherTempList = ArrayList<PhotoStudio>()
     init {
         // 증명사진 사진관 리스트
-        idenTempList.add(PhotoStudio(1,"태양 사진관", "권선구 탑동 9-21 202호",15000, "#깔끔한 #단정한 #맑은"))
-        idenTempList.add(PhotoStudio(2,"새로나 스튜디오", "영통구 매탄동 77-5", 8000, "#저렴한 #이력서사진 #취업"))
-        idenTempList.add(PhotoStudio(3,"오디션 사진관", "팔달구 인계동 65-2 (시청역 부근)",12000, "#자연스러운 #빠른"))
-        idenTempList.add(PhotoStudio(4,"시현하다", "팔달구 화서동 41-11번지 3층", 10000, "#개성있는 #자연스러운 #당일예약"))
-        idenTempList.add(PhotoStudio(5,"smile photo studio", "장안구 정자동 35-4 골드빌딩 101호", 5000, "#키치한 #자연스러운"))
+        idenTempList.add(PhotoStudio(1,"태양 사진관", "권선구 탑동 9-21 202호",15000))
+        idenTempList.add(PhotoStudio(2,"새로나 스튜디오", "영통구 매탄동 77-5", 8000))
+        idenTempList.add(PhotoStudio(3,"오디션 사진관", "팔달구 인계동 65-2 (시청역 부근)",12000))
+        idenTempList.add(PhotoStudio(4,"시현하다", "팔달구 화서동 41-11번지 3층", 10000))
+        idenTempList.add(PhotoStudio(5,"smile photo studio", "장안구 정자동 35-4 골드빌딩 101호", 5000))
 
         _idenStdioList.value = idenTempList
 
         // 프로필사진 사진관 리스트
-        profileTempList.add(PhotoStudio(1,"프로필 잘 찍는곳", "권선구 탑동 9-21 202호",15000, "#깔끔한 #단정한 #맑은"))
-        profileTempList.add(PhotoStudio(2,"태양 사진관", "영통구 매탄동 77-5", 8000, "#저렴한 #이력서사진 #취업"))
-        profileTempList.add(PhotoStudio(3,"스타 프로필", "팔달구 인계동 65-2 (시청역 부근)",12000, "#자연스러운 #빠른"))
-        profileTempList.add(PhotoStudio(4,"안녕 스튜디오", "팔달구 화서동 41-11번지 3층", 10000, "#개성있는 #자연스러운 #당일예약"))
-        profileTempList.add(PhotoStudio(5,"선명한 사진관", "장안구 정자동 35-4 골드빌딩 101호", 5000, "#키치한 #자연스러운"))
+        profileTempList.add(PhotoStudio(1,"프로필 잘 찍는곳", "권선구 탑동 9-21 202호",15000))
+        profileTempList.add(PhotoStudio(2,"태양 사진관", "영통구 매탄동 77-5", 8000))
+        profileTempList.add(PhotoStudio(3,"스타 프로필", "팔달구 인계동 65-2 (시청역 부근)",12000))
+        profileTempList.add(PhotoStudio(4,"안녕 스튜디오", "팔달구 화서동 41-11번지 3층", 10000))
+        profileTempList.add(PhotoStudio(5,"선명한 사진관", "장안구 정자동 35-4 골드빌딩 101호", 5000))
 
         _profileStudioList.value = profileTempList
 
         // 2인 이상 사진 사진관 리스트
-        moreTempList.add(PhotoStudio(1,"가족 사진관", "권선구 탑동 9-21 202호",15000, "#깔끔한 #단정한 #맑은"))
-        moreTempList.add(PhotoStudio(2,"사랑이야기", "영통구 매탄동 77-5", 8000, "#저렴한 #이력서사진 #취업"))
-        moreTempList.add(PhotoStudio(3,"오르골 사진관", "팔달구 인계동 65-2 (시청역 부근)",12000, "#자연스러운 #빠른"))
-        moreTempList.add(PhotoStudio(4,"찰칵 스튜디오", "팔달구 화서동 41-11번지 3층", 10000, "#개성있는 #자연스러운 #당일예약"))
-        moreTempList.add(PhotoStudio(5,"마리오 스튜디오", "장안구 정자동 35-4 골드빌딩 101호", 5000, "#키치한 #자연스러운"))
+        moreTempList.add(PhotoStudio(1,"가족 사진관", "권선구 탑동 9-21 202호",15000))
+        moreTempList.add(PhotoStudio(2,"사랑이야기", "영통구 매탄동 77-5", 8000))
+        moreTempList.add(PhotoStudio(3,"오르골 사진관", "팔달구 인계동 65-2 (시청역 부근)",12000))
+        moreTempList.add(PhotoStudio(4,"찰칵 스튜디오", "팔달구 화서동 41-11번지 3층", 10000))
+        moreTempList.add(PhotoStudio(5,"마리오 스튜디오", "장안구 정자동 35-4 골드빌딩 101호", 5000))
 
         _moreStudioList.value = moreTempList
 
         // 기타 사진 사진관
-        otherTempList.add(PhotoStudio(1,"철수 스냅샷", "권선구 탑동 9-21 202호",15000, "#깔끔한 #단정한 #맑은"))
-        otherTempList.add(PhotoStudio(2,"영희 스냅샷", "영통구 매탄동 77-5", 8000, "#저렴한 #이력서사진 #취업"))
-        otherTempList.add(PhotoStudio(3,"유영 스튜디오", "팔달구 인계동 65-2 (시청역 부근)",12000, "#자연스러운 #빠른"))
-        otherTempList.add(PhotoStudio(4,"보름달 사진관", "팔달구 화서동 41-11번지 3층", 10000, "#개성있는 #자연스러운 #당일예약"))
-        otherTempList.add(PhotoStudio(5,"lol 스튜디오", "장안구 정자동 35-4 골드빌딩 101호", 5000, "#키치한 #자연스러운"))
+        otherTempList.add(PhotoStudio(1,"철수 스냅샷", "권선구 탑동 9-21 202호",15000))
+        otherTempList.add(PhotoStudio(2,"영희 스냅샷", "영통구 매탄동 77-5", 8000))
+        otherTempList.add(PhotoStudio(3,"유영 스튜디오", "팔달구 인계동 65-2 (시청역 부근)",12000))
+        otherTempList.add(PhotoStudio(4,"보름달 사진관", "팔달구 화서동 41-11번지 3층", 10000))
+        otherTempList.add(PhotoStudio(5,"lol 스튜디오", "장안구 정자동 35-4 골드빌딩 101호", 5000))
 
         _otherStudioList.value = otherTempList
     }

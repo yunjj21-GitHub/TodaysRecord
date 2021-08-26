@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/studioFragment">
+
+    <fragment
+        android:id="@+id/studioFragment"
+        android:name="com.yunjung.todays_record.studio.StudioFragment"
+        android:label="StudioFragment"
+        tools:layout="@layout/fragment_studio" >
+        <action
+            android:id="@+id/action_studioFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.yunjung.todays_record.detail.DetailFragment"
+        android:label="detailFragment"
+        tools:layout="@layout/fragment_detail" />
+
+    <fragment
+        android:id="@+id/mypageFragment"
+        android:name="com.yunjung.todays_record.mypage.MypageFragment"
+        android:label="MypageFragment"
+        tools:layout="@layout/fragment_mypage" />
+
+    <fragment
+        android:id="@+id/boothFragment"
+        android:name="com.yunjung.todays_record.booth.BoothFragment"
+        android:label="BoothFragment" />
+
+    <action android:id="@+id/action_global_studioFragment" app:destination="@id/studioFragment"/>
+    <action android:id="@+id/action_global_boothFragment" app:destination="@id/boothFragment" />
+    <action android:id="@+id/action_global_mypageFragment" app:destination="@id/mypageFragment"/>
 
 </navigation>

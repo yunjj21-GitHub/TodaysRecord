@@ -1,4 +1,4 @@
-package com.yunjung.todays_record.mypage
+package com.yunjung.todays_record.booth
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,15 +8,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.yunjung.todays_record.R
-import com.yunjung.todays_record.databinding.FragmentMypageBinding
+import com.yunjung.todays_record.databinding.FragmentBoothBinding
 
-class MypageFragment : Fragment(){
-    lateinit var binding : FragmentMypageBinding
-    lateinit var viewModel: MypageViewModel
+class BoothFragment : Fragment(){
+    lateinit var binding : FragmentBoothBinding
+    lateinit var viewModel: BoothViewModel
 
     companion object{
-        fun newInstance() : MypageFragment {
-            return MypageFragment()
+        fun newInstance() : BoothViewModel{
+            return BoothViewModel()
         }
     }
 
@@ -26,7 +26,7 @@ class MypageFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mypage, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_booth, container, false)
         return binding.root
     }
 
@@ -34,7 +34,7 @@ class MypageFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(MypageViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(BoothViewModel::class.java)
         binding.viewModel = viewModel
     }
 }

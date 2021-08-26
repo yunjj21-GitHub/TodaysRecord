@@ -4,27 +4,26 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.yunjung.todays_record.MainViewModel
 import com.yunjung.todays_record.R
 import com.yunjung.todays_record.databinding.ActivityMainBinding
-import com.yunjung.todays_record.detail.DetailFragment
-import com.yunjung.todays_record.mypage.MyPageFragment
-import com.yunjung.todays_record.recyclerview.PhotoStudioAdapter
-import com.yunjung.todays_record.studio.StudioFragment
 
 class MainActivity : AppCompatActivity(){
     // 데이터 바인딩 + 뷰모델(라이브 데이터 포함)
     private lateinit var binding : ActivityMainBinding
     lateinit var mainViewModel: MainViewModel
-    // 프래그먼트
-    private lateinit var studioFragment: StudioFragment
-    private lateinit var myPageFragment: MyPageFragment
+
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    lateinit var host : NavHostFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        // 데이터 바인딩 & 뷰모델
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)// binding 객체의 레이아웃 지정
 
         // 현재의 액티비티를 라이프사이클의 오너로 명시
@@ -35,11 +34,69 @@ class MainActivity : AppCompatActivity(){
         // 넘겨준 mainViewModel binding객체의 레이아웃으로 넘어감
         binding.viewModel = mainViewModel
 
-        // 기본 프래그먼트 설정
-        studioFragment = StudioFragment.newInstance()
-        supportFragmentManager.beginTransaction().add(R.id.nav_host_fragment, studioFragment).commit()
+        // 툴바 설정
+        val toolbar = binding.toolbar
+        setSupportActionBar(toolbar) // 해당 액티비티의 앱바로 설정
+        supportActionBar?.setDisplayShowTitleEnabled(false) // 액션바에서 타이틀을 숨김
 
-        // bottom navigation menu 이벤트 설정
+        // 프래그먼트의 host를 지정
+        host = supportFragmentManager
+            .findFragmentById(R.id.fragment_frame) as NavHostFragment? ?: return
 
+        val navController = host.navController // navController : NavHost에서 App Navigation을 관리하는 객체
+
+        appBarConfiguration = AppBarConfiguration(navController.graph) // appBar에게 graph에 대한 정보를 전달
+
+        setupActionBar(navController, appBarConfiguration)
+
+        setupBottomNavMenu(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            // back button icon 설정
+            if(destination.id != R.id.studioFragment){
+                binding.toolbar.setNavigationIcon(R.drawable.ic_back)
+            }
+
+            // Toolbar title 설정
+            if(destination.id == R.id.mypageFragment){
+                binding.title.text = "나의 기록"
+            }
+            else{
+                binding.title.text = "오늘의 기록"
+            }
+        }
+    }
+
+    // bottom navigation button 움직임 설정
+    private fun setupBottomNavMenu(navController: NavController) {
+        val bottomNav = binding.bottomNavigation
+
+        bottomNav?.setupWithNavController(navController)
+
+        bottomNav.setOnItemSelectedListener { menuItem ->
+            when(menuItem.itemId) {
+                R.id.studio->{
+                    navController.navigate(R.id.action_global_studioFragment)
+                }
+                R.id.booth -> {
+                    navController.navigate(R.id.action_global_boothFragment)
+                }
+
+                R.id.myPage -> {
+                    navController.navigate(R.id.action_global_mypageFragment)
+                }
+            }
+            true
+        }
+    }
+
+    private fun setupActionBar(navController: NavController,
+                               appBarConfig : AppBarConfiguration) {
+        setupActionBarWithNavController(navController, appBarConfig)
+    }
+
+    // 뒤로가기 버튼을 동작하도록 함
+    override fun onSupportNavigateUp(): Boolean {
+        return host.navController.navigateUp() || super.onSupportNavigateUp()
     }
 }

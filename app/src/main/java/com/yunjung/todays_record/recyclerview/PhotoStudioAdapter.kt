@@ -1,15 +1,13 @@
 package com.yunjung.todays_record.recyclerview
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todays_record.R
 import com.yunjung.todays_record.databinding.StudioItemBinding
-import com.yunjung.todays_record.detail.DetailFragment
-import com.yunjung.todays_record.main.MainActivity
 import com.yunjung.todays_record.models.PhotoStudio
 
 class PhotoStudioAdapter :
@@ -48,6 +46,10 @@ class PhotoStudioAdapter :
         // position : 해당 뷰홀더가 리사이클러뷰에서 보여지는 위치 정보를 가지고 있음
         // getItem(position) : 위치에 해당하는 데이터를 가져옴
         holder.initBinding(getItem(position))
+        holder.itemView.setOnClickListener {
+            // 아이템 클릭시 fragment_detail화면으로 이동
+            it.findNavController().navigate(R.id.action_studioFragment_to_detailFragment)
+        }
     }
 }
 
