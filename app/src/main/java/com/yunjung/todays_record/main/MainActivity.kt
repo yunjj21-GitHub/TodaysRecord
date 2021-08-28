@@ -61,6 +61,9 @@ class MainActivity : AppCompatActivity(){
             if(destination.id == R.id.mypageFragment){
                 binding.title.text = "나의 기록"
             }
+            else if(destination.id == R.id.editFragment){
+                binding.title.text = "내 정보 수정"
+            }
             else{
                 binding.title.text = "오늘의 기록"
             }

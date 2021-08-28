@@ -1,4 +1,4 @@
-package com.yunjung.todays_record.mypage
+package com.yunjung.todays_record.edit
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,15 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.yunjung.todays_record.R
-import com.yunjung.todays_record.databinding.FragmentMypageBinding
+import com.yunjung.todays_record.databinding.FragmentEditBinding
 
-class MypageFragment : Fragment(){
-    lateinit var binding : FragmentMypageBinding
-    lateinit var viewModel: MypageViewModel
+class EditFragment : Fragment(){
+    lateinit var binding : FragmentEditBinding
+    lateinit var viewModel: EditViewModel
 
     companion object{
-        fun newInstance() : MypageFragment {
-            return MypageFragment()
+        fun newInstance() : EditFragment {
+            return EditFragment()
         }
     }
 
@@ -27,7 +27,7 @@ class MypageFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_mypage, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit, container, false)
         return binding.root
     }
 
@@ -35,12 +35,12 @@ class MypageFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(MypageViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(EditViewModel::class.java)
         binding.viewModel = viewModel
 
-        // 프로필 수정 화면(editFragment로 이동)
-        binding.editProfileBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_mypageFragment_to_editFragment)
+        // 완료버튼 이벤트 설정
+        binding.finishBtn.setOnClickListener {
+            findNavController().popBackStack() // 뒤로감
         }
     }
 }

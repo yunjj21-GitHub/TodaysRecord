@@ -97,7 +97,6 @@
                         </LinearLayout>
 
                         <RatingBar
-                            android:theme="@style/RatingBar"
                             android:id="@+id/ratingBar"
                             style="@style/Widget.AppCompat.RatingBar.Small"
                             android:layout_width="wrap_content"
@@ -265,7 +264,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:text="리뷰 사진만 모아보기"
+                    android:text="리뷰 사진 모아보기"
                     android:textColor="#000000"
                     android:textSize="16sp"
                     android:textStyle="bold"

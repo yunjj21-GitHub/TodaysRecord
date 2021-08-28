@@ -25,7 +25,11 @@
         android:id="@+id/mypageFragment"
         android:name="com.yunjung.todays_record.mypage.MypageFragment"
         android:label="MypageFragment"
-        tools:layout="@layout/fragment_mypage" />
+        tools:layout="@layout/fragment_mypage" >
+        <action
+            android:id="@+id/action_mypageFragment_to_editFragment"
+            app:destination="@id/editFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/boothFragment"
@@ -35,5 +39,9 @@
     <action android:id="@+id/action_global_studioFragment" app:destination="@id/studioFragment"/>
     <action android:id="@+id/action_global_boothFragment" app:destination="@id/boothFragment" />
     <action android:id="@+id/action_global_mypageFragment" app:destination="@id/mypageFragment"/>
+    <fragment
+        android:id="@+id/editFragment"
+        android:name="com.yunjung.todays_record.edit.EditFragment"
+        android:label="EditFragment" />
 
 </navigation>

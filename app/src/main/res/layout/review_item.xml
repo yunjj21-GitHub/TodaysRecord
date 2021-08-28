@@ -45,7 +45,6 @@
                     android:textColor="#000000" />
 
                 <RatingBar
-                    android:theme="@style/RatingBar"
                     android:rating="@{item.rating}"
                     android:id="@+id/ratingBar2"
                     style="@style/Widget.AppCompat.RatingBar.Small"
