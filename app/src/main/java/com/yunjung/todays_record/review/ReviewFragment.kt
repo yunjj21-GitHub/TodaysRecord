@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todays_record.R
 import com.yunjung.todays_record.databinding.FragmentReviewBinding
+import com.yunjung.todays_record.recyclerview.ReviewAdapter
 
 class ReviewFragment : Fragment() {
     lateinit var binding: FragmentReviewBinding
@@ -36,5 +39,22 @@ class ReviewFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(ReviewViewModel::class.java)
         binding.viewModel = viewModel
+
+        // 리사이클러뷰 적용
+        initRecycler()
+        subscribeStudioList()
+    }
+
+    // 리사이클러뷰 초기설정
+    private fun initRecycler(){
+        binding.recyclerViewReview.adapter = ReviewAdapter()
+        binding.recyclerViewReview.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+    }
+
+    // 리사이클러뷰에 보여지는 데이터가 변경시 어댑터에게 알림
+    private fun subscribeStudioList() {
+        viewModel.reviewList.observe(viewLifecycleOwner, {
+            (binding.recyclerViewReview.adapter as ReviewAdapter).submitList(it)
+        })
     }
 }

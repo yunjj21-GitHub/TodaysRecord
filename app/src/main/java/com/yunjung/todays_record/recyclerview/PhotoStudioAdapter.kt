@@ -28,7 +28,7 @@ class PhotoStudioAdapter :
                 binding.studioImageView.setImageResource(photoStudio.image!!) // !!연산자 : Null이 값으로 들어오면 exception을 발생
             }else{
                 binding.studioImageView.setImageResource(R.color.pointColor)
-            }*/
+            } */
         }
     }
 
