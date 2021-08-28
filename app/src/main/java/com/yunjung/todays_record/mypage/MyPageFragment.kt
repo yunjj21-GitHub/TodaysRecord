@@ -38,9 +38,19 @@ class MypageFragment : Fragment(){
         viewModel = ViewModelProvider(this).get(MypageViewModel::class.java)
         binding.viewModel = viewModel
 
-        // 프로필 수정 화면(editFragment로 이동)
+        // 내 정보 수정 버튼 이벤트 설정
         binding.editProfileBtn.setOnClickListener {
             findNavController().navigate(R.id.action_mypageFragment_to_editFragment)
+        }
+
+        // 관심목록 버튼 이벤트 설정
+        binding.interestsBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_mypageFragment_to_myinterestsFragment)
+        }
+
+        // 리뷰관리 버튼 이벤트 설정
+        binding.reviewBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_mypageFragment_to_myreviewFragment)
         }
     }
 }

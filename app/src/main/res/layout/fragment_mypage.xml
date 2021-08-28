@@ -73,7 +73,7 @@
             android:layout_weight="1">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button7"
+                android:id="@+id/interestsBtn"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="8dp"
@@ -88,13 +88,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="관심 목록"
+                android:text="관심목록"
                 android:textColor="#000000"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/button7"
-                app:layout_constraintStart_toStartOf="@+id/button7"
-                app:layout_constraintTop_toBottomOf="@+id/button7" />
+                app:layout_constraintEnd_toEndOf="@+id/interestsBtn"
+                app:layout_constraintStart_toStartOf="@+id/interestsBtn"
+                app:layout_constraintTop_toBottomOf="@+id/interestsBtn" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
@@ -109,7 +109,7 @@
             android:layout_weight="1">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button12"
+                android:id="@+id/reviewBtn"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="8dp"
@@ -128,9 +128,9 @@
                 android:textColor="#000000"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/button12"
-                app:layout_constraintStart_toStartOf="@+id/button12"
-                app:layout_constraintTop_toBottomOf="@+id/button12" />
+                app:layout_constraintEnd_toEndOf="@+id/reviewBtn"
+                app:layout_constraintStart_toStartOf="@+id/reviewBtn"
+                app:layout_constraintTop_toBottomOf="@+id/reviewBtn" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 

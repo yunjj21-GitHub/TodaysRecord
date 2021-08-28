@@ -54,19 +54,33 @@ class MainActivity : AppCompatActivity(){
         navController.addOnDestinationChangedListener { _, destination, _ ->
             // back button icon 설정
             if(destination.id != R.id.studioFragment){
-                binding.toolbar.setNavigationIcon(R.drawable.ic_back)
+                if(destination.id != R.id.boothFragment){
+                    if(destination.id != R.id.mypageFragment){
+                        binding.toolbar.setNavigationIcon(R.drawable.ic_back)
+                    }
+                }
             }
 
             // Toolbar title 설정
-            if(destination.id == R.id.mypageFragment){
-                binding.title.text = "나의 기록"
+            var titleName : String
+            when(destination.id){
+                R.id.mypageFragment -> {
+                    titleName = "나의 기록"
+                }
+                R.id.editFragment -> {
+                    titleName = "내 정보 수정"
+                }
+                R.id.myinterestsFragment ->{
+                    titleName = "관심목록"
+                }
+                R.id.myreviewFragment -> {
+                    titleName = "리뷰관리"
+                }
+                else -> {
+                    titleName = "오늘의 기록"
+                }
             }
-            else if(destination.id == R.id.editFragment){
-                binding.title.text = "내 정보 수정"
-            }
-            else{
-                binding.title.text = "오늘의 기록"
-            }
+            binding.title.text = titleName
         }
     }
 

@@ -29,6 +29,12 @@
         <action
             android:id="@+id/action_mypageFragment_to_editFragment"
             app:destination="@id/editFragment" />
+        <action
+            android:id="@+id/action_mypageFragment_to_myinterestsFragment"
+            app:destination="@id/myinterestsFragment" />
+        <action
+            android:id="@+id/action_mypageFragment_to_myreviewFragment"
+            app:destination="@id/myreviewFragment" />
     </fragment>
 
     <fragment
@@ -43,5 +49,13 @@
         android:id="@+id/editFragment"
         android:name="com.yunjung.todays_record.edit.EditFragment"
         android:label="EditFragment" />
+    <fragment
+        android:id="@+id/myinterestsFragment"
+        android:name="com.yunjung.todays_record.myinterests.MyinterestsFragment"
+        android:label="MyinterestsFragment" />
+    <fragment
+        android:id="@+id/myreviewFragment"
+        android:name="com.yunjung.todays_record.myreview.MyreviewFragment"
+        android:label="MyreviewFragment" />
 
 </navigation>

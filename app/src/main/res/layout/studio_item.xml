@@ -19,10 +19,10 @@
 
             <ImageView
                 android:id="@+id/studioImageView"
-                android:layout_width="180dp"
-                android:layout_height="180dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/sample_image" />
@@ -31,7 +31,7 @@
                 android:id="@+id/studio_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:text="@{item.name}"
                 android:textColor="#000000"
                 android:textSize="18sp"
@@ -77,11 +77,12 @@
                 android:id="@+id/divider14"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_marginTop="16dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView12" />
+                app:layout_constraintTop_toBottomOf="@+id/studioImageView" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -92,15 +93,6 @@
                 android:textColor="#000000"
                 app:layout_constraintStart_toStartOf="@+id/studio_name"
                 app:layout_constraintTop_toBottomOf="@+id/studio_name" />
-
-            <ImageView
-                android:id="@+id/imageView12"
-                android:layout_width="50dp"
-                android:layout_height="20dp"
-                app:layout_constraintEnd_toEndOf="@+id/studioImageView"
-                app:layout_constraintStart_toStartOf="@+id/studioImageView"
-                app:layout_constraintTop_toBottomOf="@+id/studioImageView"
-                app:srcCompat="@drawable/sample_indicator" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
