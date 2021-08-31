@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,9 +48,10 @@ class ReviewFragment : Fragment() {
         initRecycler()
         subscribeStudioList()
 
-        /* binding.moreImageBtn.setOnClickListener {
-            requireParentFragment().findNavController().navigate(R.id.action_detailFragment_to_imageFragment)
-        } */
+        // '사진 더 보기' 클릭 이벤트 설정
+        binding.moreImageBtn.setOnClickListener {
+            it.findNavController().navigate(R.id.action_global_imageFragment)
+        }
     }
 
     // 리사이클러뷰 초기설정

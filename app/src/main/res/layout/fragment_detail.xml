@@ -10,7 +10,7 @@
     </data>
 <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -172,7 +172,7 @@
             app:tabSelectedTextColor="@color/mainColor"
             app:tabTextAppearance="@style/TextAppearance.AppCompat.Body1"
             app:tabTextColor="#000000"/>
-
+        <!-- View Pager-->
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="match_parent"

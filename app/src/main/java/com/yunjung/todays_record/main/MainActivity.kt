@@ -9,6 +9,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.naver.maps.map.NaverMapSdk
 import com.yunjung.todays_record.MainViewModel
 import com.yunjung.todays_record.R
 import com.yunjung.todays_record.databinding.ActivityMainBinding

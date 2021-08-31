@@ -24,9 +24,6 @@
             android:name="studioId"
             app:argType="string"
             app:nullable="true" />
-        <action
-            android:id="@+id/action_detailFragment_to_imageFragment"
-            app:destination="@id/imageFragment" />
     </fragment>
 
     <fragment
@@ -68,6 +65,6 @@
     <fragment
         android:id="@+id/imageFragment"
         android:name="com.yunjung.todays_record.image.ImageFragment"
-        android:label="ImageFragment" />
+        android:label="ImageFragment" /><action android:id="@+id/action_global_imageFragment" app:destination="@id/imageFragment"/>
 
 </navigation>
