@@ -22,13 +22,14 @@
                 android:id="@+id/imageView7"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_profile" />
 
             <LinearLayout
+                android:id="@+id/linearLayout7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -45,11 +46,11 @@
                     android:textColor="#000000" />
 
                 <RatingBar
-                    android:rating="@{item.rating}"
                     android:id="@+id/ratingBar2"
                     style="@style/Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:rating="@{item.rating}" />
             </LinearLayout>
 
             <ImageView
@@ -93,19 +94,19 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
                 android:text="@{item.createdTime.toString()}"
-                app:layout_constraintStart_toStartOf="@+id/content"
-                app:layout_constraintTop_toBottomOf="@+id/content" />
+                app:layout_constraintBottom_toBottomOf="@+id/linearLayout7"
+                app:layout_constraintStart_toEndOf="@+id/linearLayout7" />
 
             <View
                 android:id="@+id/divider15"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/date" />
+                app:layout_constraintTop_toBottomOf="@+id/content" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

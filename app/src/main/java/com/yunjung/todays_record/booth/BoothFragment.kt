@@ -15,8 +15,8 @@ class BoothFragment : Fragment(){
     lateinit var viewModel: BoothViewModel
 
     companion object{
-        fun newInstance() : BoothViewModel{
-            return BoothViewModel()
+        fun newInstance() : BoothFragment{
+            return BoothFragment()
         }
     }
 

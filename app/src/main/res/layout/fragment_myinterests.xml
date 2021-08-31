@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="관심 있는 사진관 총 "
+        android:text="찜한 사진관 총 "
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"

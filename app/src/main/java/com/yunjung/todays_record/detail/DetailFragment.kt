@@ -5,14 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.res.colorResource
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yunjung.todays_record.R
@@ -25,6 +22,8 @@ class DetailFragment : Fragment(){
     lateinit var binding : FragmentDetailBinding
     lateinit var viewModel: DetailViewModel
     var heartState : Boolean = false
+
+    // val args : DetailFragmentArgs by navArgs()
 
     companion object{
         fun newInstance() : DetailFragment{
@@ -60,24 +59,36 @@ class DetailFragment : Fragment(){
             }
         }
 
-        // 뷰페이저 적용
+        /* ViewPager & TabLayout 관련 */
+        // 뷰페이저에 어댑터 부착
         val pagerAdapter = ViewpagerAdapter(requireActivity())
-
-        pagerAdapter.addFragment(InformationFragment())
-        pagerAdapter.addFragment(ReviewFragment())
-
         binding.viewPager.adapter = pagerAdapter
 
+        // 뷰페이저에 탭레이아웃 부착
+        TabLayoutMediator(binding.tabLayout, binding.viewPager){ tab, position ->
+            // 탭 아이템의 이름 지정
+            when(position){
+                0 -> tab.text = "상세정보"
+                1 -> tab.text = "리뷰"
+            }
+        }.attach()
+
+        // 뷰페이저 페이지 변경 이벤트 설정(resize ViewPager)
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+
+                val view = pagerAdapter.pageFragments[position].view
+
+                view?.post {
+                    val wMeasureSpec = View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
+                    val hMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                    view.measure(wMeasureSpec, hMeasureSpec)
+                    if (binding.viewPager.layoutParams.height != view.measuredHeight) {
+                        binding.viewPager.layoutParams = (binding.viewPager.layoutParams).also { lp -> lp.height = view.measuredHeight }
+                    }
+                }
             }
         })
-
-        // (뷰페이저 관련) TabLayout attach
-        TabLayoutMediator(binding.tabLayout, binding.viewPager){ tab, position ->
-            if(position == 0) tab.text = "상세정보"
-            else tab.text = "리뷰"
-        }.attach()
     }
 }

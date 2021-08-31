@@ -14,45 +14,47 @@ import com.yunjung.todays_record.R
 import com.yunjung.todays_record.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(){
-    // 데이터 바인딩 + 뷰모델(라이브 데이터 포함)
+    // DataBinding & ViewMdoel(+LiveData) 관련 변수
     private lateinit var binding : ActivityMainBinding
-    lateinit var mainViewModel: MainViewModel
+    lateinit var viewModel: MainViewModel
 
+    // Navigation Component 관련 변수
     private lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var host : NavHostFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 데이터 바인딩 & 뷰모델
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)// binding 객체의 레이아웃 지정
+        /* DataBinding & ViewMdoel(+LiveData) 관련 */
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        // 현재의 액티비티를 라이프사이클의 오너로 명시
-        // (라이프 사이클을 감시하며 변화를 binding 객체에 적용할 수 있다.)
         binding.lifecycleOwner = this
-        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        // 넘겨준 mainViewModel binding객체의 레이아웃으로 넘어감
-        binding.viewModel = mainViewModel
+        binding.viewModel = viewModel
 
+        /* Navigation Component 관련 */
         // 툴바 설정
         val toolbar = binding.toolbar
-        setSupportActionBar(toolbar) // 해당 액티비티의 앱바로 설정
-        supportActionBar?.setDisplayShowTitleEnabled(false) // 액션바에서 타이틀을 숨김
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false) // 툴바의 타이틀 제거
 
-        // 프래그먼트의 host를 지정
-        host = supportFragmentManager
-            .findFragmentById(R.id.fragment_frame) as NavHostFragment? ?: return
+        // NavHost를 이용하여 NavController가져오기
+        host = supportFragmentManager.findFragmentById(R.id.fragment_frame) as NavHostFragment? ?: return
+        val navController = host.navController
 
-        val navController = host.navController // navController : NavHost에서 App Navigation을 관리하는 객체
+        // 최상위 수준의 화면 지정
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.studioFragment, R.id.boothFragment, R.id.mypageFragment))
+        // bottom navigation을 사용하지 않는다면 AppBarConfiguration(navController.graph)를 넘겨준다.
 
-        appBarConfiguration = AppBarConfiguration(navController.graph) // appBar에게 graph에 대한 정보를 전달
-
+        // 액션바에 navController와 appBarConfiguration객체를 설정
         setupActionBar(navController, appBarConfiguration)
 
+        // botoom navigation에 navController객체를 설정
         setupBottomNavMenu(navController)
 
+        // 탐색이 수행 될 때 마다 실행
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            // back button icon 설정
+            // back button icon 이미지 설정
             if(destination.id != R.id.studioFragment){
                 if(destination.id != R.id.boothFragment){
                     if(destination.id != R.id.mypageFragment){
@@ -64,11 +66,14 @@ class MainActivity : AppCompatActivity(){
             // Toolbar title 설정
             var titleName : String
             when(destination.id){
+                R.id.boothFragment->{
+                    titleName = "사진부스 찾기"
+                }
                 R.id.mypageFragment -> {
                     titleName = "나의 기록"
                 }
                 R.id.editFragment -> {
-                    titleName = "내 정보 수정"
+                    titleName = "프로필 수정"
                 }
                 R.id.myinterestsFragment ->{
                     titleName = "관심목록"
@@ -76,21 +81,18 @@ class MainActivity : AppCompatActivity(){
                 R.id.myreviewFragment -> {
                     titleName = "리뷰관리"
                 }
+                R.id.imageFragment -> {
+                    titleName = "사진 더보기"
+                }
                 else -> {
                     titleName = "오늘의 기록"
                 }
             }
             binding.title.text = titleName
         }
-    }
 
-    // bottom navigation button 움직임 설정
-    private fun setupBottomNavMenu(navController: NavController) {
-        val bottomNav = binding.bottomNavigation
-
-        bottomNav?.setupWithNavController(navController)
-
-        bottomNav.setOnItemSelectedListener { menuItem ->
+        // bottom navigation 이벤트 설정
+        binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when(menuItem.itemId) {
                 R.id.studio->{
                     navController.navigate(R.id.action_global_studioFragment)
@@ -110,6 +112,11 @@ class MainActivity : AppCompatActivity(){
     private fun setupActionBar(navController: NavController,
                                appBarConfig : AppBarConfiguration) {
         setupActionBarWithNavController(navController, appBarConfig)
+    }
+
+    private fun setupBottomNavMenu(navController: NavController) {
+        val bottomNav = binding.bottomNavigation
+        bottomNav?.setupWithNavController(navController)
     }
 
     // 뒤로가기 버튼을 동작하도록 함

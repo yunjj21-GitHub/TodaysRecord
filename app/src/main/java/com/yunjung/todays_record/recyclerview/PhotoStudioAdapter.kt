@@ -22,13 +22,6 @@ class PhotoStudioAdapter :
         // 초기화
         fun initBinding(photoStudio: PhotoStudio) {
             binding.item = photoStudio // photoStudio가 binding객체의 레이아웃의 item변수로 넘어감
-
-        /* studioImageView 설정
-            if(photoStudio.image != null){
-                binding.studioImageView.setImageResource(photoStudio.image!!) // !!연산자 : Null이 값으로 들어오면 exception을 발생
-            }else{
-                binding.studioImageView.setImageResource(R.color.pointColor)
-            } */
         }
     }
 
@@ -55,7 +48,6 @@ class PhotoStudioAdapter :
 
 // 데이터가 변경되었을 때 실행
 object PhotoStudioDiff : DiffUtil.ItemCallback<PhotoStudio>() {
-    // 데이터의 고유한 값 1개만 비교
     override fun areItemsTheSame(oldItem: PhotoStudio, newItem: PhotoStudio): Boolean {
         return oldItem._id == newItem._id
     }

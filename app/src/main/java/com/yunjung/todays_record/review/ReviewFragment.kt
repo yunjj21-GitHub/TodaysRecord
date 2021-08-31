@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todays_record.R
 import com.yunjung.todays_record.databinding.FragmentReviewBinding
+import com.yunjung.todays_record.detail.DetailFragment
+import com.yunjung.todays_record.detail.DetailViewModel
 import com.yunjung.todays_record.recyclerview.ReviewAdapter
 
 class ReviewFragment : Fragment() {
@@ -18,8 +21,8 @@ class ReviewFragment : Fragment() {
     lateinit var viewModel: ReviewViewModel
 
     companion object {
-        fun newInstance(): ReviewViewModel {
-            return ReviewViewModel()
+        fun newInstance(): ReviewFragment {
+            return ReviewFragment()
         }
     }
 
@@ -43,6 +46,10 @@ class ReviewFragment : Fragment() {
         // 리사이클러뷰 적용
         initRecycler()
         subscribeStudioList()
+
+        /* binding.moreImageBtn.setOnClickListener {
+            requireParentFragment().findNavController().navigate(R.id.action_detailFragment_to_imageFragment)
+        } */
     }
 
     // 리사이클러뷰 초기설정

@@ -19,7 +19,15 @@
         android:id="@+id/detailFragment"
         android:name="com.yunjung.todays_record.detail.DetailFragment"
         android:label="detailFragment"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="studioId"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_detailFragment_to_imageFragment"
+            app:destination="@id/imageFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/mypageFragment"
@@ -57,5 +65,9 @@
         android:id="@+id/myreviewFragment"
         android:name="com.yunjung.todays_record.myreview.MyreviewFragment"
         android:label="MyreviewFragment" />
+    <fragment
+        android:id="@+id/imageFragment"
+        android:name="com.yunjung.todays_record.image.ImageFragment"
+        android:label="ImageFragment" />
 
 </navigation>

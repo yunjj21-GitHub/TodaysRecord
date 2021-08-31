@@ -1,4 +1,4 @@
-package com.yunjung.todays_record.myreview
+package com.yunjung.todays_record.image
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,15 +8,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.yunjung.todays_record.R
-import com.yunjung.todays_record.databinding.FragmentMyreviewBinding
+import com.yunjung.todays_record.databinding.FragmentImageBinding
 
-class MyreviewFragment : Fragment(){
-    lateinit var binding : FragmentMyreviewBinding
-    lateinit var viewModel: MyreviewViewModel
+class ImageFragment : Fragment(){
+    lateinit var binding : FragmentImageBinding
+    lateinit var viewModel: ImageViewModel
 
     companion object{
-        fun newInstance() : MyreviewFragment {
-            return MyreviewFragment()
+        fun newInstance() : ImageFragment {
+            return ImageFragment()
         }
     }
 
@@ -26,7 +26,7 @@ class MyreviewFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_myreview, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_image, container, false)
         return binding.root
     }
 
@@ -34,7 +34,7 @@ class MyreviewFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(MyreviewViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ImageViewModel::class.java)
         binding.viewModel = viewModel
     }
 }
