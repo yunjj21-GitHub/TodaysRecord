@@ -34,7 +34,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView15"
+                    android:id="@+id/content"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -54,7 +54,7 @@
                     android:background="?android:attr/listDivider"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView15" />
+                    app:layout_constraintTop_toBottomOf="@+id/content" />
                 <!-- 비용 -->
                 <TextView
                     android:id="@+id/textView17"
@@ -65,11 +65,11 @@
                     android:textColor="#000000"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/textView15"
+                    app:layout_constraintStart_toStartOf="@+id/content"
                     app:layout_constraintTop_toBottomOf="@+id/divider6" />
 
                 <TextView
-                    android:id="@+id/textView18"
+                    android:id="@+id/cost"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -86,7 +86,7 @@
                     android:background="?android:attr/listDivider"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView18" />
+                    app:layout_constraintTop_toBottomOf="@+id/cost" />
                 <!-- 위치 -->
                 <TextView
                     android:id="@+id/textView19"
@@ -97,7 +97,7 @@
                     android:textColor="#000000"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/textView18"
+                    app:layout_constraintStart_toStartOf="@+id/cost"
                     app:layout_constraintTop_toBottomOf="@+id/divider7" />
 
                 <fragment
@@ -113,7 +113,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
                 <TextView
-                    android:id="@+id/textView20"
+                    android:id="@+id/address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -131,9 +131,9 @@
                     android:text="주소복사"
                     android:textColor="#000000"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView20"
+                    app:layout_constraintBottom_toBottomOf="@+id/address"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView20" />
+                    app:layout_constraintTop_toTopOf="@+id/address" />
 
                 <View
                     android:id="@+id/divider8"
@@ -154,7 +154,7 @@
                     android:textColor="#000000"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@+id/textView20"
+                    app:layout_constraintStart_toStartOf="@+id/address"
                     app:layout_constraintTop_toBottomOf="@+id/divider8" />
 
                 <TextView
@@ -168,7 +168,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
                 <TextView
-                    android:id="@+id/textView25"
+                    android:id="@+id/phoneNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="000-000-000"
@@ -188,7 +188,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView24" />
 
                 <TextView
-                    android:id="@+id/textView27"
+                    android:id="@+id/hompageAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="http://A_PhotoStudio.co.kr"
@@ -210,7 +210,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
                 <TextView
-                    android:id="@+id/textView29"
+                    android:id="@+id/instarId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="A_PhotoStudio"

@@ -51,7 +51,7 @@
             app:layout_constraintTop_toTopOf="@+id/imageView" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/studioName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -71,7 +71,7 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/studioName" />
 
         <!-- 찜 & 공유 버튼 -->
         <androidx.constraintlayout.widget.ConstraintLayout

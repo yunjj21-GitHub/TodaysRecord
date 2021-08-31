@@ -65,31 +65,29 @@ class MainActivity : AppCompatActivity(){
             }
 
             // Toolbar title 설정
-            var titleName : String
             when(destination.id){
                 R.id.boothFragment->{
-                    titleName = "사진부스 찾기"
+                    binding.title.text = "사진부스 찾기"
                 }
                 R.id.mypageFragment -> {
-                    titleName = "나의 기록"
+                    binding.title.text = "나의 기록"
                 }
                 R.id.editFragment -> {
-                    titleName = "프로필 수정"
+                    binding.title.text = "프로필 수정"
                 }
                 R.id.myinterestsFragment ->{
-                    titleName = "관심목록"
+                    binding.title.text = "관심목록"
                 }
                 R.id.myreviewFragment -> {
-                    titleName = "리뷰관리"
+                    binding.title.text = "리뷰관리"
                 }
                 R.id.imageFragment -> {
-                    titleName = "사진 더보기"
+                    binding.title.text = "사진 더보기"
                 }
                 else -> {
-                    titleName = "오늘의 기록"
+                    binding.title.text = "오늘의 기록"
                 }
             }
-            binding.title.text = titleName
         }
 
         // bottom navigation 이벤트 설정

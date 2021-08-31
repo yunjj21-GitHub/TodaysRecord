@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todays_record.R
 import com.yunjung.todays_record.databinding.StudioItemBinding
 import com.yunjung.todays_record.models.PhotoStudio
+import com.yunjung.todays_record.studio.StudioFragmentDirections
 
 class PhotoStudioAdapter :
     ListAdapter<PhotoStudio, PhotoStudioAdapter.PhotoStudioViewHolder>(PhotoStudioDiff){
@@ -41,7 +42,9 @@ class PhotoStudioAdapter :
         holder.initBinding(getItem(position))
         holder.itemView.setOnClickListener {
             // 아이템 클릭시 fragment_detail화면으로 이동
-            it.findNavController().navigate(R.id.action_studioFragment_to_detailFragment)
+            // it.findNavController().navigate(R.id.action_studioFragment_to_detailFragment)
+            val directions =  StudioFragmentDirections.actionStudioFragmentToDetailFragment(getItem(position))
+            it.findNavController().navigate(directions)
         }
     }
 }

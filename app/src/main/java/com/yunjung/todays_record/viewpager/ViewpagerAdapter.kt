@@ -8,10 +8,10 @@ import com.yunjung.todays_record.review.ReviewFragment
 
 class ViewpagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity){
     var pageFragments : ArrayList<Fragment> = ArrayList()
-    // 초기화
-    init{
-        pageFragments.add(InformationFragment())
-        pageFragments.add(ReviewFragment())
+
+    // page(Fragment)를 추가하는 메소드
+    fun addFragment(fragment: Fragment){
+        pageFragments.add(fragment)
     }
 
     // 페이지의 개수를 넘겨주는 메소드

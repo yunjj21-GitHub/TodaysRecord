@@ -15,15 +15,21 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.yunjung.todays_record.R
 import com.yunjung.todays_record.databinding.FragmentDetailBinding
 import com.yunjung.todays_record.information.InformationFragment
+import com.yunjung.todays_record.models.PhotoStudio
 import com.yunjung.todays_record.review.ReviewFragment
 import com.yunjung.todays_record.viewpager.ViewpagerAdapter
 
 class DetailFragment : Fragment(){
+    // DataBinding & ViewModel 관련 변수
     lateinit var binding : FragmentDetailBinding
     lateinit var viewModel: DetailViewModel
-    var heartState : Boolean = false
 
-    // val args : DetailFragmentArgs by navArgs()
+    // Navigaion component safe args 관련 변수
+    private val args : DetailFragmentArgs by navArgs()
+    private lateinit var photoStudio: PhotoStudio
+
+    // '찜'버튼 이벤트 관련 변수
+    var heartState : Boolean = false
 
     companion object{
         fun newInstance() : DetailFragment{
@@ -45,9 +51,15 @@ class DetailFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        /* DataBinding & ViewModel 관련 */
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         binding.viewModel = viewModel
 
+        /* Navigaion component safe args 관련 */
+        photoStudio = args.photoStudio!! // 이전 프래그먼트에서 보낸값을 받아옴
+        binding.studioName.text = photoStudio.name // view에 적용
+
+        /* 그외 코드 */
         // 찜 버튼 클릭 이벤트 설정
         binding.heartBtn.setOnClickListener {
             if(heartState == false) {
@@ -62,6 +74,8 @@ class DetailFragment : Fragment(){
         /* ViewPager & TabLayout 관련 */
         // 뷰페이저에 어댑터 부착
         val pagerAdapter = ViewpagerAdapter(requireActivity())
+        pagerAdapter.addFragment(InformationFragment())
+        pagerAdapter.addFragment(ReviewFragment())
         binding.viewPager.adapter = pagerAdapter
 
         // 뷰페이저에 탭레이아웃 부착

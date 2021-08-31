@@ -20,9 +20,10 @@
         android:name="com.yunjung.todays_record.detail.DetailFragment"
         android:label="detailFragment"
         tools:layout="@layout/fragment_detail" >
+
         <argument
-            android:name="studioId"
-            app:argType="string"
+            android:name="photoStudio"
+            app:argType="com.yunjung.todays_record.models.PhotoStudio"
             app:nullable="true" />
     </fragment>
 
