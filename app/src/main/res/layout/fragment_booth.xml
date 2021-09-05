@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.yunjung.todays_record.booth.BoothViewModel" />
+            type="com.yunjung.todaysrecord.booth.BoothViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.yunjung.todays_record.image.ImageViewModel" />
+            type="com.yunjung.todaysrecord.image.ImageViewModel" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout

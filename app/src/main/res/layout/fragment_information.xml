@@ -5,12 +5,12 @@
     <data>
         <variable
             name="viewModel"
-            type="com.yunjung.todays_record.information.InformationViewModel" />
+            type="com.yunjung.todaysrecord.information.InformationViewModel" />
     </data>
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -18,7 +18,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
                 <!-- 사진관 소개 -->
                 <TextView
                     android:id="@+id/textView14"
@@ -220,5 +220,5 @@
                     app:layout_constraintTop_toTopOf="@+id/textView28" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 </layout>

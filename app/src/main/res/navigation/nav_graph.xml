@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/studioFragment"
-        android:name="com.yunjung.todays_record.studio.StudioFragment"
+        android:name="com.yunjung.todaysrecord.studio.StudioFragment"
         android:label="StudioFragment"
         tools:layout="@layout/fragment_studio" >
         <action
@@ -17,19 +17,19 @@
 
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.yunjung.todays_record.detail.DetailFragment"
+        android:name="com.yunjung.todaysrecord.detail.DetailFragment"
         android:label="detailFragment"
         tools:layout="@layout/fragment_detail" >
 
         <argument
             android:name="photoStudio"
-            app:argType="com.yunjung.todays_record.models.PhotoStudio"
+            app:argType="com.yunjung.todaysrecord.models.PhotoStudio"
             app:nullable="true" />
     </fragment>
 
     <fragment
         android:id="@+id/mypageFragment"
-        android:name="com.yunjung.todays_record.mypage.MypageFragment"
+        android:name="com.yunjung.todaysrecord.mypage.MypageFragment"
         android:label="MypageFragment"
         tools:layout="@layout/fragment_mypage" >
         <action
@@ -45,7 +45,7 @@
 
     <fragment
         android:id="@+id/boothFragment"
-        android:name="com.yunjung.todays_record.booth.BoothFragment"
+        android:name="com.yunjung.todaysrecord.booth.BoothFragment"
         android:label="BoothFragment" />
 
     <action android:id="@+id/action_global_studioFragment" app:destination="@id/studioFragment"/>
@@ -53,19 +53,19 @@
     <action android:id="@+id/action_global_mypageFragment" app:destination="@id/mypageFragment"/>
     <fragment
         android:id="@+id/editFragment"
-        android:name="com.yunjung.todays_record.edit.EditFragment"
+        android:name="com.yunjung.todaysrecord.edit.EditFragment"
         android:label="EditFragment" />
     <fragment
         android:id="@+id/myinterestsFragment"
-        android:name="com.yunjung.todays_record.myinterests.MyinterestsFragment"
+        android:name="com.yunjung.todaysrecord.myinterests.MyinterestsFragment"
         android:label="MyinterestsFragment" />
     <fragment
         android:id="@+id/myreviewFragment"
-        android:name="com.yunjung.todays_record.myreview.MyreviewFragment"
+        android:name="com.yunjung.todaysrecord.myreview.MyreviewFragment"
         android:label="MyreviewFragment" />
     <fragment
         android:id="@+id/imageFragment"
-        android:name="com.yunjung.todays_record.image.ImageFragment"
+        android:name="com.yunjung.todaysrecord.image.ImageFragment"
         android:label="ImageFragment" /><action android:id="@+id/action_global_imageFragment" app:destination="@id/imageFragment"/>
 
 </navigation>

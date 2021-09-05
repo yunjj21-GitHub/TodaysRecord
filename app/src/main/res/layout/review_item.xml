@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.yunjung.todays_record.models.Review" />
+            type="com.yunjung.todaysrecord.models.Review" />
     </data>
 
     <androidx.cardview.widget.CardView
