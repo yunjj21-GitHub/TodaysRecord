@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/mainColor"
-            android:text="2인 이상 사진"
+            android:text="가족 커플 우정 사진"
             android:textColor="#FFFFFFFF"
             android:textSize="14sp"
             android:textStyle="bold" />

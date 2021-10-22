@@ -6,17 +6,17 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.yunjung.todaysrecord.databinding.StudioItemBinding
+import com.yunjung.todaysrecord.databinding.ItemStudioBinding
 import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.studio.StudioFragmentDirections
 
 class PhotoStudioAdapter :
     ListAdapter<PhotoStudio, PhotoStudioAdapter.PhotoStudioViewHolder>(PhotoStudioDiff){
-    lateinit var binding : StudioItemBinding // 카드뷰를 포함한 레이아웃의 바인딩 객체
+    lateinit var binding : ItemStudioBinding // 카드뷰를 포함한 레이아웃의 바인딩 객체
     lateinit var layoutInflater : LayoutInflater
 
     // 뷰홀더 정의
-    class PhotoStudioViewHolder(private val binding : StudioItemBinding) :
+    class PhotoStudioViewHolder(private val binding : ItemStudioBinding) :
         RecyclerView.ViewHolder(binding.root){
 
         // 초기화
@@ -29,7 +29,7 @@ class PhotoStudioAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoStudioViewHolder {
         // 연결할 레이아웃 설정
         layoutInflater = LayoutInflater.from(parent.context)
-        binding = StudioItemBinding.inflate(layoutInflater)
+        binding = ItemStudioBinding.inflate(layoutInflater)
 
         return PhotoStudioViewHolder(binding)
     }

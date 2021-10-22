@@ -14,7 +14,7 @@ android {
     buildToolsVersion "30.0.0"
 
     defaultConfig {
-        applicationId "com.yunjung.record"
+        applicationId "com.yunjung.todaysrecord"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
@@ -79,4 +79,16 @@ dependencies {
 
     // 네이버 지도 SDK
     implementation 'com.naver.maps:map-sdk:3.12.0'
+
+    // 네이버 지도 사용자 위치 표시 관련
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
+
+    // Gson
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
+
+    // Logging Interceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
 }

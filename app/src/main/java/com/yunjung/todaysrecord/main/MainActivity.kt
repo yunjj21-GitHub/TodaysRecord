@@ -2,6 +2,7 @@ package com.yunjung.todaysrecord.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -12,6 +13,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.yunjung.todaysrecord.MainViewModel
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.ActivityMainBinding
+import com.yunjung.todaysrecord.network.RetrofitManager
 
 class MainActivity : AppCompatActivity(){
     // DataBinding & ViewMdoel(+LiveData) 관련 변수
@@ -24,6 +26,9 @@ class MainActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        /* Retrofit 관련 */
+        RetrofitManager.getInformation() // readChannel api 호출
+
         /* DataBinding & ViewMdoel(+LiveData) 관련 */
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
@@ -54,13 +59,18 @@ class MainActivity : AppCompatActivity(){
 
         // 탐색이 수행 될 때 마다 실행
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            // 지역설정 버튼 & 텍스트 보임 여부 설정
+            if(destination.id == R.id.studioFragment){
+                binding.locationBtn.visibility = View.VISIBLE
+                binding.locationText.visibility = View.VISIBLE
+            }else{
+                binding.locationBtn.visibility = View.INVISIBLE
+                binding.locationText.visibility = View.INVISIBLE
+            }
+
             // back button icon 이미지 설정
-            if(destination.id != R.id.studioFragment){
-                if(destination.id != R.id.boothFragment){
-                    if(destination.id != R.id.mypageFragment){
-                        binding.toolbar.setNavigationIcon(R.drawable.ic_back)
-                    }
-                }
+            if(destination.id != R.id.studioFragment && destination.id != R.id.boothFragment && destination.id != R.id.mypageFragment){
+                binding.toolbar.setNavigationIcon(R.drawable.ic_back)
             }
 
             // Toolbar title 설정
@@ -104,6 +114,11 @@ class MainActivity : AppCompatActivity(){
                 }
             }
             true
+        }
+
+        /* 지역설정 버튼 관련 */
+        binding.locationBtn.setOnClickListener {
+            navController.navigate(R.id.action_studioFragment_to_setlocationFragment)
         }
     }
 

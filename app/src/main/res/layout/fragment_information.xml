@@ -124,15 +124,15 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/textView21"
-                    android:layout_width="80dp"
+                    android:layout_width="50dp"
                     android:layout_height="20dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="16dp"
                     android:background="#00FFFFFF"
-                    android:text="주소복사"
-                    android:textColor="#000000"
+                    android:text="복사"
+                    android:textColor="#3F51B5"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/address"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/address"
                     app:layout_constraintTop_toTopOf="@+id/address" />
 
                 <View
@@ -177,6 +177,19 @@
                     app:layout_constraintStart_toEndOf="@+id/textView24"
                     app:layout_constraintTop_toTopOf="@+id/textView24" />
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/textView30"
+                    android:layout_width="50dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="16dp"
+                    android:background="#00FFFFFF"
+                    android:text="복사"
+                    android:textColor="#3F51B5"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/phoneNumber"
+                    app:layout_constraintStart_toEndOf="@+id/phoneNumber"
+                    app:layout_constraintTop_toTopOf="@+id/phoneNumber" />
+
                 <TextView
                     android:id="@+id/textView26"
                     android:layout_width="wrap_content"
@@ -196,6 +209,19 @@
                     app:layout_constraintBottom_toBottomOf="@+id/textView26"
                     app:layout_constraintStart_toEndOf="@+id/textView26"
                     app:layout_constraintTop_toTopOf="@+id/textView26" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/textView31"
+                    android:layout_width="50dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="16dp"
+                    android:background="#00FFFFFF"
+                    android:text="복사"
+                    android:textColor="#3F51B5"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/hompageAddress"
+                    app:layout_constraintStart_toEndOf="@+id/hompageAddress"
+                    app:layout_constraintTop_toTopOf="@+id/hompageAddress" />
 
                 <TextView
                     android:id="@+id/textView28"
@@ -218,6 +244,19 @@
                     app:layout_constraintBottom_toBottomOf="@+id/textView28"
                     app:layout_constraintStart_toEndOf="@+id/textView28"
                     app:layout_constraintTop_toTopOf="@+id/textView28" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/textView32"
+                    android:layout_width="50dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="16dp"
+                    android:background="#00FFFFFF"
+                    android:text="복사"
+                    android:textColor="#3F51B5"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/instarId"
+                    app:layout_constraintStart_toEndOf="@+id/instarId"
+                    app:layout_constraintTop_toTopOf="@+id/instarId" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

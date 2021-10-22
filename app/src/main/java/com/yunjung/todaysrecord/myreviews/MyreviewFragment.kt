@@ -1,4 +1,4 @@
-package com.yunjung.todaysrecord.myreview
+package com.yunjung.todaysrecord.myreviews
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,10 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.yunjung.todaysrecord.R
-import com.yunjung.todaysrecord.databinding.FragmentMyreviewBinding
+import com.yunjung.todaysrecord.databinding.FragmentMyreviewsBinding
 
 class MyreviewFragment : Fragment(){
-    lateinit var binding : FragmentMyreviewBinding
+    lateinit var binding : FragmentMyreviewsBinding
     lateinit var viewModel: MyreviewViewModel
 
     companion object{
@@ -26,7 +26,7 @@ class MyreviewFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_myreview, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_myreviews, container, false)
         return binding.root
     }
 

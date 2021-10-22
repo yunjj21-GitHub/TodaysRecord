@@ -1,10 +1,10 @@
-package com.yunjung.todaysrecord.edit
+package com.yunjung.todaysrecord.myreviews
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class EditViewModel : ViewModel() {
+class MyreviewViewModel : ViewModel() {
     // 수정 가능한 라이브 데이터 (클래스 내부에서만 사용), 초기화 값 0
     private val _cur = MutableLiveData<Int>(0)
 

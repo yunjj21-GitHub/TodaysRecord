@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_studioFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_studioFragment_to_setlocationFragment"
+            app:destination="@id/setlocationFragment" />
     </fragment>
 
     <fragment
@@ -53,7 +56,7 @@
     <action android:id="@+id/action_global_mypageFragment" app:destination="@id/mypageFragment"/>
     <fragment
         android:id="@+id/editFragment"
-        android:name="com.yunjung.todaysrecord.edit.EditFragment"
+        android:name="com.yunjung.todaysrecord.editprofile.EditprofileFragment"
         android:label="EditFragment" />
     <fragment
         android:id="@+id/myinterestsFragment"
@@ -61,11 +64,15 @@
         android:label="MyinterestsFragment" />
     <fragment
         android:id="@+id/myreviewFragment"
-        android:name="com.yunjung.todaysrecord.myreview.MyreviewFragment"
+        android:name="com.yunjung.todaysrecord.myreviews.MyreviewFragment"
         android:label="MyreviewFragment" />
     <fragment
         android:id="@+id/imageFragment"
-        android:name="com.yunjung.todaysrecord.image.ImageFragment"
+        android:name="com.yunjung.todaysrecord.moreimage.MoreImageFragment"
         android:label="ImageFragment" /><action android:id="@+id/action_global_imageFragment" app:destination="@id/imageFragment"/>
+    <fragment
+        android:id="@+id/setlocationFragment"
+        android:name="com.yunjung.todaysrecord.location.SetlocationFragment"
+        android:label="SetlocationFragment" />
 
 </navigation>

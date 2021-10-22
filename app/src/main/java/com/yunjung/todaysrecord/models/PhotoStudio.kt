@@ -2,6 +2,7 @@ package com.yunjung.todaysrecord.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import org.json.JSONObject
 
 // Kotlin의 data class : getter(), setter() 등이 자동으로 생성된다.
 // PhotoStudio 데이터의 모양을 정의함

@@ -40,6 +40,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/locationBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/ic_location"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_frame"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <!-- 프레그먼트 프레임 -->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_frame"
@@ -51,7 +61,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            app:navGraph="@navigation/nav_graph"/>
+            app:navGraph="@navigation/nav_graph" />
 
         <!-- 하단 메뉴-->
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -67,6 +77,18 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_nav_menu" />
+
+        <TextView
+            android:id="@+id/locationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="사용자 지역"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/locationBtn"
+            app:layout_constraintStart_toEndOf="@+id/locationBtn"
+            app:layout_constraintTop_toTopOf="@+id/locationBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
