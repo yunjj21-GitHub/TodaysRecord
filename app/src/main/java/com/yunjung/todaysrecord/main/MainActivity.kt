@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         /* Retrofit 관련 */
-        RetrofitManager.getInformation() // readChannel api 호출
+        RetrofitManager.getInformation() // 필요한 api 호출
 
         /* DataBinding & ViewMdoel(+LiveData) 관련 */
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)

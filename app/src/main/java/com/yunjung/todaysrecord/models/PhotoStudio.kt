@@ -1,6 +1,7 @@
 package com.yunjung.todaysrecord.models
 
 import android.os.Parcelable
+import com.google.gson.JsonObject
 import kotlinx.parcelize.Parcelize
 import org.json.JSONObject
 
@@ -8,12 +9,17 @@ import org.json.JSONObject
 // PhotoStudio 데이터의 모양을 정의함
 @Parcelize
 data class PhotoStudio (
-    var _id : Int? = null,
+    var _id : String? = null,
+    var area : String? = null, // 해당 사진관이 보여질 지역
+    var type : String? = null,
     var name : String? = null,
-    var address : String? = null,
-    var cost : Int? = null,
-    var content : String? = null,
+    var address : String? = null, // 상세주소
+    var cost : String? = null,
+    var image : String? = null,
     var phoneNumber : String? = null,
-    var homePage : String? = null,
-    var instarId : String? = null
+    var siteAddress : String? = null, // 인터넷 주소
+    var instagramId : String? = null,
+    var briefIntro : String? = null, // 간략한 소개
+    var intro : String? = null,
+    var location : List<Double>? = null // 지도에 표시하기 위한 좌표
 ) : Parcelable

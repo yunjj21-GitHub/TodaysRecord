@@ -74,5 +74,9 @@
         android:id="@+id/setlocationFragment"
         android:name="com.yunjung.todaysrecord.location.SetlocationFragment"
         android:label="SetlocationFragment" />
+    <fragment
+        android:id="@+id/writeReivewFragment"
+        android:name="com.yunjung.todaysrecord.writereivew.WriteReivewFragment"
+        android:label="WriteReivewFragment" /><action android:id="@+id/action_global_writeReivewFragment" app:destination="@id/writeReivewFragment"/>
 
 </navigation>

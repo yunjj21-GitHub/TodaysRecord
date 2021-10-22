@@ -36,7 +36,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/main_button"
+        android:background="@drawable/white_button"
         android:text="로그인"
         android:textSize="16sp"
         android:textStyle="bold"

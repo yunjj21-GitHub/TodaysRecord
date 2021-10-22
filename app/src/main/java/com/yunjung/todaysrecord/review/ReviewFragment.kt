@@ -50,7 +50,12 @@ class ReviewFragment : Fragment() {
         initRecycler()
         subscribeStudioList()
 
-        // '사진 더 보기' 클릭 이벤트 설정
+        // '리뷰 작성하기' 버튼 클릭 이벤트 설정
+        binding.writeReviewBtn.setOnClickListener {
+            it.findNavController().navigate(R.id.action_global_writeReivewFragment)
+        }
+
+        // '사진 더 보기' 버튼 클릭 이벤트 설정
         binding.moreImageBtn.setOnClickListener {
             it.findNavController().navigate(R.id.action_global_imageFragment)
         }
