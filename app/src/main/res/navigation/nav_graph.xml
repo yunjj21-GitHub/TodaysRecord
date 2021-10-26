@@ -72,7 +72,7 @@
         android:label="ImageFragment" /><action android:id="@+id/action_global_imageFragment" app:destination="@id/imageFragment"/>
     <fragment
         android:id="@+id/setlocationFragment"
-        android:name="com.yunjung.todaysrecord.location.SetlocationFragment"
+        android:name="com.yunjung.todaysrecord.setlocation.SetlocationFragment"
         android:label="SetlocationFragment" />
     <fragment
         android:id="@+id/writeReivewFragment"

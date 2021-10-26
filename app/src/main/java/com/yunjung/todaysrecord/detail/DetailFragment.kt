@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentDetailBinding
@@ -102,5 +103,9 @@ class DetailFragment : Fragment(){
                 heartState = false
             }
         }
+
+        // URL 이미지 처리
+        var photoStudioImage : String = viewModel.photoStudio.value?.image!![0]
+        Glide.with(this).load(photoStudioImage).into(binding.photoStudioImage)
     }
 }

@@ -15,11 +15,10 @@ data class PhotoStudio (
     var name : String? = null,
     var address : String? = null, // 상세주소
     var cost : String? = null,
-    var image : String? = null,
+    var image : List<String>? = null,
     var phoneNumber : String? = null,
     var siteAddress : String? = null, // 인터넷 주소
     var instagramId : String? = null,
-    var briefIntro : String? = null, // 간략한 소개
     var intro : String? = null,
     var location : List<Double>? = null // 지도에 표시하기 위한 좌표
 ) : Parcelable

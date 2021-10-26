@@ -1,11 +1,13 @@
 package com.yunjung.todaysrecord.recyclerview
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.yunjung.todaysrecord.databinding.ItemStudioBinding
 import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.studio.StudioFragmentDirections
@@ -45,6 +47,13 @@ class PhotoStudioAdapter :
             val directions =  StudioFragmentDirections.actionStudioFragmentToDetailFragment(getItem(position))
             it.findNavController().navigate(directions)
         }
+
+        // null data 처리
+        if(getItem(position).cost == null) binding.costText.text = "가격 정보 없음"
+
+        // URL 이미지 처리
+        var photoStudioImage : String = getItem(position).image!![0]
+        Glide.with(holder.itemView.context).load(photoStudioImage).into(binding.studioMainImage)
     }
 }
 

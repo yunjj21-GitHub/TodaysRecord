@@ -40,7 +40,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:text="안녕하세요. 사랑과 정성을 다하는 A사진관 입니다.\n저희 사진관의 강점은 깔끔하고 화사한 보정으로 면접사진을 \n필요로 하는 누구에게든 만족을 드릴 수 있다는 것입니다^^.\n어서어서 방문하시고 인생사진 남기세요~"
+                    android:text="@{viewModel.photoStudio.intro}"
                     android:textColor="#000000"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -73,10 +73,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="(시간 당) 0000원"
+                    android:text="@{viewModel.photoStudio.cost}"
                     android:textColor="#000000"
                     app:layout_constraintStart_toStartOf="@+id/textView17"
                     app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+                <TextView
+                    android:id="@+id/costText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="원"
+                    android:textColor="#000000"
+                    app:layout_constraintBottom_toBottomOf="@+id/cost"
+                    app:layout_constraintStart_toEndOf="@+id/cost"
+                    app:layout_constraintTop_toTopOf="@+id/cost" />
 
                 <View
                     android:id="@+id/divider7"
@@ -100,9 +110,8 @@
                     app:layout_constraintStart_toStartOf="@+id/cost"
                     app:layout_constraintTop_toBottomOf="@+id/divider7" />
 
-                <fragment
+                <FrameLayout
                     android:id="@+id/map"
-                    android:name="com.naver.maps.map.MapFragment"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:layout_marginStart="16dp"
@@ -117,23 +126,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="00시 00구 00동 00-00, 000호"
+                    android:text="@{viewModel.photoStudio.address}"
                     android:textColor="#000000"
                     app:layout_constraintStart_toStartOf="@+id/textView19"
                     app:layout_constraintTop_toBottomOf="@+id/map" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/textView21"
-                    android:layout_width="50dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="16dp"
-                    android:background="#00FFFFFF"
-                    android:text="복사"
-                    android:textColor="#3F51B5"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/address"
-                    app:layout_constraintStart_toEndOf="@+id/address"
-                    app:layout_constraintTop_toTopOf="@+id/address" />
 
                 <View
                     android:id="@+id/divider8"
@@ -143,7 +139,7 @@
                     android:background="?android:attr/listDivider"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView21" />
+                    app:layout_constraintTop_toBottomOf="@+id/address" />
                 <!-- 그외 정보 -->
                 <TextView
                     android:id="@+id/textView23"
@@ -171,24 +167,11 @@
                     android:id="@+id/phoneNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="000-000-000"
+                    android:text="@{viewModel.photoStudio.phoneNumber}"
                     android:textColor="#000000"
                     app:layout_constraintBottom_toBottomOf="@+id/textView24"
                     app:layout_constraintStart_toEndOf="@+id/textView24"
                     app:layout_constraintTop_toTopOf="@+id/textView24" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/textView30"
-                    android:layout_width="50dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="16dp"
-                    android:background="#00FFFFFF"
-                    android:text="복사"
-                    android:textColor="#3F51B5"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/phoneNumber"
-                    app:layout_constraintStart_toEndOf="@+id/phoneNumber"
-                    app:layout_constraintTop_toTopOf="@+id/phoneNumber" />
 
                 <TextView
                     android:id="@+id/textView26"
@@ -204,24 +187,11 @@
                     android:id="@+id/hompageAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="http://A_PhotoStudio.co.kr"
+                    android:text="@{viewModel.photoStudio.siteAddress}"
                     android:textColor="#000000"
                     app:layout_constraintBottom_toBottomOf="@+id/textView26"
                     app:layout_constraintStart_toEndOf="@+id/textView26"
                     app:layout_constraintTop_toTopOf="@+id/textView26" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/textView31"
-                    android:layout_width="50dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="16dp"
-                    android:background="#00FFFFFF"
-                    android:text="복사"
-                    android:textColor="#3F51B5"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/hompageAddress"
-                    app:layout_constraintStart_toEndOf="@+id/hompageAddress"
-                    app:layout_constraintTop_toTopOf="@+id/hompageAddress" />
 
                 <TextView
                     android:id="@+id/textView28"
@@ -239,24 +209,11 @@
                     android:id="@+id/instarId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="A_PhotoStudio"
+                    android:text="@{viewModel.photoStudio.instagramId}"
                     android:textColor="#000000"
                     app:layout_constraintBottom_toBottomOf="@+id/textView28"
                     app:layout_constraintStart_toEndOf="@+id/textView28"
                     app:layout_constraintTop_toTopOf="@+id/textView28" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/textView32"
-                    android:layout_width="50dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="16dp"
-                    android:background="#00FFFFFF"
-                    android:text="복사"
-                    android:textColor="#3F51B5"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/instarId"
-                    app:layout_constraintStart_toEndOf="@+id/instarId"
-                    app:layout_constraintTop_toTopOf="@+id/instarId" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

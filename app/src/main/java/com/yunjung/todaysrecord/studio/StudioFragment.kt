@@ -1,7 +1,9 @@
 package com.yunjung.todaysrecord.studio
 
+import android.content.ContentValues
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentStudioBinding
+import com.yunjung.todaysrecord.models.AreaLarge
+import com.yunjung.todaysrecord.models.PhotoStudio
+import com.yunjung.todaysrecord.network.RetrofitManager
 import com.yunjung.todaysrecord.recyclerview.PhotoStudioAdapter
+import retrofit2.Call
+import retrofit2.Response
 
 class StudioFragment : Fragment(){
     lateinit var binding : FragmentStudioBinding
@@ -43,95 +50,104 @@ class StudioFragment : Fragment(){
 
         // 리사이클러뷰 적용
         initRecycler()
-        subscribeStudioList(1)
+        getPhotoStudioByAreaAndType("망원동", "증명사진")
 
-        // 상단 버튼 이벤트 적용
-        binding.idenBtn.setOnClickListener {
-            binding.idenBtn.setBackgroundResource(R.drawable.studio_top_btn_clicked)
-            binding.idenBtn.setTextColor(Color.parseColor("#512771"))
+        // 상단 메뉴 버튼 이벤트 설정
+        binding.IDPhotoStudioBtn.setOnClickListener {
+            binding.IDPhotoStudioBtn.setBackgroundResource(R.drawable.studio_top_btn_clicked)
+            binding.IDPhotoStudioBtn.setTextColor(Color.parseColor("#512771"))
 
-            binding.profileBtn.setBackgroundResource(R.color.mainColor)
-            binding.profileBtn.setTextColor(Color.WHITE)
+            // 안눌린 버튼 처리
+            binding.profilePhotoStudioBtn.setBackgroundResource(R.color.mainColor)
+            binding.profilePhotoStudioBtn.setTextColor(Color.WHITE)
 
-            binding.moreBtn.setBackgroundResource(R.color.mainColor)
-            binding.moreBtn.setTextColor(Color.WHITE)
+            binding.familyPhotoStudioBtn.setBackgroundResource(R.color.mainColor)
+            binding.familyPhotoStudioBtn.setTextColor(Color.WHITE)
 
-            binding.otherBtn.setBackgroundResource(R.color.mainColor)
-            binding.otherBtn.setTextColor(Color.WHITE)
+            binding.otherPhotoStudioBtn.setBackgroundResource(R.color.mainColor)
+            binding.otherPhotoStudioBtn.setTextColor(Color.WHITE)
 
-            subscribeStudioList(1)
+            getPhotoStudioByAreaAndType("망원동", "증명사진")
         }
-        binding.profileBtn.setOnClickListener {
-            binding.profileBtn.setBackgroundResource(R.drawable.studio_top_btn_clicked)
-            binding.profileBtn.setTextColor(Color.parseColor("#512771"))
+        binding.profilePhotoStudioBtn.setOnClickListener {
+            binding.profilePhotoStudioBtn.setBackgroundResource(R.drawable.studio_top_btn_clicked)
+            binding.profilePhotoStudioBtn.setTextColor(Color.parseColor("#512771"))
 
-            binding.idenBtn.setBackgroundResource(R.color.mainColor)
-            binding.idenBtn.setTextColor(Color.WHITE)
+            // 안눌린 버튼 처리
+            binding.IDPhotoStudioBtn.setBackgroundResource(R.color.mainColor)
+            binding.IDPhotoStudioBtn.setTextColor(Color.WHITE)
 
-            binding.moreBtn.setBackgroundResource(R.color.mainColor)
-            binding.moreBtn.setTextColor(Color.WHITE)
+            binding.familyPhotoStudioBtn.setBackgroundResource(R.color.mainColor)
+            binding.familyPhotoStudioBtn.setTextColor(Color.WHITE)
 
-            binding.otherBtn.setBackgroundResource(R.color.mainColor)
-            binding.otherBtn.setTextColor(Color.WHITE)
+            binding.otherPhotoStudioBtn.setBackgroundResource(R.color.mainColor)
+            binding.otherPhotoStudioBtn.setTextColor(Color.WHITE)
 
-            subscribeStudioList(2)
+            getPhotoStudioByAreaAndType("망원동", "프로필사진")
         }
-        binding.moreBtn.setOnClickListener {
-            binding.moreBtn.setBackgroundResource(R.drawable.studio_top_btn_clicked)
-            binding.moreBtn.setTextColor(Color.parseColor("#512771"))
+        binding.familyPhotoStudioBtn.setOnClickListener {
+            binding.familyPhotoStudioBtn.setBackgroundResource(R.drawable.studio_top_btn_clicked)
+            binding.familyPhotoStudioBtn.setTextColor(Color.parseColor("#512771"))
 
-            binding.profileBtn.setBackgroundResource(R.color.mainColor)
-            binding.profileBtn.setTextColor(Color.WHITE)
+            // 안눌린 버튼 처리
+            binding.IDPhotoStudioBtn.setBackgroundResource(R.color.mainColor)
+            binding.IDPhotoStudioBtn.setTextColor(Color.WHITE)
 
-            binding.idenBtn.setBackgroundResource(R.color.mainColor)
-            binding.idenBtn.setTextColor(Color.WHITE)
+            binding.profilePhotoStudioBtn.setBackgroundResource(R.color.mainColor)
+            binding.profilePhotoStudioBtn.setTextColor(Color.WHITE)
 
-            binding.otherBtn.setBackgroundResource(R.color.mainColor)
-            binding.otherBtn.setTextColor(Color.WHITE)
+            binding.otherPhotoStudioBtn.setBackgroundResource(R.color.mainColor)
+            binding.otherPhotoStudioBtn.setTextColor(Color.WHITE)
 
-            subscribeStudioList(3)
+            getPhotoStudioByAreaAndType("망원동", "가족 커플 우정 사진")
         }
-        binding.otherBtn.setOnClickListener {
-            binding.otherBtn.setBackgroundResource(R.drawable.studio_top_btn_clicked)
-            binding.otherBtn.setTextColor(Color.parseColor("#512771"))
+        binding.otherPhotoStudioBtn.setOnClickListener {
+            binding.otherPhotoStudioBtn.setBackgroundResource(R.drawable.studio_top_btn_clicked)
+            binding.otherPhotoStudioBtn.setTextColor(Color.parseColor("#512771"))
 
-            binding.profileBtn.setBackgroundResource(R.color.mainColor)
-            binding.profileBtn.setTextColor(Color.WHITE)
+            // 안눌린 버튼 처리
+            binding.IDPhotoStudioBtn.setBackgroundResource(R.color.mainColor)
+            binding.IDPhotoStudioBtn.setTextColor(Color.WHITE)
 
-            binding.moreBtn.setBackgroundResource(R.color.mainColor)
-            binding.moreBtn.setTextColor(Color.WHITE)
+            binding.profilePhotoStudioBtn.setBackgroundResource(R.color.mainColor)
+            binding.profilePhotoStudioBtn.setTextColor(Color.WHITE)
 
-            binding.idenBtn.setBackgroundResource(R.color.mainColor)
-            binding.idenBtn.setTextColor(Color.WHITE)
+            binding.familyPhotoStudioBtn.setBackgroundResource(R.color.mainColor)
+            binding.familyPhotoStudioBtn.setTextColor(Color.WHITE)
 
-            subscribeStudioList(4)
+            getPhotoStudioByAreaAndType("망원동", "기타")
         }
     }
 
     // 리사이클러뷰 초기설정
     private fun initRecycler(){
-        binding.recyclerViewStudio.adapter = PhotoStudioAdapter()
-        binding.recyclerViewStudio.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        binding.recyclerViewPhotoStudio.adapter = PhotoStudioAdapter()
+        binding.recyclerViewPhotoStudio.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
     }
 
-    // 리사이클러뷰에 보여지는 데이터가 변경시 어댑터에게 알림
-    private fun subscribeStudioList(target : Int) {
-       if(target == 1){
-           viewModel.idenStdioList.observe(viewLifecycleOwner, {
-               (binding.recyclerViewStudio.adapter as PhotoStudioAdapter).submitList(it)
-           })
-       }else if(target == 2) {
-           viewModel.profileStudioList.observe(viewLifecycleOwner, {
-               (binding.recyclerViewStudio.adapter as PhotoStudioAdapter).submitList(it)
-           })
-       }else if(target == 3) {
-           viewModel.moreStudioList.observe(viewLifecycleOwner, {
-               (binding.recyclerViewStudio.adapter as PhotoStudioAdapter).submitList(it)
-           })
-       }else if(target == 4){
-           viewModel.otherStudioList.observe(viewLifecycleOwner, {
-               (binding.recyclerViewStudio.adapter as PhotoStudioAdapter).submitList(it)
-           })
-       }
+    // 서버에서 눌린 상단 버튼에 따라 디스플레이 되어야 하는 사진관 목록 가져와서 recyclerViewPhotoStudio에 담기도록 함
+    fun getPhotoStudioByAreaAndType(area : String, type : String){
+        // 서버에서 필요한 사진관 리스트 가져오기
+        val call : Call<List<PhotoStudio>>? = RetrofitManager.iRetrofit?.getPhotoStudioByAreaAndType(area = "망원동", type = type)
+        call?.enqueue(object : retrofit2.Callback<List<PhotoStudio>>{
+            // 응답 성공시
+            override fun onResponse(
+                call: Call<List<PhotoStudio>>,
+                response: Response<List<PhotoStudio>>
+            ) {
+                val result : List<PhotoStudio>? = response.body()
+                viewModel.updatePhotoStudioList(result)
+
+                // 리사이클러뷰에 보여지는 데이터가 변경시 어댑터에게 알림
+                viewModel.photoStudioList.observe(viewLifecycleOwner, {
+                    (binding.recyclerViewPhotoStudio.adapter as PhotoStudioAdapter).submitList(it)
+                })
+            }
+
+            // 응답 실패시
+            override fun onFailure(call: Call<List<PhotoStudio>>, t: Throwable) {
+                Log.e(ContentValues.TAG, t.localizedMessage)
+            }
+        })
     }
 }

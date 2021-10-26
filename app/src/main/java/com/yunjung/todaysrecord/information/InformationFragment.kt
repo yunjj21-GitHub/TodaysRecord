@@ -1,20 +1,28 @@
 package com.yunjung.todaysrecord.information
 
+import android.content.ContentValues.TAG
+import android.nfc.Tag
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.*
+import com.naver.maps.map.overlay.Marker
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentInformationBinding
 import com.yunjung.todaysrecord.detail.DetailFragmentArgs
 import com.yunjung.todaysrecord.models.PhotoStudio
 
-class InformationFragment : Fragment(){
+class InformationFragment : Fragment(), OnMapReadyCallback{
     lateinit var binding : FragmentInformationBinding
     lateinit var viewModel: InformationViewModel
+
+    private lateinit var naverMap: NaverMap
 
     companion object{
         // Fragment가 생성될 때 DetailFragmentArgs 객체를 전달 받음
@@ -48,5 +56,34 @@ class InformationFragment : Fragment(){
         binding.viewModel = viewModel
 
         // photoStudio 객체 사용가능
+        viewModel.updateValue(photoStudio)
+
+        // null data 처리
+        if(viewModel.photoStudio.value!!.cost == null) binding.costText.text = "가격 정보 없음"
+
+        /* 네이버 지도 관련  */
+        val fragmentManager = childFragmentManager
+
+        // 카메라 초기 위치 설정
+        val options = NaverMapOptions()
+            .camera(CameraPosition(LatLng(viewModel.photoStudio.value!!.location!![0], viewModel.photoStudio.value!!.location!![1]), 16.0))
+
+        // 네이버 지도 객체 생성
+        val mapFragment = fragmentManager.findFragmentById(R.id.map) as MapFragment?
+            ?: MapFragment.newInstance(options).also {
+                fragmentManager.beginTransaction().add(R.id.map, it).commit()
+            }
+
+        mapFragment.getMapAsync(this) // 비동기로 naverMap 객체를 얻어옴
+    }
+
+    // NaverMap 객체를 얻어 올 수 있음
+    override fun onMapReady(naverMap: NaverMap) {
+        this.naverMap = naverMap
+
+        // 해당 사진관 마커 추가
+        val marker = Marker()
+        marker.position = LatLng(viewModel.photoStudio.value!!.location!![0], viewModel.photoStudio.value!!.location!![1])
+        marker.map = naverMap
     }
 }
