@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity(){
                 R.id.myreviewFragment -> {
                     binding.title.text = "리뷰관리"
                 }
-                R.id.imageFragment -> {
+                R.id.moreimageFragment -> {
                     binding.title.text = "사진 더보기"
                 }
                 else -> {

@@ -66,10 +66,10 @@
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/textView10"
+                                android:id="@+id/reviewNum"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="00"
+                                android:text="@{viewModel.reviewNum.toString()}"
                                 android:textColor="#000000"
                                 android:textSize="16sp" />
 
@@ -96,7 +96,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
                             <TextView
-                                android:id="@+id/textView16"
+                                android:id="@+id/reviewAvg"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0.00"
@@ -299,7 +299,7 @@
                         android:layout_height="match_parent">
 
                         <ImageView
-                            android:id="@+id/imageView4"
+                            android:id="@+id/preImageView1"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:layout_marginStart="16dp"
@@ -312,14 +312,14 @@
                             app:srcCompat="@drawable/sample_image" />
 
                         <ImageView
-                            android:id="@+id/imageView5"
+                            android:id="@+id/preImageView2"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:layout_marginStart="16dp"
                             android:scaleType="fitXY"
-                            app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-                            app:layout_constraintStart_toEndOf="@+id/imageView4"
-                            app:layout_constraintTop_toTopOf="@+id/imageView4"
+                            app:layout_constraintBottom_toBottomOf="@+id/preImageView1"
+                            app:layout_constraintStart_toEndOf="@+id/preImageView1"
+                            app:layout_constraintTop_toTopOf="@+id/preImageView1"
                             app:srcCompat="@drawable/sample_image" />
 
                         <LinearLayout

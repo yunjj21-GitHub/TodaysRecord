@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.yunjung.todaysrecord.databinding.ItemImageBinding
 import com.yunjung.todaysrecord.models.Review
 
@@ -39,6 +40,10 @@ class ImageAdapter : ListAdapter<Review, ImageAdapter.ImageViewHolder>(ReviewDif
         // position : 해당 뷰홀더가 리사이클러뷰에서 보여지는 위치 정보를 가지고 있음
         // getItem(position) : 위치에 해당하는 데이터를 가져옴
         holder.initBinding(getItem(position))
+
+        // URL 이미지 처리
+        var image : String = getItem(position).image!!
+        Glide.with(holder.itemView.context).load(image).into(binding.imageView)
     }
 
     // 데이터가 변경되었을 때 실행

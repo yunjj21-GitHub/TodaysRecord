@@ -67,9 +67,14 @@
         android:name="com.yunjung.todaysrecord.myreviews.MyreviewFragment"
         android:label="MyreviewFragment" />
     <fragment
-        android:id="@+id/imageFragment"
+        android:id="@+id/moreimageFragment"
         android:name="com.yunjung.todaysrecord.moreimage.MoreImageFragment"
-        android:label="ImageFragment" /><action android:id="@+id/action_global_imageFragment" app:destination="@id/imageFragment"/>
+        android:label="ImageFragment" >
+        <argument
+            android:name="photoStudio"
+            app:argType="com.yunjung.todaysrecord.models.PhotoStudio"
+            app:nullable="true" />
+    </fragment><action android:id="@+id/action_global_moreimageFragment" app:destination="@id/moreimageFragment"/>
     <fragment
         android:id="@+id/setlocationFragment"
         android:name="com.yunjung.todaysrecord.setlocation.SetlocationFragment"
@@ -77,6 +82,10 @@
     <fragment
         android:id="@+id/writeReivewFragment"
         android:name="com.yunjung.todaysrecord.writereivew.WriteReivewFragment"
-        android:label="WriteReivewFragment" /><action android:id="@+id/action_global_writeReivewFragment" app:destination="@id/writeReivewFragment"/>
+        android:label="WriteReivewFragment" >
+        <argument
+            android:name="psId"
+            app:argType="string" />
+    </fragment><action android:id="@+id/action_global_writeReivewFragment" app:destination="@id/writeReivewFragment"/>
 
 </navigation>

@@ -1,6 +1,9 @@
 package com.yunjung.todaysrecord.review
 
+import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +13,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentReviewBinding
 import com.yunjung.todaysrecord.detail.DetailFragmentArgs
 import com.yunjung.todaysrecord.models.PhotoStudio
+import com.yunjung.todaysrecord.models.Review
+import com.yunjung.todaysrecord.moreimage.MoreImageFragmentDirections
+import com.yunjung.todaysrecord.network.RetrofitManager
 import com.yunjung.todaysrecord.recyclerview.ReviewAdapter
+import com.yunjung.todaysrecord.writereivew.WriteReivewFragmentDirections
+import retrofit2.Call
+import retrofit2.Response
 
 class ReviewFragment : Fragment() {
     lateinit var binding: FragmentReviewBinding
@@ -46,18 +56,46 @@ class ReviewFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ReviewViewModel::class.java)
         binding.viewModel = viewModel
 
-        // 리사이클러뷰 적용
-        initRecycler()
-        subscribeStudioList()
+        // 서버로부터 해당 사진관의 리뷰를 가져옴
+        val call : Call<List<Review>>? = RetrofitManager.iRetrofit?.getReviewByPsId(photoStudio._id)
+        call?.enqueue(object : retrofit2.Callback<List<Review>> {
+            // 응답 성공시
+            override fun onResponse(
+                call: Call<List<Review>>,
+                response: Response<List<Review>>
+            ) {
+                val result : List<Review>? = response.body()
+                viewModel.getReviewList(result) // viewModel에 받아온 값 적용
+
+                // '리뷰 사진 모아보기'란의 URL 이미지 처리
+                var preImage1 : String? = viewModel.reviewList.value!![0].image
+                Glide.with(view).load(preImage1).into(binding.preImageView1)
+
+                var preImage2 : String? = viewModel.reviewList.value!![1].image
+                Glide.with(view).load(preImage2).into(binding.preImageView2)
+
+                // 리사이클러뷰 적용
+                initRecycler()
+                subscribeStudioList()
+
+                // '사진 더 보기' 버튼 클릭 이벤트 설정
+                binding.moreImageBtn.setOnClickListener {
+                    val direction = MoreImageFragmentDirections.actionGlobalMoreimageFragment(
+                        photoStudio)
+                    it.findNavController().navigate(direction)
+                }
+            }
+
+            // 응답 실패시
+            override fun onFailure(call: Call<List<Review>>, t: Throwable) {
+                Log.e(ContentValues.TAG, t.localizedMessage)
+            }
+        })
 
         // '리뷰 작성하기' 버튼 클릭 이벤트 설정
         binding.writeReviewBtn.setOnClickListener {
-            it.findNavController().navigate(R.id.action_global_writeReivewFragment)
-        }
-
-        // '사진 더 보기' 버튼 클릭 이벤트 설정
-        binding.moreImageBtn.setOnClickListener {
-            it.findNavController().navigate(R.id.action_global_imageFragment)
+            val directions = WriteReivewFragmentDirections.actionGlobalWriteReivewFragment(photoStudio._id.toString())
+            it.findNavController().navigate(directions)
         }
     }
 

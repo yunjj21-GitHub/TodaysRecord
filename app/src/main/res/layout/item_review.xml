@@ -39,10 +39,10 @@
                 app:layout_constraintTop_toTopOf="@+id/imageView7">
 
                 <TextView
-                    android:id="@+id/userId"
+                    android:id="@+id/userNickName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{item.userId}"
+                    android:text="userNickName"
                     android:textColor="#000000" />
 
                 <RatingBar
@@ -54,32 +54,29 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imageView9"
+                android:id="@+id/reviewImage"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="@+id/imageView7"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView7"
                 app:srcCompat="@drawable/sample_image" />
 
             <TextView
                 android:id="@+id/content"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
                 android:text="@{item.content}"
                 android:textColor="#000000"
-                app:layout_constraintStart_toStartOf="@+id/imageView9"
-                app:layout_constraintTop_toBottomOf="@+id/imageView9" />
-
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="작성된 날짜"
-                app:layout_constraintBottom_toBottomOf="@+id/linearLayout7"
-                app:layout_constraintStart_toEndOf="@+id/linearLayout7" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reviewImage" />
 
             <View
                 android:id="@+id/divider15"
