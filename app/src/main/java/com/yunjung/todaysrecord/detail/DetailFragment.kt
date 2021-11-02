@@ -1,5 +1,6 @@
 package com.yunjung.todaysrecord.detail
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -50,6 +51,9 @@ class DetailFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 임의의 userId
+        val userId : String = "616be2b08346b820364b82b1"
+
         /* DataBinding & ViewModel 관련 */
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         binding.viewModel = viewModel
@@ -74,7 +78,7 @@ class DetailFragment : Fragment(){
             }
         }.attach()
 
-        // 뷰페이저 페이지 변경 이벤트 설정(resize ViewPager)
+        /* 뷰페이저 페이지 변경 이벤트 설정(resize ViewPager) */
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -92,9 +96,14 @@ class DetailFragment : Fragment(){
             }
         })
 
-        /* 그외 코드 */
-        // 찜 버튼 클릭 이벤트 설정
+        /* 찜 버튼 클릭 이벤트 설정 */
         binding.heartBtn.setOnClickListener {
+            // userId에 interests를 확인 (해당 photoStudioId가 있는지 없는지)
+
+            // 있을 때의 클릭이벤트
+
+            // 없을 때의 클릭이벤트
+
             if(heartState == false) {
                 binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
                 heartState = true
@@ -104,8 +113,19 @@ class DetailFragment : Fragment(){
             }
         }
 
-        // URL 이미지 처리
+        /* 사진관 메인 이미지 디스플레이 & 이미지 왼오 버튼 클릭 이벤트 설정 */
         var photoStudioImage : String = viewModel.photoStudio.value?.image!![0]
         Glide.with(this).load(photoStudioImage).into(binding.photoStudioImage)
+
+        /* 공유하기 버튼 클릭 이벤트 설정 */
+        binding.shareBtn.setOnClickListener {
+            // 공유하기 창을 띄운다
+            val shareIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, "공유할 내용")
+            }
+            startActivity(Intent.createChooser(shareIntent, null))
+        }
     }
 }

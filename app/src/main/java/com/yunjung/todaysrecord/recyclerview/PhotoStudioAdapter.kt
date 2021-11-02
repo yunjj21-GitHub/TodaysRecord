@@ -1,6 +1,8 @@
 package com.yunjung.todaysrecord.recyclerview
 
+import android.content.ContentValues.TAG
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
@@ -14,8 +16,6 @@ import com.yunjung.todaysrecord.studio.StudioFragmentDirections
 
 class PhotoStudioAdapter :
     ListAdapter<PhotoStudio, PhotoStudioAdapter.PhotoStudioViewHolder>(PhotoStudioDiff){
-    lateinit var binding : ItemStudioBinding // 카드뷰를 포함한 레이아웃의 바인딩 객체
-    lateinit var layoutInflater : LayoutInflater
 
     // 뷰홀더 정의
     class PhotoStudioViewHolder(private val binding : ItemStudioBinding) :
@@ -24,14 +24,21 @@ class PhotoStudioAdapter :
         // 초기화
         fun initBinding(photoStudio: PhotoStudio) {
             binding.item = photoStudio // photoStudio가 binding객체의 레이아웃의 item변수로 넘어감
+
+            // cost필드 null일 때 처리
+            if(photoStudio.cost == null) binding.costText.text = "가격 정보 없음"
+
+            // URL 이미지 처리
+            var photoStudioImage : String = photoStudio.image!![0]
+            Glide.with(binding.root.context).load(photoStudioImage).into(binding.studioMainImage)
         }
     }
 
     // 뷰홀더가 생성 되었을 때 실행
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoStudioViewHolder {
         // 연결할 레이아웃 설정
-        layoutInflater = LayoutInflater.from(parent.context)
-        binding = ItemStudioBinding.inflate(layoutInflater)
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = ItemStudioBinding.inflate(layoutInflater)
 
         return PhotoStudioViewHolder(binding)
     }
@@ -47,13 +54,6 @@ class PhotoStudioAdapter :
             val directions =  StudioFragmentDirections.actionStudioFragmentToDetailFragment(getItem(position))
             it.findNavController().navigate(directions)
         }
-
-        // null data 처리
-        if(getItem(position).cost == null) binding.costText.text = "가격 정보 없음"
-
-        // URL 이미지 처리
-        var photoStudioImage : String = getItem(position).image!![0]
-        Glide.with(holder.itemView.context).load(photoStudioImage).into(binding.studioMainImage)
     }
 }
 

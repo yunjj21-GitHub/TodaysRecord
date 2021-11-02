@@ -64,6 +64,12 @@ interface IRetrofit {
         @Query("belong") belong : String? = null
     ) : Call<List<AreaSmall>>
 
+    @GET("/checkPhotostudioIdInUserInterests")
+    fun checkPhotostudioIdInUserInterests(
+        @Query("psId") psId : String? = null,
+        @Query("userId") userId : String? = null
+    ) : Call<Boolean>
+
     // Update
     // 전체를 수정하는 PUT
     @PUT("/putReviewById")
@@ -85,6 +91,20 @@ interface IRetrofit {
     fun patchUserProfileImageById(
         @Query("_id") _id : String? = null,
         @Query("profileImage") profileImage : String? = null
+    ) : Call<User>
+
+    // 유저의 interests에 특정 photostudio _id를 추가하는 API
+    @PATCH("addPhotostudioIdInUserInterests")
+    fun addPhotostudioIdInUserInterests(
+        @Query("psId") psId : String? = null,
+        @Query("userId") userId : String? = null
+    ) : Call<User>
+
+    // 유저의 interests에 특정 photostudio _id를 빼는 API
+    @PATCH("pullPhotostudioIdInUserInterests")
+    fun pullPhotostudioIdInUserInterests(
+        @Query("psId") psId : String? = null,
+        @Query("userId") userId : String? = null
     ) : Call<User>
 
     // Delete (DELETE)

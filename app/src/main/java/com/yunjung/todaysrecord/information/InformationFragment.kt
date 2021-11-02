@@ -1,6 +1,7 @@
 package com.yunjung.todaysrecord.information
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.nfc.Tag
 import android.os.Bundle
 import android.util.Log
@@ -84,6 +85,18 @@ class InformationFragment : Fragment(), OnMapReadyCallback{
         // 해당 사진관 마커 추가
         val marker = Marker()
         marker.position = LatLng(viewModel.photoStudio.value!!.location!![0], viewModel.photoStudio.value!!.location!![1])
-        marker.map = naverMap
+        marker.map = this.naverMap
+    }
+
+    // 해당 프래그먼트가 재개될 때 실행
+    override fun onResume() {
+        super.onResume()
+
+        if(this::naverMap.isInitialized) { // naverMap 객체가 초기화 되었다면
+            // 해당 사진관 마커 다시 추가
+            val marker = Marker()
+            marker.position = LatLng(viewModel.photoStudio.value!!.location!![0], viewModel.photoStudio.value!!.location!![1])
+            marker.map = this.naverMap
+        }
     }
 }

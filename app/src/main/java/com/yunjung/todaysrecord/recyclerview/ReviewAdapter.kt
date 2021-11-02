@@ -19,8 +19,6 @@ import retrofit2.Response
 
 class ReviewAdapter :
     ListAdapter<Review, ReviewAdapter.ReviewViewHolder>(ReviewDiff){
-    lateinit var binding : ItemReviewBinding
-    lateinit var layoutInflater: LayoutInflater
 
     // 뷰홀더 정의
     class ReviewViewHolder(private val binding : ItemReviewBinding) :
@@ -29,6 +27,28 @@ class ReviewAdapter :
         // 초기화
         fun initBinding(review: Review) {
             binding.item = review // review가 binding객체의 레이아웃의 item변수로 넘어감
+
+            // Review의 UserId를 통해서 대응되는 User 객체를 얻어옴
+            val call : Call<User>? = RetrofitManager.iRetrofit?.getUserById(review.userId)
+            call?.enqueue(object : retrofit2.Callback<User> {
+                // 응답 성공시
+                override fun onResponse(
+                    call: Call<User>,
+                    response: Response<User>
+                ) {
+                    // nickName 디스플레이
+                    binding.userNickName.text = response.body()!!.nickName
+                }
+
+                // 응답 실패시
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    Log.e(ContentValues.TAG, t.localizedMessage)
+                }
+            })
+
+            // URL 이미지 처리
+            var reviewImage : String = review.image!!
+            Glide.with(binding.root.context).load(reviewImage).into(binding.reviewImage)
         }
     }
 
@@ -38,8 +58,8 @@ class ReviewAdapter :
         viewType: Int
     ): ReviewAdapter.ReviewViewHolder {
         // 연결할 레이아웃 설정
-        layoutInflater = LayoutInflater.from(parent.context) // layoutInflater 초기화
-        binding = ItemReviewBinding.inflate(layoutInflater) // binding 초기화
+        val layoutInflater = LayoutInflater.from(parent.context) // layoutInflater 초기화
+        val binding = ItemReviewBinding.inflate(layoutInflater) // binding 초기화
 
         return ReviewViewHolder(binding)
     }
@@ -48,30 +68,8 @@ class ReviewAdapter :
     override fun onBindViewHolder(holder: ReviewAdapter.ReviewViewHolder, position: Int) {
         // position : 해당 뷰홀더가 리사이클러뷰에서 보여지는 위치 정보를 가지고 있음
         // getItem(position) : 위치에 해당하는 데이터를 가져옴
+
         holder.initBinding(getItem(position))
-
-        // Review의 UserId를 통해서 대응되는 User 객체를 얻어옴
-        val call : Call<User>? = RetrofitManager.iRetrofit?.getUserById(getItem(position).userId)
-        call?.enqueue(object : retrofit2.Callback<User> {
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<User>,
-                response: Response<User>
-            ) {
-                // nickName 디스플레이
-                binding.userNickName.text = response.body()!!.nickName
-                Log.e(TAG, "nickName : " + response.body()!!.nickName)
-            }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<User>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
-        })
-
-        // URL 이미지 처리
-        var reviewImage : String = getItem(position).image!!
-        Glide.with(holder.itemView.context).load(reviewImage).into(binding.reviewImage)
     }
 
     // 데이터가 변경되었을 때 실행

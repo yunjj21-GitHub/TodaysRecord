@@ -54,36 +54,67 @@ class ReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(ReviewViewModel::class.java)
-        binding.viewModel = viewModel
 
         // 서버로부터 해당 사진관의 리뷰를 가져옴
-        val call : Call<List<Review>>? = RetrofitManager.iRetrofit?.getReviewByPsId(photoStudio._id)
-        call?.enqueue(object : retrofit2.Callback<List<Review>> {
+        val call : Call<List<Review>> = RetrofitManager.iRetrofit.getReviewByPsId(photoStudio._id)
+        call.enqueue(object : retrofit2.Callback<List<Review>> {
             // 응답 성공시
             override fun onResponse(
                 call: Call<List<Review>>,
                 response: Response<List<Review>>
             ) {
-                val result : List<Review>? = response.body()
-                viewModel.getReviewList(result) // viewModel에 받아온 값 적용
+                /* viewModel에 필요한 값 전달 */
+                val result : List<Review> = response.body()!!
+                viewModel.getReviewList(result)
 
-                // '리뷰 사진 모아보기'란의 URL 이미지 처리
+                viewModel.getReviewNum(result.size)
+
+                // reviewAvg & 각 별점의 비율을 계산
+                var avg : Int = 0
+                var fiveStar : Int = 0
+                var fourStar : Int = 0
+                var threeStar : Int = 0
+                var twoStar : Int = 0
+                var oneStar : Int = 0
+                for(res in result){
+                    avg += res.rating!!
+
+                    when (res.rating) {
+                        5 -> fiveStar++
+                        4 -> fourStar++
+                        3 -> threeStar++
+                        2 -> twoStar++
+                        1 -> oneStar++
+                    }
+                }
+                viewModel.getReviewAvg(avg / result.size)
+
+                fiveStar = (fiveStar * 100) / result.size
+                fourStar = (fourStar * 100) / result.size
+                threeStar = (threeStar * 100) / result.size
+                twoStar = (twoStar * 100) / result.size
+                oneStar = (oneStar * 100) / result.size
+                viewModel.getRating(fiveStar, fourStar, threeStar, twoStar, oneStar)
+
+                /* '리뷰 사진 모아보기'란의 URL 이미지 처리 */
                 var preImage1 : String? = viewModel.reviewList.value!![0].image
                 Glide.with(view).load(preImage1).into(binding.preImageView1)
 
                 var preImage2 : String? = viewModel.reviewList.value!![1].image
                 Glide.with(view).load(preImage2).into(binding.preImageView2)
 
-                // 리사이클러뷰 적용
+                /* 리사이클러뷰 적용 */
                 initRecycler()
                 subscribeStudioList()
 
-                // '사진 더 보기' 버튼 클릭 이벤트 설정
+                /* '사진 더 보기' 버튼 클릭 이벤트 설정 */
                 binding.moreImageBtn.setOnClickListener {
                     val direction = MoreImageFragmentDirections.actionGlobalMoreimageFragment(
                         photoStudio)
                     it.findNavController().navigate(direction)
                 }
+
+                binding.viewModel = viewModel
             }
 
             // 응답 실패시
@@ -92,7 +123,7 @@ class ReviewFragment : Fragment() {
             }
         })
 
-        // '리뷰 작성하기' 버튼 클릭 이벤트 설정
+        /* '리뷰 작성하기' 버튼 클릭 이벤트 설정 */
         binding.writeReviewBtn.setOnClickListener {
             val directions = WriteReivewFragmentDirections.actionGlobalWriteReivewFragment(photoStudio._id.toString())
             it.findNavController().navigate(directions)

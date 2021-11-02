@@ -99,7 +99,7 @@
                                 android:id="@+id/reviewAvg"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0.00"
+                                android:text="@{viewModel.reviewAvg.toString()}"
                                 android:textColor="#000000" />
 
                             <TextView
@@ -117,7 +117,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="26dp"
                             android:numStars="5"
-                            android:rating="5"
+                            android:rating="@{viewModel.reviewAvg}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
@@ -130,7 +130,7 @@
                         android:layout_height="match_parent"
                         android:background="?android:attr/listDivider" />
 
-                    <!-- 각 별전 Rating Bar -->
+                    <!-- 각 별점 Rating Bar -->
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -199,6 +199,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
+                            android:progress="@{viewModel.fiveStarRatio}"
                             app:layout_constraintBottom_toBottomOf="@+id/textView30"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView30"
@@ -213,6 +214,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
+                            android:progress="@{viewModel.fourStarRatio}"
                             app:layout_constraintBottom_toBottomOf="@+id/textView31"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView31"
@@ -227,6 +229,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
+                            android:progress="@{viewModel.threeStarRatio}"
                             app:layout_constraintBottom_toBottomOf="@+id/textView32"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView32"
@@ -241,6 +244,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
+                            android:progress="@{viewModel.twoStarRatio}"
                             app:layout_constraintBottom_toBottomOf="@+id/textView33"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView33"
@@ -255,6 +259,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
+                            android:progress="@{viewModel.oneStarRatio}"
                             app:layout_constraintBottom_toBottomOf="@+id/textView34"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView34"
