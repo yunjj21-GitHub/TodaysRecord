@@ -1,7 +1,9 @@
 package com.yunjung.todaysrecord.detail
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +18,13 @@ import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentDetailBinding
 import com.yunjung.todaysrecord.information.InformationFragment
 import com.yunjung.todaysrecord.models.PhotoStudio
+import com.yunjung.todaysrecord.models.User
+import com.yunjung.todaysrecord.network.RetrofitManager
+import com.yunjung.todaysrecord.recyclerview.PhotoStudioAdapter
 import com.yunjung.todaysrecord.review.ReviewFragment
 import com.yunjung.todaysrecord.viewpager.ViewpagerAdapter
+import retrofit2.Call
+import retrofit2.Response
 
 class DetailFragment : Fragment(){
     // DataBinding & ViewModel 관련 변수
@@ -51,8 +58,8 @@ class DetailFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 임의의 userId
-        val userId : String = "616be2b08346b820364b82b1"
+        val userId : String = "616be2b08346b820364b82b1" // 임의의 userId
+        var heartState : Boolean = false // user가 현재 사진관을 찜하고 있는지 아닌지를 저장
 
         /* DataBinding & ViewModel 관련 */
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
@@ -96,22 +103,69 @@ class DetailFragment : Fragment(){
             }
         })
 
-        /* 찜 버튼 클릭 이벤트 설정 */
+        /* 찜 버튼 관련 */
+        // user가 현재 사진관을 찜하고 있는지 확인
+        val call : Call<Boolean> = RetrofitManager.iRetrofit.checkPhotostudioIdInUserInterests(psId = photoStudio._id, userId = userId)
+        call.enqueue(object : retrofit2.Callback<Boolean>{
+            // 응답 성공시
+            override fun onResponse(
+                call: Call<Boolean>,
+                response: Response<Boolean>
+            ) {
+                heartState = response.body()!!
+                if(heartState){ // 찜 하고 있다면 (true)
+                    binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
+                }else{ // 찜 하고 있지 않다면 (false)
+                    binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
+                }
+            }
+
+            // 응답 실패시
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.e(ContentValues.TAG, t.localizedMessage)
+            }
+        })
+
+        // 찜 버튼 클릭 이벤트 설정
         binding.heartBtn.setOnClickListener {
-            // userId에 interests를 확인 (해당 photoStudioId가 있는지 없는지)
+            if(heartState){ // user가 현재 사진관을 찜하고 있었다면
+                val call : Call<User> = RetrofitManager.iRetrofit.pullPhotostudioIdInUserInterests(psId = photoStudio._id, userId = userId)
+                call.enqueue(object : retrofit2.Callback<User>{
+                    // 응답 성공시
+                    override fun onResponse(
+                        call: Call<User>,
+                        response: Response<User>
+                    ) {
+                        heartState = false
+                        binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
+                    }
 
-            // 있을 때의 클릭이벤트
+                    // 응답 실패시
+                    override fun onFailure(call: Call<User>, t: Throwable) {
+                        Log.e(ContentValues.TAG, t.localizedMessage)
+                    }
+                })
+            }
+            else { // user가 현재 사진관을 찜하지 않고 있었다면
+                val call : Call<User> = RetrofitManager.iRetrofit.addPhotostudioIdInUserInterests(psId = photoStudio._id, userId = userId)
+                call.enqueue(object : retrofit2.Callback<User>{
+                    // 응답 성공시
+                    override fun onResponse(
+                        call: Call<User>,
+                        response: Response<User>
+                    ) {
+                        heartState = true
+                        binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
+                    }
 
-            // 없을 때의 클릭이벤트
-
-            if(heartState == false) {
-                binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
-                heartState = true
-            }else{
-                binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
-                heartState = false
+                    // 응답 실패시
+                    override fun onFailure(call: Call<User>, t: Throwable) {
+                        Log.e(ContentValues.TAG, t.localizedMessage)
+                    }
+                })
             }
         }
+
 
         /* 사진관 메인 이미지 디스플레이 & 이미지 왼오 버튼 클릭 이벤트 설정 */
         var photoStudioImage : String = viewModel.photoStudio.value?.image!![0]
