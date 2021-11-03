@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentPhotostudioFamilyBinding
+import com.yunjung.todaysrecord.main.MainActivity
 import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.network.RetrofitManager
 import com.yunjung.todaysrecord.recyclerview.PhotoStudioAdapter

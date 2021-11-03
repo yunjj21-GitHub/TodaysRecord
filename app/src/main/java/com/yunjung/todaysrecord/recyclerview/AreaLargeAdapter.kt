@@ -10,9 +10,6 @@ import com.yunjung.todaysrecord.databinding.ItemAreaLargeBinding
 import com.yunjung.todaysrecord.setlocation.SetlocationFragment
 
 class AreaLargeAdapter: ListAdapter<AreaLarge, AreaLargeAdapter.AreaLargeViewHolder>(AreaLargeDiff){
-    lateinit var binding : ItemAreaLargeBinding
-    lateinit var layoutInflater: LayoutInflater
-
     // 뷰홀더 정의
     class AreaLargeViewHolder(private val binding : ItemAreaLargeBinding) :
         RecyclerView.ViewHolder(binding.root){
@@ -29,16 +26,16 @@ class AreaLargeAdapter: ListAdapter<AreaLarge, AreaLargeAdapter.AreaLargeViewHol
         viewType: Int
     ): AreaLargeAdapter.AreaLargeViewHolder {
         // 연결할 레이아웃 설정
-        layoutInflater = LayoutInflater.from(parent.context) // layoutInflater 초기화
-        binding = ItemAreaLargeBinding.inflate(layoutInflater) // binding 초기화
+        val layoutInflater = LayoutInflater.from(parent.context) // layoutInflater 초기화
+        val binding = ItemAreaLargeBinding.inflate(layoutInflater) // binding 초기화
 
-        setMatchParentToRecyclerView()
+        setMatchParentToRecyclerView(binding)
 
         return AreaLargeViewHolder(binding)
     }
 
     // 각 item이 recyclerView를 가득 채우도록 함
-    private fun setMatchParentToRecyclerView(){
+    private fun setMatchParentToRecyclerView(binding : ItemAreaLargeBinding){
         val layoutParams =  RecyclerView.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
@@ -54,7 +51,16 @@ class AreaLargeAdapter: ListAdapter<AreaLarge, AreaLargeAdapter.AreaLargeViewHol
 
         // 아이템 클릭 이벤트 설정
         holder.itemView.setOnClickListener {
+            SetlocationFragment.userArea[0] = getItem(position).name
 
+            if(getItem(position).name == "전국"){
+                SetlocationFragment.userArea[1] = "전체"
+                SetlocationFragment.userArea[2] = "전체"
+            }
+            else{
+                SetlocationFragment.userArea[1] = null
+                SetlocationFragment.userArea[2] = null
+            }
         }
     }
 

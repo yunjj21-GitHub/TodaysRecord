@@ -10,7 +10,7 @@ import org.json.JSONObject
 @Parcelize
 data class PhotoStudio (
     var _id : String? = null,
-    var area : String? = null, // 해당 사진관이 보여질 지역
+    var area : List<String>? = null, // 해당 사진관이 보여질 지역
     var type : String? = null,
     var name : String? = null,
     var address : String? = null, // 상세주소

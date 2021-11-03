@@ -7,11 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.databinding.ItemAreaSmallBinding
 import com.yunjung.todaysrecord.models.AreaSmall
+import com.yunjung.todaysrecord.setlocation.SetlocationFragment
 
 class AreaSmallAdapter : ListAdapter<AreaSmall, AreaSmallAdapter.AreaSmallViewHolder>(AreaSmallDiff){
-    lateinit var binding : ItemAreaSmallBinding
-    lateinit var layoutInflater: LayoutInflater
-
     // 뷰홀더 정의
     class AreaSmallViewHolder(private val binding : ItemAreaSmallBinding) :
         RecyclerView.ViewHolder(binding.root){
@@ -28,16 +26,16 @@ class AreaSmallAdapter : ListAdapter<AreaSmall, AreaSmallAdapter.AreaSmallViewHo
         viewType: Int
     ): AreaSmallAdapter.AreaSmallViewHolder {
         // 연결할 레이아웃 설정
-        layoutInflater = LayoutInflater.from(parent.context) // layoutInflater 초기화
-        binding = ItemAreaSmallBinding.inflate(layoutInflater) // binding 초기화
+        val layoutInflater = LayoutInflater.from(parent.context) // layoutInflater 초기화
+        val binding = ItemAreaSmallBinding.inflate(layoutInflater) // binding 초기화
 
-        setMatchParentToRecyclerView()
+        setMatchParentToRecyclerView(binding)
 
         return AreaSmallViewHolder(binding)
     }
 
     // 각 item이 recyclerView를 가득 채우도록 함
-    private fun setMatchParentToRecyclerView(){
+    private fun setMatchParentToRecyclerView(binding : ItemAreaSmallBinding){
         val layoutParams =  RecyclerView.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
@@ -53,7 +51,7 @@ class AreaSmallAdapter : ListAdapter<AreaSmall, AreaSmallAdapter.AreaSmallViewHo
 
         // 아이템 클릭 이벤트 설정
         holder.itemView.setOnClickListener {
-
+            SetlocationFragment.userArea[2] = getItem(position).name
         }
     }
 

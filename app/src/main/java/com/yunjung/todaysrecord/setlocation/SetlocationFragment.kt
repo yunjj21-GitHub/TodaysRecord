@@ -1,6 +1,7 @@
 package com.yunjung.todaysrecord.setlocation
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,8 +13,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.yunjung.todaysrecord.MainViewModel
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentSetlocationBinding
+import com.yunjung.todaysrecord.main.MainActivity
 import com.yunjung.todaysrecord.models.AreaLarge
 import com.yunjung.todaysrecord.models.AreaMedium
 import com.yunjung.todaysrecord.models.AreaSmall
@@ -32,6 +35,8 @@ class SetlocationFragment : Fragment(){
         fun newInstance() : SetlocationFragment {
             return SetlocationFragment()
         }
+
+        var userArea = arrayOfNulls<String>(3) // 사용자가 설정하는 지역을 저장
     }
 
     // 뷰가 생성될 때 실행
@@ -50,6 +55,10 @@ class SetlocationFragment : Fragment(){
 
         viewModel = ViewModelProvider(this).get(SetlocationViewModel::class.java)
         binding.viewModel = viewModel
+
+        userArea[0] = null
+        userArea[1] = null
+        userArea[2] = null
 
         // Fragment를 생성하며, RecyclerViewAreaLarge에 담을 데이터를 가져와 해당 뷰에 적용
         val call : Call<List<AreaLarge>>? = RetrofitManager.iRetrofit?.getAreaLarge()
@@ -79,7 +88,25 @@ class SetlocationFragment : Fragment(){
 
         // '완료' 버튼 동작 설정
         binding.finishBtn.setOnClickListener {
-            it.findNavController().navigateUp() // 뒤로가기 동작
+            // 지역이 올바르게 선택되지 않은 경우
+            if(userArea[0] == null || userArea[1] == null || userArea[2] == null){
+                it.findNavController().navigateUp() // 뒤로가기 동작
+            }
+            else{ // 지역이 올바르게 선택된 경우
+                when {
+                    userArea[2] != "전체" -> { // 동읍면 != '전체'
+                        // MainActivity.userArea = userArea[2]
+                    }
+                    userArea[1] != "전체" -> { // 시군구 != '전체'
+                        // MainActivity.userArea = userArea[1]
+                    }
+                    else -> {
+                        // MainActivity.userArea = userArea[0]
+                    }
+                }
+                Log.e(TAG, userArea[0] + " " + userArea[1] + " " + userArea[2])
+                it.findNavController().navigateUp() // 뒤로가기 동작
+            }
         }
     }
 

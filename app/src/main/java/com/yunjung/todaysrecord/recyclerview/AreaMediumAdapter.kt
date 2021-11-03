@@ -7,11 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.databinding.ItemAreaMediumBinding
 import com.yunjung.todaysrecord.models.AreaMedium
+import com.yunjung.todaysrecord.setlocation.SetlocationFragment
 
 class AreaMediumAdapter : ListAdapter<AreaMedium, AreaMediumAdapter.AreaMediumViewHolder>(AreaMediumDiff){
-    lateinit var binding : ItemAreaMediumBinding
-    lateinit var layoutInflater: LayoutInflater
-
     // 뷰홀더 정의
     class AreaMediumViewHolder(private val binding : ItemAreaMediumBinding) :
         RecyclerView.ViewHolder(binding.root){
@@ -28,16 +26,16 @@ class AreaMediumAdapter : ListAdapter<AreaMedium, AreaMediumAdapter.AreaMediumVi
         viewType: Int
     ): AreaMediumAdapter.AreaMediumViewHolder {
         // 연결할 레이아웃 설정
-        layoutInflater = LayoutInflater.from(parent.context) // layoutInflater 초기화
-        binding = ItemAreaMediumBinding.inflate(layoutInflater) // binding 초기화
+        val layoutInflater = LayoutInflater.from(parent.context) // layoutInflater 초기화
+        val binding = ItemAreaMediumBinding.inflate(layoutInflater) // binding 초기화
 
-        setMatchParentToRecyclerView()
+        setMatchParentToRecyclerView(binding)
 
         return AreaMediumViewHolder(binding)
     }
 
     // 각 item이 recyclerView를 가득 채우도록 함
-    private fun setMatchParentToRecyclerView(){
+    private fun setMatchParentToRecyclerView(binding : ItemAreaMediumBinding){
         val layoutParams =  RecyclerView.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
@@ -53,7 +51,14 @@ class AreaMediumAdapter : ListAdapter<AreaMedium, AreaMediumAdapter.AreaMediumVi
 
         // 아이템 클릭 이벤트 설정
         holder.itemView.setOnClickListener {
+            SetlocationFragment.userArea[1] = getItem(position).name
 
+            if(getItem(position).name == "전체"){
+                SetlocationFragment.userArea[2] = "전체"
+            }
+            else{
+                SetlocationFragment.userArea[2] = null
+            }
         }
     }
 

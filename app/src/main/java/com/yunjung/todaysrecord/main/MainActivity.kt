@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /* Retrofit 관련 */
 
         /* DataBinding & ViewMdoel(+LiveData) 관련 */
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
