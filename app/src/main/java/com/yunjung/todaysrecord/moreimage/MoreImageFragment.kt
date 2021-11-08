@@ -61,8 +61,8 @@ class MoreImageFragment : Fragment(){
         /* Navigaion component safe args 관련 */
         photoStudio = args.photoStudio!! // 이전 프래그먼트에서 보낸값을 받아옴
 
-        // 서버로 부터 받아온 사진관 정보와 대응되는 리뷰 리스트를 가져옴
-        val call : Call<List<Review>>? = RetrofitManager.iRetrofit?.getReviewByPsId(ReviewFragment.photoStudio._id)
+        // 서버로 부터 받아온 사진관 정보와 대응되는 사진을 포함한 리뷰 리스트를 가져옴
+        val call : Call<List<Review>>? = RetrofitManager.iRetrofit?.getImageReviewByPsId(ReviewFragment.photoStudio._id)
         call?.enqueue(object : retrofit2.Callback<List<Review>> {
             // 응답 성공시
             override fun onResponse(

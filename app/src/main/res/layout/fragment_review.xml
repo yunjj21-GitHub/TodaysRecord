@@ -314,7 +314,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/sample_image" />
+                            app:srcCompat="@color/white" />
 
                         <ImageView
                             android:id="@+id/preImageView2"
@@ -325,7 +325,7 @@
                             app:layout_constraintBottom_toBottomOf="@+id/preImageView1"
                             app:layout_constraintStart_toEndOf="@+id/preImageView1"
                             app:layout_constraintTop_toTopOf="@+id/preImageView1"
-                            app:srcCompat="@drawable/sample_image" />
+                            app:srcCompat="@color/white" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"

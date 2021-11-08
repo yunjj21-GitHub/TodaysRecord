@@ -35,10 +35,6 @@ class InformationFragment : Fragment(), OnMapReadyCallback{
     }
 
     // 프래그먼트가 생성될 때 실행
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     // 뷰가 생성될 때 실행
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,7 +63,7 @@ class InformationFragment : Fragment(), OnMapReadyCallback{
 
         // 카메라 초기 위치 설정
         val options = NaverMapOptions()
-            .camera(CameraPosition(LatLng(viewModel.photoStudio.value!!.location!![0], viewModel.photoStudio.value!!.location!![1]), 16.0))
+            .camera(CameraPosition(LatLng(photoStudio.location!![1], photoStudio.location!![0]), 16.0))
 
         // 네이버 지도 객체 생성
         val mapFragment = fragmentManager.findFragmentById(R.id.map) as MapFragment?
@@ -84,7 +80,9 @@ class InformationFragment : Fragment(), OnMapReadyCallback{
 
         // 해당 사진관 마커 추가
         val marker = Marker()
-        marker.position = LatLng(viewModel.photoStudio.value!!.location!![0], viewModel.photoStudio.value!!.location!![1])
+        marker.position = LatLng(photoStudio.location!![1], photoStudio.location!![0]) // LatLng(latitude, longitude)
+        marker.captionText = photoStudio.name.toString()
+        marker.captionRequestedWidth = 200
         marker.map = this.naverMap
     }
 
@@ -95,7 +93,9 @@ class InformationFragment : Fragment(), OnMapReadyCallback{
         if(this::naverMap.isInitialized) { // naverMap 객체가 초기화 되었다면
             // 해당 사진관 마커 다시 추가
             val marker = Marker()
-            marker.position = LatLng(viewModel.photoStudio.value!!.location!![0], viewModel.photoStudio.value!!.location!![1])
+            marker.position = LatLng(photoStudio.location!![1], photoStudio.location!![0])
+            marker.captionText = photoStudio.name.toString()
+            marker.captionRequestedWidth = 200
             marker.map = this.naverMap
         }
     }

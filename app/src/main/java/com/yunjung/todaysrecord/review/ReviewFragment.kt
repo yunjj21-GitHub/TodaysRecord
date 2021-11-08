@@ -76,32 +76,38 @@ class ReviewFragment : Fragment() {
                 var threeStar : Int = 0
                 var twoStar : Int = 0
                 var oneStar : Int = 0
-                for(res in result){
-                    avg += res.rating!!
 
-                    when (res.rating) {
-                        5 -> fiveStar++
-                        4 -> fourStar++
-                        3 -> threeStar++
-                        2 -> twoStar++
-                        1 -> oneStar++
+                if(result.isNotEmpty()){
+                    for(res in result){
+                        avg += res.rating!!
+
+                        when (res.rating) {
+                            5 -> fiveStar++
+                            4 -> fourStar++
+                            3 -> threeStar++
+                            2 -> twoStar++
+                            1 -> oneStar++
+                        }
                     }
-                }
-                viewModel.getReviewAvg(avg / result.size)
+                    viewModel.getReviewAvg(avg / result.size)
 
-                fiveStar = (fiveStar * 100) / result.size
-                fourStar = (fourStar * 100) / result.size
-                threeStar = (threeStar * 100) / result.size
-                twoStar = (twoStar * 100) / result.size
-                oneStar = (oneStar * 100) / result.size
+                    fiveStar = (fiveStar * 100) / result.size
+                    fourStar = (fourStar * 100) / result.size
+                    threeStar = (threeStar * 100) / result.size
+                    twoStar = (twoStar * 100) / result.size
+                    oneStar = (oneStar * 100) / result.size
+                }
                 viewModel.getRating(fiveStar, fourStar, threeStar, twoStar, oneStar)
 
                 /* '리뷰 사진 모아보기'란의 URL 이미지 처리 */
-                var preImage1 : String? = viewModel.reviewList.value!![0].image
-                Glide.with(view).load(preImage1).into(binding.preImageView1)
-
-                var preImage2 : String? = viewModel.reviewList.value!![1].image
-                Glide.with(view).load(preImage2).into(binding.preImageView2)
+                if(result.isNotEmpty()){
+                    var preImage1 : String? = viewModel.reviewList.value!![0].image
+                    Glide.with(view).load(preImage1).into(binding.preImageView1)
+                }
+                if(result.size >= 2){
+                    var preImage2 : String? = viewModel.reviewList.value!![1].image
+                    Glide.with(view).load(preImage2).into(binding.preImageView2)
+                }
 
                 /* 리사이클러뷰 적용 */
                 initRecycler()

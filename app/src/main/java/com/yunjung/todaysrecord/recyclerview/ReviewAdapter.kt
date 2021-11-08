@@ -47,7 +47,7 @@ class ReviewAdapter :
             })
 
             // URL 이미지 처리
-            var reviewImage : String = review.image!!
+            var reviewImage : String? = review.image
             Glide.with(binding.root.context).load(reviewImage).into(binding.reviewImage)
         }
     }

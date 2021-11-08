@@ -35,6 +35,9 @@ class MainActivity : AppCompatActivity(){
 
         binding.viewModel = viewModel
 
+        // 임의의 로그인
+        viewModel.updateUserId("616be02b8346b820364b8295")
+
         /* Navigation Component 관련 */
         // 툴바 설정
         val toolbar = binding.toolbar

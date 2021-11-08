@@ -30,7 +30,7 @@
                 app:srcCompat="@drawable/sample_image" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/appCompatButton2"
+                android:id="@+id/leftBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginRight="8dp"
@@ -40,6 +40,7 @@
                 app:layout_constraintTop_toTopOf="@+id/photoStudioImage" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/rightBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="8dp"

@@ -70,6 +70,17 @@ interface IRetrofit {
         @Query("userId") userId : String? = null
     ) : Call<Boolean>
 
+    @GET("/getImageReviewByPsId")
+    fun getImageReviewByPsId(
+        @Query("psId") psId : String? = null
+    ) : Call<List<Review>>
+
+    @GET("/getPhotoboothByLocation")
+    fun getPhotoboothByLocation(
+        @Query("userLongitude") userLongitude : String? = null,
+        @Query("userLatitude") userLatitude : String? = null
+    ) : Call<List<PhotoBooth>>
+
     // Update
     // 전체를 수정하는 PUT
     @PUT("/putReviewById")

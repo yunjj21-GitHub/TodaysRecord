@@ -166,10 +166,33 @@ class DetailFragment : Fragment(){
             }
         }
 
-
-        /* 사진관 메인 이미지 디스플레이 & 이미지 왼오 버튼 클릭 이벤트 설정 */
-        var photoStudioImage : String = viewModel.photoStudio.value?.image!![0]
+        /* 사진관 메인 이미지 디스플레이 */
+        var photoStudioImage : String = photoStudio.image!![0]
         Glide.with(this).load(photoStudioImage).into(binding.photoStudioImage)
+
+        /* 이미지 왼오 버튼 클릭 이벤트 설정  */
+        var idx : Int = 0 // 보여질 사진관의 이미지의 인덱스를 저장
+        binding.leftBtn.setOnClickListener { // 왼 버튼
+            if(idx == 0){
+                idx = photoStudio.image!!.size - 1
+            }
+            else idx--
+
+            photoStudioImage = photoStudio.image!![idx]
+            Glide.with(this).load(photoStudioImage).into(binding.photoStudioImage)
+        }
+
+        binding.rightBtn.setOnClickListener {
+            if(idx == photoStudio.image!!.size-1){
+                idx = 0
+            }
+            else idx++
+
+            photoStudioImage = photoStudio.image!![idx]
+            Glide.with(this).load(photoStudioImage).into(binding.photoStudioImage)
+        }
+
+
 
         /* 공유하기 버튼 클릭 이벤트 설정 */
         binding.shareBtn.setOnClickListener {

@@ -11,6 +11,9 @@ buildscript {
 
         // Safe Args(네비게이션 관련)
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5")
+
+        // FireBase 로그인 관련
+        classpath 'com.google.gms:google-services:4.3.10'
     }
 }
 

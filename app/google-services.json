@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "328418360186",
+    "project_id": "todays-record-67391",
+    "storage_bucket": "todays-record-67391.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328418360186:android:81a0cce26b31daa20af4c3",
+        "android_client_info": {
+          "package_name": "com.yunjung.todaysrecord"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "328418360186-rpoj7i3e445oq12a5muicr973rjkog9l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yunjung.todaysrecord",
+            "certificate_hash": "9562beef42a21a5fcc61d78ac9484f18f4621f0c"
+          }
+        },
+        {
+          "client_id": "328418360186-8c4c7r9kp35sk536etao655t3mgoj7ob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByA0EMkaYdJzrntAOpE0nfmFv53Fjnm8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "328418360186-8c4c7r9kp35sk536etao655t3mgoj7ob.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
