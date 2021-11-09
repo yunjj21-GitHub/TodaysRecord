@@ -37,6 +37,9 @@ class DetailFragment : Fragment(){
     val args : DetailFragmentArgs by navArgs()
     private lateinit var photoStudio: PhotoStudio
 
+    // val userId : String = (requireActivity() as MainActivity).viewModel.userId.value ?: "anonymous"
+    val userId : String = "616be2b08346b820364b82b1" // 로그인된 userId
+
     // '찜'버튼 이벤트 관련 변수
     var heartState : Boolean = false
 
@@ -60,7 +63,6 @@ class DetailFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val userId : String = (requireActivity() as MainActivity).viewModel.userId.value ?: "anonymous"
         var heartState : Boolean = false // user가 현재 사진관을 찜하고 있는지 아닌지를 저장
 
         /* DataBinding & ViewModel 관련 */
@@ -108,7 +110,7 @@ class DetailFragment : Fragment(){
         /* 찜 버튼 관련 */
         // user가 현재 사진관을 찜하고 있는지 확인
         if(userId != "anonymous"){
-            val call : Call<Boolean> = RetrofitManager.iRetrofit.checkPhotostudioIdInUserInterests(psId = photoStudio._id, userId = userId)
+            val call : Call<Boolean> = RetrofitManager.iRetrofit.checkUserIdInPhotostudioInterested(_id = photoStudio._id, userId = userId)
             call.enqueue(object : retrofit2.Callback<Boolean>{
                 // 응답 성공시
                 override fun onResponse(
@@ -134,37 +136,37 @@ class DetailFragment : Fragment(){
         binding.heartBtn.setOnClickListener {
             if(userId != "anonymous"){
                 if(heartState){ // user가 현재 사진관을 찜하고 있었다면
-                    val call : Call<User> = RetrofitManager.iRetrofit.pullPhotostudioIdInUserInterests(psId = photoStudio._id, userId = userId)
-                    call.enqueue(object : retrofit2.Callback<User>{
+                    val call : Call<PhotoStudio> = RetrofitManager.iRetrofit.pullUserIdInPhotostudioInterested(_id = photoStudio._id, userId = userId)
+                    call.enqueue(object : retrofit2.Callback<PhotoStudio>{
                         // 응답 성공시
                         override fun onResponse(
-                            call: Call<User>,
-                            response: Response<User>
+                            call: Call<PhotoStudio>,
+                            response: Response<PhotoStudio>
                         ) {
                             heartState = false
                             binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
                         }
 
                         // 응답 실패시
-                        override fun onFailure(call: Call<User>, t: Throwable) {
+                        override fun onFailure(call: Call<PhotoStudio>, t: Throwable) {
                             Log.e(ContentValues.TAG, t.localizedMessage)
                         }
                     })
                 }
                 else { // user가 현재 사진관을 찜하지 않고 있었다면
-                    val call : Call<User> = RetrofitManager.iRetrofit.addPhotostudioIdInUserInterests(psId = photoStudio._id, userId = userId)
-                    call.enqueue(object : retrofit2.Callback<User>{
+                    val call : Call<PhotoStudio> = RetrofitManager.iRetrofit.addUserIdInPhotostudioInterested(_id = photoStudio._id, userId = userId)
+                    call.enqueue(object : retrofit2.Callback<PhotoStudio>{
                         // 응답 성공시
                         override fun onResponse(
-                            call: Call<User>,
-                            response: Response<User>
+                            call: Call<PhotoStudio>,
+                            response: Response<PhotoStudio>
                         ) {
                             heartState = true
                             binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
                         }
 
                         // 응답 실패시
-                        override fun onFailure(call: Call<User>, t: Throwable) {
+                        override fun onFailure(call: Call<PhotoStudio>, t: Throwable) {
                             Log.e(ContentValues.TAG, t.localizedMessage)
                         }
                     })

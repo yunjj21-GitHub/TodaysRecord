@@ -11,9 +11,6 @@
         android:label="StudioFragment"
         tools:layout="@layout/fragment_studio" >
         <action
-            android:id="@+id/action_studioFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
-        <action
             android:id="@+id/action_studioFragment_to_setlocationFragment"
             app:destination="@id/setlocationFragment" />
     </fragment>
@@ -97,6 +94,6 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.yunjung.todaysrecord.login.LoginFragment"
-        android:label="LoginFragment" />
+        android:label="LoginFragment" /><action android:id="@+id/action_global_detailFragment" app:destination="@id/detailFragment"/>
 
 </navigation>

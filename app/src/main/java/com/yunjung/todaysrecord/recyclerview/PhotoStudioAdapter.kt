@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.yunjung.todaysrecord.databinding.ItemStudioBinding
+import com.yunjung.todaysrecord.detail.DetailFragmentDirections
 import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.studio.StudioFragmentDirections
 
@@ -52,8 +53,9 @@ class PhotoStudioAdapter :
             // 아이템 클릭시 fragment_detail화면으로 이동
             // it.findNavController().navigate(R.id.action_studioFragment_to_detailFragment)
 
-            val directions =  StudioFragmentDirections.actionStudioFragmentToDetailFragment(getItem(position))
-            it.findNavController().navigate(directions)
+            // val direction =  StudioFragmentDirections.actionStudioFragmentToDetailFragment(getItem(position))
+            val direction = DetailFragmentDirections.actionGlobalDetailFragment(getItem(position))
+            it.findNavController().navigate(direction)
         }
     }
 }
