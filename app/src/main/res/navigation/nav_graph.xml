@@ -44,6 +44,9 @@
         <action
             android:id="@+id/action_mypageFragment_to_myreviewFragment"
             app:destination="@id/myreviewFragment" />
+        <action
+            android:id="@+id/action_mypageFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <fragment
@@ -57,7 +60,11 @@
     <fragment
         android:id="@+id/editFragment"
         android:name="com.yunjung.todaysrecord.editprofile.EditprofileFragment"
-        android:label="EditFragment" />
+        android:label="EditFragment" >
+        <argument
+            android:name="userNickname"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/myinterestsFragment"
         android:name="com.yunjung.todaysrecord.myinterests.MyinterestsFragment"
@@ -87,5 +94,9 @@
             android:name="psId"
             app:argType="string" />
     </fragment><action android:id="@+id/action_global_writeReivewFragment" app:destination="@id/writeReivewFragment"/>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.yunjung.todaysrecord.login.LoginFragment"
+        android:label="LoginFragment" />
 
 </navigation>

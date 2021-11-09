@@ -35,10 +35,10 @@ interface IRetrofit {
         @Query("psId") psId : String? = null
     ) : Call<List<Review>>
 
-    @GET("/getUserById")
-    fun getUserById(
+    @GET("/getUserNicknameById")
+    fun getUserNicknameById(
         @Query("_id") _id : String? = null
-    ) : Call<User>
+    ) : Call<String>
 
     @GET("/getPhotostudioById")
     fun getPhotostudioById(
@@ -92,10 +92,10 @@ interface IRetrofit {
     ) : Call<Review>
 
     // 부분을 수정하는 PATCH
-    @PATCH("/patchUserNickNameById")
-    fun patchUserNickNameById(
+    @PATCH("/patchUserNicknameById")
+    fun patchUserNicknameById(
         @Query("_id") _id : String? = null,
-        @Query("nickName") nickName : String? = null
+        @Query("nickname") nickname : String? = null
     ) : Call<User>
 
     @PATCH("/patchUserProfileImageById")

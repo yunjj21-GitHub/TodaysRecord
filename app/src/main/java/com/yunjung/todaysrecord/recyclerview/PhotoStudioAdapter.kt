@@ -51,6 +51,7 @@ class PhotoStudioAdapter :
         holder.itemView.setOnClickListener {
             // 아이템 클릭시 fragment_detail화면으로 이동
             // it.findNavController().navigate(R.id.action_studioFragment_to_detailFragment)
+
             val directions =  StudioFragmentDirections.actionStudioFragmentToDetailFragment(getItem(position))
             it.findNavController().navigate(directions)
         }

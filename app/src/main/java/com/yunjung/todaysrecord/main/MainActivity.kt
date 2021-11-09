@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(){
         binding.viewModel = viewModel
 
         // 임의의 로그인
-        viewModel.updateUserId("616be02b8346b820364b8295")
+        viewModel.updateUserInfo("616be2b08346b820364b82b1")
 
         /* Navigation Component 관련 */
         // 툴바 설정
@@ -93,6 +93,9 @@ class MainActivity : AppCompatActivity(){
                 }
                 R.id.moreimageFragment -> {
                     binding.title.text = "사진 더보기"
+                }
+                R.id.loginFragment -> {
+                    binding.title.text = " "
                 }
                 else -> {
                     binding.title.text = "오늘의 기록"

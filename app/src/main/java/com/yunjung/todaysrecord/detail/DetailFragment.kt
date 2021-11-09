@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentDetailBinding
 import com.yunjung.todaysrecord.information.InformationFragment
+import com.yunjung.todaysrecord.main.MainActivity
 import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.models.User
 import com.yunjung.todaysrecord.network.RetrofitManager
@@ -58,7 +60,7 @@ class DetailFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val userId : String = "616be2b08346b820364b82b1" // 임의의 userId
+        val userId : String = (requireActivity() as MainActivity).viewModel.userId.value ?: "anonymous"
         var heartState : Boolean = false // user가 현재 사진관을 찜하고 있는지 아닌지를 저장
 
         /* DataBinding & ViewModel 관련 */
@@ -105,64 +107,70 @@ class DetailFragment : Fragment(){
 
         /* 찜 버튼 관련 */
         // user가 현재 사진관을 찜하고 있는지 확인
-        val call : Call<Boolean> = RetrofitManager.iRetrofit.checkPhotostudioIdInUserInterests(psId = photoStudio._id, userId = userId)
-        call.enqueue(object : retrofit2.Callback<Boolean>{
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<Boolean>,
-                response: Response<Boolean>
-            ) {
-                heartState = response.body()!!
-                if(heartState){ // 찜 하고 있다면 (true)
-                    binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
-                }else{ // 찜 하고 있지 않다면 (false)
-                    binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
+        if(userId != "anonymous"){
+            val call : Call<Boolean> = RetrofitManager.iRetrofit.checkPhotostudioIdInUserInterests(psId = photoStudio._id, userId = userId)
+            call.enqueue(object : retrofit2.Callback<Boolean>{
+                // 응답 성공시
+                override fun onResponse(
+                    call: Call<Boolean>,
+                    response: Response<Boolean>
+                ) {
+                    heartState = response.body()!!
+                    if(heartState){ // 찜 하고 있다면 (true)
+                        binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
+                    }else{ // 찜 하고 있지 않다면 (false)
+                        binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
+                    }
                 }
-            }
 
-            // 응답 실패시
-            override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
-        })
+                // 응답 실패시
+                override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                    Log.e(ContentValues.TAG, t.localizedMessage)
+                }
+            })
+        }
 
         // 찜 버튼 클릭 이벤트 설정
         binding.heartBtn.setOnClickListener {
-            if(heartState){ // user가 현재 사진관을 찜하고 있었다면
-                val call : Call<User> = RetrofitManager.iRetrofit.pullPhotostudioIdInUserInterests(psId = photoStudio._id, userId = userId)
-                call.enqueue(object : retrofit2.Callback<User>{
-                    // 응답 성공시
-                    override fun onResponse(
-                        call: Call<User>,
-                        response: Response<User>
-                    ) {
-                        heartState = false
-                        binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
-                    }
+            if(userId != "anonymous"){
+                if(heartState){ // user가 현재 사진관을 찜하고 있었다면
+                    val call : Call<User> = RetrofitManager.iRetrofit.pullPhotostudioIdInUserInterests(psId = photoStudio._id, userId = userId)
+                    call.enqueue(object : retrofit2.Callback<User>{
+                        // 응답 성공시
+                        override fun onResponse(
+                            call: Call<User>,
+                            response: Response<User>
+                        ) {
+                            heartState = false
+                            binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
+                        }
 
-                    // 응답 실패시
-                    override fun onFailure(call: Call<User>, t: Throwable) {
-                        Log.e(ContentValues.TAG, t.localizedMessage)
-                    }
-                })
-            }
-            else { // user가 현재 사진관을 찜하지 않고 있었다면
-                val call : Call<User> = RetrofitManager.iRetrofit.addPhotostudioIdInUserInterests(psId = photoStudio._id, userId = userId)
-                call.enqueue(object : retrofit2.Callback<User>{
-                    // 응답 성공시
-                    override fun onResponse(
-                        call: Call<User>,
-                        response: Response<User>
-                    ) {
-                        heartState = true
-                        binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
-                    }
+                        // 응답 실패시
+                        override fun onFailure(call: Call<User>, t: Throwable) {
+                            Log.e(ContentValues.TAG, t.localizedMessage)
+                        }
+                    })
+                }
+                else { // user가 현재 사진관을 찜하지 않고 있었다면
+                    val call : Call<User> = RetrofitManager.iRetrofit.addPhotostudioIdInUserInterests(psId = photoStudio._id, userId = userId)
+                    call.enqueue(object : retrofit2.Callback<User>{
+                        // 응답 성공시
+                        override fun onResponse(
+                            call: Call<User>,
+                            response: Response<User>
+                        ) {
+                            heartState = true
+                            binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
+                        }
 
-                    // 응답 실패시
-                    override fun onFailure(call: Call<User>, t: Throwable) {
-                        Log.e(ContentValues.TAG, t.localizedMessage)
-                    }
-                })
+                        // 응답 실패시
+                        override fun onFailure(call: Call<User>, t: Throwable) {
+                            Log.e(ContentValues.TAG, t.localizedMessage)
+                        }
+                    })
+                }
+            }else{
+                Toast.makeText(context, "로그인을 먼저 해주세요", Toast.LENGTH_LONG).show()
             }
         }
 

@@ -29,19 +29,19 @@ class ReviewAdapter :
             binding.item = review // review가 binding객체의 레이아웃의 item변수로 넘어감
 
             // Review의 UserId를 통해서 대응되는 User 객체를 얻어옴
-            val call : Call<User>? = RetrofitManager.iRetrofit?.getUserById(review.userId)
-            call?.enqueue(object : retrofit2.Callback<User> {
+            val call : Call<String> = RetrofitManager.iRetrofit?.getUserNicknameById(review.userId)
+            call?.enqueue(object : retrofit2.Callback<String> {
                 // 응답 성공시
                 override fun onResponse(
-                    call: Call<User>,
-                    response: Response<User>
+                    call: Call<String>,
+                    response: Response<String>
                 ) {
                     // nickName 디스플레이
-                    binding.userNickName.text = response.body()!!.nickName
+                    binding.userNickName.text = response.body().toString()
                 }
 
                 // 응답 실패시
-                override fun onFailure(call: Call<User>, t: Throwable) {
+                override fun onFailure(call: Call<String>, t: Throwable) {
                     Log.e(ContentValues.TAG, t.localizedMessage)
                 }
             })

@@ -1,8 +1,14 @@
 package com.yunjung.todaysrecord
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.yunjung.todaysrecord.models.User
+import com.yunjung.todaysrecord.network.RetrofitManager
+import retrofit2.Call
+import retrofit2.Response
 
 class MainViewModel : ViewModel() {
     // 수정 가능한 라이브 데이터 (클래스 내부에서만 사용), 초기화 값 0
@@ -16,12 +22,8 @@ class MainViewModel : ViewModel() {
     val userId: LiveData<String>
         get() = _userId // 클래스 내부에서 사용하는 변수를 get()으로 가져와 반환
 
-    // ViewModel이 가지고 있는 값을 업데이트
-    fun updateUserArea(area : String) {
-        _userArea.value = area
-    }
 
-    fun updateUserId(userId : String) {
+    fun updateUserInfo(userId : String) {
         _userId.value = userId
     }
 }

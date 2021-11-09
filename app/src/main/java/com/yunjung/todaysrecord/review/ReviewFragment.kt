@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -64,9 +65,8 @@ class ReviewFragment : Fragment() {
                 response: Response<List<Review>>
             ) {
                 /* viewModel에 필요한 값 전달 */
-                val result : List<Review> = response.body()!!
+                val result : List<Review> = response.body() ?: listOf()
                 viewModel.getReviewList(result)
-
                 viewModel.getReviewNum(result.size)
 
                 // reviewAvg & 각 별점의 비율을 계산
@@ -117,7 +117,7 @@ class ReviewFragment : Fragment() {
                 binding.moreImageBtn.setOnClickListener {
                     val direction = MoreImageFragmentDirections.actionGlobalMoreimageFragment(
                         photoStudio)
-                    it.findNavController().navigate(direction)
+                    findNavController().navigate(direction)
                 }
 
                 binding.viewModel = viewModel
