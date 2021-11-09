@@ -23,7 +23,7 @@ class MainViewModel : ViewModel() {
         get() = _userId // 클래스 내부에서 사용하는 변수를 get()으로 가져와 반환
 
 
-    fun updateUserInfo(userId : String) {
+    fun updateUserId(userId : String) {
         _userId.value = userId
     }
 }

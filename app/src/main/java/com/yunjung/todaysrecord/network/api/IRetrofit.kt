@@ -35,10 +35,10 @@ interface IRetrofit {
         @Query("psId") psId : String? = null
     ) : Call<List<Review>>
 
-    @GET("/getUserNicknameById")
-    fun getUserNicknameById(
+    @GET("/getUserById")
+    fun getUserById(
         @Query("_id") _id : String? = null
-    ) : Call<String>
+    ) : Call<User>
 
     @GET("/getPhotostudioById")
     fun getPhotostudioById(
@@ -85,6 +85,11 @@ interface IRetrofit {
     fun getPhotostudioListByUserId(
         @Query("userId") userId : String? = null
     ) : Call<List<PhotoStudio>>
+
+    @GET("/checkIfEmailAlreadySingedUp")
+    fun checkIfEmailAlreadySingedUp(
+        @Query("email") email : String? = null
+    ) : Call<List<User>>
 
     // Update
     // 전체를 수정하는 PUT

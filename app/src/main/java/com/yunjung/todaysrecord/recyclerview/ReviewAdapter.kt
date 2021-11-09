@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.ItemReviewBinding
 import com.yunjung.todaysrecord.models.Review
 import com.yunjung.todaysrecord.models.User
@@ -29,19 +30,26 @@ class ReviewAdapter :
             binding.item = review // review가 binding객체의 레이아웃의 item변수로 넘어감
 
             // Review의 UserId를 통해서 대응되는 User 객체를 얻어옴
-            val call : Call<String> = RetrofitManager.iRetrofit?.getUserNicknameById(review.userId)
-            call?.enqueue(object : retrofit2.Callback<String> {
+            val call : Call<User> = RetrofitManager.iRetrofit?.getUserById(review.userId)
+            call?.enqueue(object : retrofit2.Callback<User> {
                 // 응답 성공시
                 override fun onResponse(
-                    call: Call<String>,
-                    response: Response<String>
+                    call: Call<User>,
+                    response: Response<User>
                 ) {
                     // nickName 디스플레이
-                    binding.userNickName.text = response.body().toString()
+                    binding.userNickName.text = response.body()!!.nickname.toString()
+
+                    // userProfile image 디스플레이
+                    var profileImage : String? = response.body()!!.profileImage ?: null
+                    Glide.with(binding.root.context)
+                        .load(profileImage)
+                        .fallback(R.drawable.ic_profile)
+                        .into(binding.userProfile)
                 }
 
                 // 응답 실패시
-                override fun onFailure(call: Call<String>, t: Throwable) {
+                override fun onFailure(call: Call<User>, t: Throwable) {
                     Log.e(ContentValues.TAG, t.localizedMessage)
                 }
             })

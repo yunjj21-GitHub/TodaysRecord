@@ -61,6 +61,10 @@
         <argument
             android:name="userNickname"
             app:argType="string" />
+        <argument
+            android:name="userProfile"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/myinterestsFragment"

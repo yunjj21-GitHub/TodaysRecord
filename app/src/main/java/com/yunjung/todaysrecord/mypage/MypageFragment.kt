@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentMypageBinding
 import com.yunjung.todaysrecord.main.MainActivity
@@ -27,6 +28,7 @@ class MypageFragment : Fragment(){
 
     // var userId : String = (requireActivity() as MainActivity).viewModel.userId.value ?: "anonymous"
     var userId : String = "616be2b08346b820364b82b1"
+    var userProfile : String? = null
 
     companion object{
         fun newInstance() : MypageFragment {
@@ -51,19 +53,27 @@ class MypageFragment : Fragment(){
         viewModel = ViewModelProvider(this).get(MypageViewModel::class.java)
 
         if(userId != "anonymous"){
-            val call : Call<String> = RetrofitManager.iRetrofit?.getUserNicknameById(_id = userId)
-            call?.enqueue(object : retrofit2.Callback<String>{
+            val call : Call<User> = RetrofitManager.iRetrofit?.getUserById(_id = userId)
+            call?.enqueue(object : retrofit2.Callback<User>{
                 // 응답 성공시
                 override fun onResponse(
-                    call: Call<String>,
-                    response: Response<String>
+                    call: Call<User>,
+                    response: Response<User>
                 ) {
-                    viewModel.updateUserNickname(response.body().toString())
+                    viewModel.updateUserNickname(response.body()!!.nickname.toString())
+
+                    // 유저 프로필 이미지 설정 (URL 이미지 처리)
+                    userProfile = response.body()!!.profileImage ?: null
+                    Glide.with(binding.root.context)
+                        .load(userProfile)
+                        .fallback(R.drawable.ic_profile)
+                        .into(binding.userProfile)
+
                     binding.viewModel = viewModel
                 }
 
                 // 응답 실패시
-                override fun onFailure(call: Call<String>, t: Throwable) {
+                override fun onFailure(call: Call<User>, t: Throwable) {
                     Log.e(ContentValues.TAG, t.localizedMessage)
                 }
             })
@@ -77,7 +87,7 @@ class MypageFragment : Fragment(){
             if(userId == "anonymous"){ // 로그인이 되어 있지 않을 때
                 findNavController().navigate(R.id.action_mypageFragment_to_loginFragment)
             }else { // 로그인이 되어 있을 때
-                val direction = MypageFragmentDirections.actionMypageFragmentToEditFragment(viewModel.userNickname.value.toString())
+                val direction = MypageFragmentDirections.actionMypageFragmentToEditFragment(viewModel.userNickname.value.toString(), userProfile)
                 findNavController().navigate(direction)
             }
         }

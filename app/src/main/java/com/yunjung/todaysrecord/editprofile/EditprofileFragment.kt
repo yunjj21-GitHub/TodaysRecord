@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentEditprofileBinding
 import com.yunjung.todaysrecord.detail.DetailFragmentArgs
@@ -55,8 +56,14 @@ class EditprofileFragment : Fragment(){
 
         viewModel = ViewModelProvider(this).get(EditprofileViewModel::class.java)
 
+        // viewModel 업데이트
         viewModel.updateUserNickname(args.userNickname)
-        Log.e(TAG,viewModel.userNickname.value.toString())
+
+        // userProfile 이미지 디스플레이
+        Glide.with(binding.root.context)
+            .load(args.userProfile)
+            .fallback(R.drawable.ic_profile)
+            .into(binding.userProfile)
 
         binding.viewModel = viewModel
 
