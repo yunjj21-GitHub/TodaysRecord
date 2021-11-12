@@ -92,7 +92,10 @@ class MainActivity : AppCompatActivity(){
                     binding.title.text = "사진 더보기"
                 }
                 R.id.loginFragment -> {
-                    binding.title.text = " "
+                    binding.title.text = "로그인"
+                }
+                R.id.joinMembershipFragment -> {
+                    binding.title.text = "회원가입"
                 }
                 else -> {
                     binding.title.text = "오늘의 기록"

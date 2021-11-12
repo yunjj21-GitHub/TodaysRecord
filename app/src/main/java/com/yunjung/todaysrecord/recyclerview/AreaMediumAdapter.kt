@@ -1,5 +1,7 @@
 package com.yunjung.todaysrecord.recyclerview
 
+import android.content.ContentValues
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -7,7 +9,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.databinding.ItemAreaMediumBinding
 import com.yunjung.todaysrecord.models.AreaMedium
+import com.yunjung.todaysrecord.models.AreaSmall
+import com.yunjung.todaysrecord.network.RetrofitManager
 import com.yunjung.todaysrecord.setlocation.SetlocationFragment
+import retrofit2.Call
+import retrofit2.Response
 
 class AreaMediumAdapter : ListAdapter<AreaMedium, AreaMediumAdapter.AreaMediumViewHolder>(AreaMediumDiff){
     // 뷰홀더 정의
@@ -51,14 +57,28 @@ class AreaMediumAdapter : ListAdapter<AreaMedium, AreaMediumAdapter.AreaMediumVi
 
         // 아이템 클릭 이벤트 설정
         holder.itemView.setOnClickListener {
-            SetlocationFragment.userArea[1] = getItem(position).name
+            val clickedArea : String = getItem(position).name ?: ""
 
-            if(getItem(position).name == "전체"){
-                SetlocationFragment.userArea[2] = "전체"
-            }
-            else{
-                SetlocationFragment.userArea[2] = null
-            }
+            val call : Call<List<AreaSmall>>? = RetrofitManager.iRetrofit?.getAreaSmallByBelong(clickedArea)
+            call?.enqueue(object : retrofit2.Callback<List<AreaSmall>>{
+                // 응답 성공시
+                override fun onResponse(
+                    call: Call<List<AreaSmall>>,
+                    response: Response<List<AreaSmall>>
+                ) {
+                    // SetlocationFragment의 areaSmallList 업데이트
+                    SetlocationFragment.areaSmallList.value = response.body() ?: listOf()
+
+                    // SetlocationFragment의 selectedArea 업데이트
+                    if(clickedArea != "전체") SetlocationFragment.selectedArea[1] = clickedArea
+                    SetlocationFragment.selectedArea[2] = ""
+                }
+
+                // 응답 실패시
+                override fun onFailure(call: Call<List<AreaSmall>>, t: Throwable) {
+                    Log.e(ContentValues.TAG, t.localizedMessage)
+                }
+            })
         }
     }
 

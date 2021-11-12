@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.firebase.ui.auth.ui.phone.CheckPhoneNumberFragment.TAG
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentMypageBinding
 import com.yunjung.todaysrecord.main.MainActivity
@@ -92,7 +93,7 @@ class MypageFragment : Fragment(){
             }
         }
 
-        // 관심목록 버튼 이벤트 설정
+        // 관심목록 버튼 클릭 이벤트 설정
         binding.interestsBtn.setOnClickListener {
             if(userId == "anonymous"){ // 로그인이 되어 있지 않을 때
                 Toast.makeText(context, "먼저 로그인을 해주세요", Toast.LENGTH_LONG)
@@ -101,12 +102,21 @@ class MypageFragment : Fragment(){
             }
         }
 
-        // 리뷰관리 버튼 이벤트 설정
+        // 리뷰관리 버튼 클릭 이벤트 설정
         binding.reviewBtn.setOnClickListener {
             if(userId == "anonymous"){ // 로그인이 되어 있지 않을 때
                 Toast.makeText(context, "먼저 로그인을 해주세요", Toast.LENGTH_LONG)
             }else { // 로그인이 되어 있을 때
                 findNavController().navigate(R.id.action_mypageFragment_to_myreviewFragment)
+            }
+        }
+
+        // 로그아웃 버튼 클릭 이벤트 설정
+        binding.logoutBtn.setOnClickListener {
+            if(userId == "anonymous"){ // 로그인이 되어 있지 않을 때
+                Toast.makeText(context, "이미 로그아웃된 상태 입니다.", Toast.LENGTH_LONG)
+            }else { // 로그인이 되어 있을 때
+                // (requireActivity() as MainActivity).viewModel.updateUserId("anonymous")
             }
         }
     }

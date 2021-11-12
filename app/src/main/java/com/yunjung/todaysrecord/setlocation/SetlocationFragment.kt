@@ -7,10 +7,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.MainViewModel
@@ -36,7 +39,11 @@ class SetlocationFragment : Fragment(){
             return SetlocationFragment()
         }
 
-        var userArea = arrayOfNulls<String>(3) // 사용자가 설정하는 지역을 저장
+        var areaLargeList = MutableLiveData<List<AreaLarge>>() // '시도' 지역 리스트를 저장
+        var areaMediumList = MutableLiveData<List<AreaMedium>>() // '시군구' 지역 리스트를 저장
+        var areaSmallList = MutableLiveData<List<AreaSmall>>() // '동읍면' 지역 리스트를 저장
+
+        var selectedArea = mutableListOf("", "", "")
     }
 
     // 뷰가 생성될 때 실행
@@ -56,11 +63,10 @@ class SetlocationFragment : Fragment(){
         viewModel = ViewModelProvider(this).get(SetlocationViewModel::class.java)
         binding.viewModel = viewModel
 
-        userArea[0] = null
-        userArea[1] = null
-        userArea[2] = null
 
-        // Fragment를 생성하며, RecyclerViewAreaLarge에 담을 데이터를 가져와 해당 뷰에 적용
+        // 화면 구성에 필요한 3개의 recyclerView를 모두 적용
+
+        // '시도' 지역 리스트를 보여주는 recyclerView
         val call : Call<List<AreaLarge>>? = RetrofitManager.iRetrofit?.getAreaLarge()
         call?.enqueue(object : retrofit2.Callback<List<AreaLarge>>{
             // 응답 성공시
@@ -68,8 +74,7 @@ class SetlocationFragment : Fragment(){
                 call: Call<List<AreaLarge>>,
                 response: Response<List<AreaLarge>>
             ) {
-                val result : List<AreaLarge>? = response.body()
-                viewModel.getAreaLargeValue(result)
+                areaLargeList.value = response.body() ?: listOf() // areaLargeList 업데이트
 
                 // 리사이클러뷰 적용
                 initRecycler("Large")
@@ -82,31 +87,40 @@ class SetlocationFragment : Fragment(){
             }
         })
 
-        // TEST
-        setRecyclerAreaMedium()
-        setRecyclerAreaSmall()
+        // '시군구' 지역 리스트를 보여주는 recyclerView
+        initRecycler("Medium")
+        subscribeList("Medium")
 
-        // '완료' 버튼 동작 설정
+        // '동읍면' 지역 리스트를 보여주는 recyclerView
+        initRecycler("Small")
+        subscribeList("Small")
+
+        // '완료' 버튼 클릭 이벤트 설정
         binding.finishBtn.setOnClickListener {
-            // 지역이 올바르게 선택되지 않은 경우
-            if(userArea[0] == null || userArea[1] == null || userArea[2] == null){
-                it.findNavController().navigateUp() // 뒤로가기 동작
-            }
-            else{ // 지역이 올바르게 선택된 경우
+            if(selectedArea[0] == "" && selectedArea[1] == "" && selectedArea[2] == ""){
+                Toast.makeText(context, "선택하신 지역이 없습니다.", Toast.LENGTH_LONG)
+            }else{
                 when {
-                    userArea[2] != "전체" -> { // 동읍면 != '전체'
-                        // MainActivity.userArea = userArea[2]
+                    selectedArea[2] != "" -> {
+                        (requireActivity() as MainActivity).viewModel.updateUerArea(
+                            selectedArea[2])
                     }
-                    userArea[1] != "전체" -> { // 시군구 != '전체'
-                        // MainActivity.userArea = userArea[1]
+                    selectedArea[1] != "" -> {
+                        (requireActivity() as MainActivity).viewModel.updateUerArea(
+                            selectedArea[1]
+                        )
                     }
-                    else -> {
-                        // MainActivity.userArea = userArea[0]
+                    selectedArea[0] != "" -> {
+                        (requireActivity() as MainActivity).viewModel.updateUerArea(
+                            selectedArea[0]
+                        )
                     }
                 }
-                Log.e(TAG, userArea[0] + " " + userArea[1] + " " + userArea[2])
-                it.findNavController().navigateUp() // 뒤로가기 동작
             }
+
+            Log.e(TAG, (requireActivity() as MainActivity).viewModel.userArea.value.toString())
+
+            findNavController().navigateUp()
         }
     }
 
@@ -130,68 +144,20 @@ class SetlocationFragment : Fragment(){
     private fun subscribeList(recyclerName: String){
         when (recyclerName) {
             "Large" -> {
-                viewModel.areaLargeList.observe(viewLifecycleOwner,{
+                areaLargeList.observe(viewLifecycleOwner,{
                     (binding.recyclerAreaLarge.adapter as AreaLargeAdapter).submitList(it)
                 })
             }
             "Medium" -> {
-                viewModel.areaMediumList.observe(viewLifecycleOwner,{
+                areaMediumList.observe(viewLifecycleOwner,{
                     (binding.recyclerAreaMedium.adapter as AreaMediumAdapter).submitList(it)
                 })
             }
             else -> { // recyclerName == "Small"
-                viewModel.areaSmallList.observe(viewLifecycleOwner,{
+                areaSmallList.observe(viewLifecycleOwner,{
                     (binding.recyclerAreaSmall.adapter as AreaSmallAdapter).submitList(it)
                 })
             }
         }
-    }
-
-    // RecyclerViewAreaMedium에 담을 데이터를 가져와 해당 뷰에 적용 (AreaLargeAdapter에서 호출)
-    fun setRecyclerAreaMedium(){
-        val call : Call<List<AreaMedium>>? = RetrofitManager.iRetrofit?.getAreaMediumByBelong("서울")
-        call?.enqueue(object : retrofit2.Callback<List<AreaMedium>>{
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<List<AreaMedium>>,
-                response: Response<List<AreaMedium>>
-            ) {
-                val result : List<AreaMedium>? = response.body()
-                viewModel.getAreaMediumValue(result)
-
-                // 리사이클러뷰 적용
-                initRecycler("Medium")
-                subscribeList("Medium")
-            }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<List<AreaMedium>>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
-        })
-    }
-
-    // RecyclerViewSmall에 담을 데이터를 가져와 해당 뷰에 적용 (AreaMediumAdapter에서 호출)
-    fun setRecyclerAreaSmall(){
-        val call : Call<List<AreaSmall>>? = RetrofitManager.iRetrofit?.getAreaSmallByBelong("마포구")
-        call?.enqueue(object : retrofit2.Callback<List<AreaSmall>>{
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<List<AreaSmall>>,
-                response: Response<List<AreaSmall>>
-            ) {
-                val result : List<AreaSmall>? = response.body()
-                viewModel.getAreaSmallValue(result)
-
-                // 리사이클러뷰 적용
-                initRecycler("Small")
-                subscribeList("Small")
-            }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<List<AreaSmall>>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
-        })
     }
 }

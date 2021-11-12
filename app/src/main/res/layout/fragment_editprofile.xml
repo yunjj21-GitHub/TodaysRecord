@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/userProfile"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

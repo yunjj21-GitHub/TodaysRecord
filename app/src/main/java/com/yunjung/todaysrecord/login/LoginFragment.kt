@@ -123,6 +123,8 @@ class LoginFragment : Fragment() {
                                 findNavController().navigateUp()
                             }else{ // 아직 가입되지 않은 계정이라면
                                 // 회원가입 화면으로 이동
+                                val direction = LoginFragmentDirections.actionLoginFragmentToJoinMembershipFragment(acct.email, acct.photoUrl.toString())
+                                findNavController().navigate(direction)
                             }
                         }
 

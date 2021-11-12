@@ -26,4 +26,8 @@ class MainViewModel : ViewModel() {
     fun updateUserId(userId : String) {
         _userId.value = userId
     }
+
+    fun updateUerArea(userArea : String){
+        _userArea.value = userArea
+    }
 }

@@ -23,6 +23,14 @@ interface IRetrofit {
         @Field("image") image : String? = null,
     ) : Call<Review>
 
+    @FormUrlEncoded
+    @POST("/postUser")
+    fun postUser(
+        @Field("email") email : String? = null,
+        @Field("profileImage") profileImage : String? = null,
+        @Field("nickname") nickname : String? = null
+    ) : Call<User>
+
     // Read (GET)
     @GET("/getPhotoStudioByAreaAndType")
     fun getPhotoStudioByAreaAndType(

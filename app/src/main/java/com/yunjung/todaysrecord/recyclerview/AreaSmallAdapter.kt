@@ -51,7 +51,10 @@ class AreaSmallAdapter : ListAdapter<AreaSmall, AreaSmallAdapter.AreaSmallViewHo
 
         // 아이템 클릭 이벤트 설정
         holder.itemView.setOnClickListener {
-            SetlocationFragment.userArea[2] = getItem(position).name
+            val clickedArea : String = getItem(position).name ?: ""
+
+            // SetlocationFragment의 selectedArea 업데이트
+            if(clickedArea != "전체") SetlocationFragment.selectedArea[2] = clickedArea
         }
     }
 

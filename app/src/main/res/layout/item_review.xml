@@ -20,8 +20,8 @@
 
             <ImageView
                 android:id="@+id/userProfile"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +34,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="@+id/userProfile"
                 app:layout_constraintStart_toEndOf="@+id/userProfile"
                 app:layout_constraintTop_toTopOf="@+id/userProfile">
 
@@ -42,6 +41,7 @@
                     android:id="@+id/userNickName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="2dp"
                     android:text="userNickName"
                     android:textColor="#000000" />
 

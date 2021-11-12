@@ -98,6 +98,24 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.yunjung.todaysrecord.login.LoginFragment"
-        android:label="LoginFragment" /><action android:id="@+id/action_global_detailFragment" app:destination="@id/detailFragment"/>
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_joinMembershipFragment"
+            app:destination="@id/joinMembershipFragment" />
+    </fragment><action android:id="@+id/action_global_detailFragment" app:destination="@id/detailFragment"/>
+    <fragment
+        android:id="@+id/joinMembershipFragment"
+        android:name="com.yunjung.todaysrecord.join_membership.JoinMembershipFragment"
+        android:label="JoinMembershipFragment" >
+        <argument
+            android:name="email"
+            app:argType="string" />
+        <argument
+            android:name="profileImage"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_joinMembershipFragment_to_mypageFragment"
+            app:destination="@id/mypageFragment" />
+    </fragment>
 
 </navigation>
