@@ -57,7 +57,8 @@ class AreaMediumAdapter : ListAdapter<AreaMedium, AreaMediumAdapter.AreaMediumVi
 
         // 아이템 클릭 이벤트 설정
         holder.itemView.setOnClickListener {
-            val clickedArea : String = getItem(position).name ?: ""
+            var clickedArea = ""
+            if(getItem(position).name != "전체") clickedArea = getItem(position).name ?: ""
 
             val call : Call<List<AreaSmall>>? = RetrofitManager.iRetrofit?.getAreaSmallByBelong(clickedArea)
             call?.enqueue(object : retrofit2.Callback<List<AreaSmall>>{
@@ -70,7 +71,7 @@ class AreaMediumAdapter : ListAdapter<AreaMedium, AreaMediumAdapter.AreaMediumVi
                     SetlocationFragment.areaSmallList.value = response.body() ?: listOf()
 
                     // SetlocationFragment의 selectedArea 업데이트
-                    if(clickedArea != "전체") SetlocationFragment.selectedArea[1] = clickedArea
+                    SetlocationFragment.selectedArea[1] = clickedArea
                     SetlocationFragment.selectedArea[2] = ""
                 }
 

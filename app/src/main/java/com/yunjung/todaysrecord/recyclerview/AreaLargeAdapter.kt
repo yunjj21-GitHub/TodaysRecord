@@ -59,7 +59,8 @@ class AreaLargeAdapter: ListAdapter<AreaLarge, AreaLargeAdapter.AreaLargeViewHol
 
         // 아이템 클릭 이벤트 설정
         holder.itemView.setOnClickListener {
-            val clickedArea : String = getItem(position).name ?: ""
+            var clickedArea = ""
+            if(getItem(position).name != "전체") clickedArea = getItem(position).name ?: ""
 
             val call : Call<List<AreaMedium>>? = RetrofitManager.iRetrofit?.getAreaMediumByBelong(clickedArea)
             call?.enqueue(object : retrofit2.Callback<List<AreaMedium>> {
