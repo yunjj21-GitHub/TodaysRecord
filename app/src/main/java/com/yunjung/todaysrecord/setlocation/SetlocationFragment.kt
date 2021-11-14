@@ -39,10 +39,6 @@ class SetlocationFragment : Fragment(){
             return SetlocationFragment()
         }
 
-        var areaLargeList = MutableLiveData<List<AreaLarge>>() // '시도' 지역 리스트를 저장
-        var areaMediumList = MutableLiveData<List<AreaMedium>>() // '시군구' 지역 리스트를 저장
-        var areaSmallList = MutableLiveData<List<AreaSmall>>() // '동읍면' 지역 리스트를 저장
-
         var selectedArea = mutableListOf("", "", "")
     }
 
@@ -63,7 +59,6 @@ class SetlocationFragment : Fragment(){
         viewModel = ViewModelProvider(this).get(SetlocationViewModel::class.java)
         binding.viewModel = viewModel
 
-
         // 화면 구성에 필요한 3개의 recyclerView를 모두 적용
 
         // '시도' 지역 리스트를 보여주는 recyclerView
@@ -74,7 +69,7 @@ class SetlocationFragment : Fragment(){
                 call: Call<List<AreaLarge>>,
                 response: Response<List<AreaLarge>>
             ) {
-                areaLargeList.value = response.body() ?: listOf() // areaLargeList 업데이트
+                viewModel.areaLargeList.value = response.body() ?: listOf() // areaLargeList 업데이트
 
                 // 리사이클러뷰 적용
                 initRecycler("Large")
@@ -118,8 +113,6 @@ class SetlocationFragment : Fragment(){
                 }
             }
 
-            Log.e(TAG, (requireActivity() as MainActivity).viewModel.userArea.value.toString())
-
             findNavController().navigateUp()
         }
     }
@@ -127,15 +120,15 @@ class SetlocationFragment : Fragment(){
     private fun initRecycler(recyclerName : String){
         when (recyclerName) {
             "Large" -> {
-                binding.recyclerAreaLarge.adapter = AreaLargeAdapter()
+                binding.recyclerAreaLarge.adapter = AreaLargeAdapter(viewModel)
                 binding.recyclerAreaLarge.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             }
             "Medium" -> {
-                binding.recyclerAreaMedium.adapter = AreaMediumAdapter()
+                binding.recyclerAreaMedium.adapter = AreaMediumAdapter(viewModel)
                 binding.recyclerAreaMedium.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             }
             else -> { // recyclerName == "Small"
-                binding.recyclerAreaSmall.adapter = AreaSmallAdapter()
+                binding.recyclerAreaSmall.adapter = AreaSmallAdapter(viewModel)
                 binding.recyclerAreaSmall.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             }
         }
@@ -144,17 +137,17 @@ class SetlocationFragment : Fragment(){
     private fun subscribeList(recyclerName: String){
         when (recyclerName) {
             "Large" -> {
-                areaLargeList.observe(viewLifecycleOwner,{
+                viewModel.areaLargeList.observe(viewLifecycleOwner,{
                     (binding.recyclerAreaLarge.adapter as AreaLargeAdapter).submitList(it)
                 })
             }
             "Medium" -> {
-                areaMediumList.observe(viewLifecycleOwner,{
+                viewModel.areaMediumList.observe(viewLifecycleOwner,{
                     (binding.recyclerAreaMedium.adapter as AreaMediumAdapter).submitList(it)
                 })
             }
             else -> { // recyclerName == "Small"
-                areaSmallList.observe(viewLifecycleOwner,{
+                viewModel.areaSmallList.observe(viewLifecycleOwner,{
                     (binding.recyclerAreaSmall.adapter as AreaSmallAdapter).submitList(it)
                 })
             }

@@ -47,7 +47,7 @@ class PhotostudioFamilyFragment : Fragment(){
 
         // 리사이클러뷰 적용
         initRecycler()
-        getPhotoStudioByAreaAndType((requireActivity() as MainActivity).viewModel.userArea.value ?: "서울", "가족 커플 우정 사진")
+        getPhotoStudioByAreaAndType((requireActivity() as MainActivity).viewModel.userArea.value ?: "전국", "가족 커플 우정 사진")
     }
 
     // 리사이클러뷰 초기설정

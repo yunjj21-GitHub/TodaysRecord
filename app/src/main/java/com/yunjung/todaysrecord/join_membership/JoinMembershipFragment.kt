@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentJoinMembershipBinding
 import com.yunjung.todaysrecord.main.MainActivity
@@ -71,7 +72,7 @@ class JoinMembershipFragment : Fragment(){
                     response: Response<User>
                 ) {
                     // MainViewModel의 userId 업데이트 (어플 내 로그인 처리)
-                    // (requireActivity() as MainActivity).viewModel.updateUserId(response.body()!!._id.toString())
+                    (requireContext().applicationContext as MyApplication).userId.value = response.body()!!._id
 
                     // myPageFragment로 이동
                     findNavController().navigate(JoinMembershipFragmentDirections.actionJoinMembershipFragmentToMypageFragment())

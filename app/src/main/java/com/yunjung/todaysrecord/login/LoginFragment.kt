@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.ktx.Firebase
 import com.yunjung.todaysrecord.MainViewModel
+import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentLoginBinding
 import com.yunjung.todaysrecord.main.MainActivity
@@ -106,7 +107,6 @@ class LoginFragment : Fragment() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) { // 구글 로그인이 성공했다면
-
                     // 이미 가입된 계정인지 확인
                     val call : Call<List<User>> = RetrofitManager.iRetrofit.checkIfEmailAlreadySingedUp(email = acct.email)
                     call.enqueue(object : retrofit2.Callback<List<User>>{
@@ -116,10 +116,9 @@ class LoginFragment : Fragment() {
                             call: Call<List<User>>,
                             response: Response<List<User>>
                         ) {
-
                             if(!response.body().isNullOrEmpty()){ // 이미 가입된 계정이라면
-                                Toast.makeText(context, "성공적으로 로그인 되었습니다.", Toast.LENGTH_SHORT)
-                                (requireActivity() as MainActivity).viewModel.updateUserId(response.body()!![0]._id.toString())
+                                Toast.makeText(context, "성공적으로 로그인 되었습니다.", Toast.LENGTH_SHORT).show()
+                                (requireContext().applicationContext as MyApplication).userId.value = response.body()!![0]._id
                                 findNavController().navigateUp()
                             }else{ // 아직 가입되지 않은 계정이라면
                                 // 회원가입 화면으로 이동
@@ -134,7 +133,7 @@ class LoginFragment : Fragment() {
                         }
                     })
                 } else { // 구글 로그인이 실패했다면
-                    Toast.makeText(context, "로그인을 실패하였습니다.", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, "로그인을 실패하였습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
     }

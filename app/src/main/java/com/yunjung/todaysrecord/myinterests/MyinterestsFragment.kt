@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentMyinterestsBinding
 import com.yunjung.todaysrecord.models.PhotoStudio
@@ -24,9 +25,6 @@ import retrofit2.Response
 class MyinterestsFragment: Fragment(){
     lateinit var binding : FragmentMyinterestsBinding
     lateinit var viewModel: MyinterestsViewModel
-
-    // var userId : String = (requireActivity() as MainActivity).viewModel.userId.value ?: "anonymous"
-    var userId : String = "616be2b08346b820364b82b1" // 로그인된 userId
 
     companion object{
         fun newInstance() : MyinterestsFragment {
@@ -50,6 +48,8 @@ class MyinterestsFragment: Fragment(){
 
         viewModel = ViewModelProvider(this).get(MyinterestsViewModel::class.java)
         binding.viewModel = viewModel
+
+        val userId : String = (requireContext().applicationContext as MyApplication).userId.value.toString() // 로그인된 user의 _id를 가져옴
 
         // 해당 user가 찜한 사진관의 리스트를 가져옴
         val call : Call<List<PhotoStudio>> = RetrofitManager.iRetrofit?.getPhotostudioListByUserId(userId = userId)

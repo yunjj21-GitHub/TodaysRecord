@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentMyreviewsBinding
 import com.yunjung.todaysrecord.models.Review
@@ -22,9 +23,6 @@ import retrofit2.Response
 class MyreviewFragment : Fragment(){
     lateinit var binding : FragmentMyreviewsBinding
     lateinit var viewModel: MyreviewViewModel
-
-    // var userId : String = (requireActivity() as MainActivity).viewModel.userId.value ?: "anonymous"
-    var userId : String = "616be2b08346b820364b82b1" // 로그인된 userId
 
     companion object{
         fun newInstance() : MyreviewFragment {
@@ -48,6 +46,8 @@ class MyreviewFragment : Fragment(){
 
         viewModel = ViewModelProvider(this).get(MyreviewViewModel::class.java)
         binding.viewModel = viewModel
+
+        val userId : String = (requireContext().applicationContext as MyApplication).userId.value.toString()
 
         // Review의 userId가 로그인된 userId와 일치하는 것을 가져옴
         val call : Call<List<Review>> = RetrofitManager.iRetrofit?.getReviewByUserId(userId = userId)

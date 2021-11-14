@@ -47,7 +47,7 @@ class PhotostudioOtherFragment : Fragment(){
 
         // 리사이클러뷰 적용
         initRecycler()
-        getPhotoStudioByAreaAndType((requireActivity() as MainActivity).viewModel.userArea.value ?: "서울", "기타")
+        getPhotoStudioByAreaAndType((requireActivity() as MainActivity).viewModel.userArea.value ?: "전국", "기타")
     }
 
     // 리사이클러뷰 초기설정

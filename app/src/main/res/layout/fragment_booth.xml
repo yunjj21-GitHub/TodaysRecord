@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/mainColor"
-            android:text="내 주변 사진부스 검색하기"
+            android:text="가까운 사진부스 찾아보기"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"

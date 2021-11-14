@@ -12,20 +12,11 @@ import retrofit2.Response
 
 class MainViewModel : ViewModel() {
     // 수정 가능한 라이브 데이터 (클래스 내부에서만 사용), 초기화 값 0
-    private val _userArea = MutableLiveData<String>("서울")
-    private val _userId = MutableLiveData<String>("anonymous")
+    private val _userArea = MutableLiveData<String>("전국")
 
     // 수정 불가능한 라이브 데이터 (클래스 외부에서 접근 시 사용)
     val userArea: LiveData<String>
         get() = _userArea // 클래스 내부에서 사용하는 변수를 get()으로 가져와 반환
-
-    val userId: LiveData<String>
-        get() = _userId // 클래스 내부에서 사용하는 변수를 get()으로 가져와 반환
-
-
-    fun updateUserId(userId : String) {
-        _userId.value = userId
-    }
 
     fun updateUerArea(userArea : String){
         _userArea.value = userArea

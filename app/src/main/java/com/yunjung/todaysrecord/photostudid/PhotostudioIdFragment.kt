@@ -49,7 +49,7 @@ class PhotostudioIdFragment : Fragment(){
 
         // 리사이클러뷰 적용
         initRecycler()
-        getPhotoStudioByAreaAndType((requireActivity() as MainActivity).viewModel.userArea.value ?: "서울", "증명사진")
+        getPhotoStudioByAreaAndType((requireActivity() as MainActivity).viewModel.userArea.value ?: "전국", "증명사진")
     }
 
     // 리사이클러뷰 초기설정

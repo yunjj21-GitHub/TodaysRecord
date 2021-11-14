@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,10 +13,12 @@ import com.yunjung.todaysrecord.models.AreaMedium
 import com.yunjung.todaysrecord.models.AreaSmall
 import com.yunjung.todaysrecord.network.RetrofitManager
 import com.yunjung.todaysrecord.setlocation.SetlocationFragment
+import com.yunjung.todaysrecord.setlocation.SetlocationViewModel
 import retrofit2.Call
 import retrofit2.Response
 
-class AreaMediumAdapter : ListAdapter<AreaMedium, AreaMediumAdapter.AreaMediumViewHolder>(AreaMediumDiff){
+class AreaMediumAdapter(val setlocationViewModel : SetlocationViewModel)
+    : ListAdapter<AreaMedium, AreaMediumAdapter.AreaMediumViewHolder>(AreaMediumDiff){
     // 뷰홀더 정의
     class AreaMediumViewHolder(private val binding : ItemAreaMediumBinding) :
         RecyclerView.ViewHolder(binding.root){
@@ -67,12 +70,19 @@ class AreaMediumAdapter : ListAdapter<AreaMedium, AreaMediumAdapter.AreaMediumVi
                     call: Call<List<AreaSmall>>,
                     response: Response<List<AreaSmall>>
                 ) {
-                    // SetlocationFragment의 areaSmallList 업데이트
-                    SetlocationFragment.areaSmallList.value = response.body() ?: listOf()
+                    // SetLocationViewModel의 areaSmallList 업데이트
+                    setlocationViewModel.areaSmallList.value = response.body() ?: listOf()
 
-                    // SetlocationFragment의 selectedArea 업데이트
+                    // SetLocationViewModel의 selectedArea 업데이트
                     SetlocationFragment.selectedArea[1] = clickedArea
                     SetlocationFragment.selectedArea[2] = ""
+
+                    // 토스트 메세지 출력
+                    if(clickedArea == ""){
+                        Toast.makeText(holder.itemView.context, SetlocationFragment.selectedArea[0] + " " + "전체", Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(holder.itemView.context, SetlocationFragment.selectedArea[0] + " " + SetlocationFragment.selectedArea[1], Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 // 응답 실패시

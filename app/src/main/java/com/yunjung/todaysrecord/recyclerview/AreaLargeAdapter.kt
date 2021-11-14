@@ -5,6 +5,7 @@ import android.util.Log
 import com.yunjung.todaysrecord.models.AreaLarge
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -17,7 +18,10 @@ import com.yunjung.todaysrecord.setlocation.SetlocationViewModel
 import retrofit2.Call
 import retrofit2.Response
 
-class AreaLargeAdapter: ListAdapter<AreaLarge, AreaLargeAdapter.AreaLargeViewHolder>(AreaLargeDiff){
+class AreaLargeAdapter(val setlocationViewModel : SetlocationViewModel)
+    : ListAdapter<AreaLarge, AreaLargeAdapter.AreaLargeViewHolder>(AreaLargeDiff){
+
+
     // 뷰홀더 정의
     class AreaLargeViewHolder(private val binding : ItemAreaLargeBinding) :
         RecyclerView.ViewHolder(binding.root){
@@ -27,7 +31,6 @@ class AreaLargeAdapter: ListAdapter<AreaLarge, AreaLargeAdapter.AreaLargeViewHol
             binding.item = areaLarge
         }
     }
-
     // 뷰홀더가 생성 되었을 때 실행
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -59,8 +62,7 @@ class AreaLargeAdapter: ListAdapter<AreaLarge, AreaLargeAdapter.AreaLargeViewHol
 
         // 아이템 클릭 이벤트 설정
         holder.itemView.setOnClickListener {
-            var clickedArea = ""
-            if(getItem(position).name != "전체") clickedArea = getItem(position).name ?: ""
+            var clickedArea = getItem(position).name ?: ""
 
             val call : Call<List<AreaMedium>>? = RetrofitManager.iRetrofit?.getAreaMediumByBelong(clickedArea)
             call?.enqueue(object : retrofit2.Callback<List<AreaMedium>> {
@@ -69,16 +71,19 @@ class AreaLargeAdapter: ListAdapter<AreaLarge, AreaLargeAdapter.AreaLargeViewHol
                     call: Call<List<AreaMedium>>,
                     response: Response<List<AreaMedium>>
                 ) {
-                    // SetlocationFragment의 areaMediumList 업데이트
-                    SetlocationFragment.areaMediumList.value = response.body() ?: listOf()
+                    // SetLocationViewModel의 areaMediumList 업데이트
+                    setlocationViewModel.areaMediumList.value = response.body() ?: listOf()
 
-                    // SetlocationFragment의 areaSmallList 업데이트 (빈 리스트로 만듦)
-                    SetlocationFragment.areaSmallList.value = listOf()
+                    // SetLocationViewModel의 areaSmallList 업데이트 (빈 리스트로 만듦)
+                    setlocationViewModel.areaSmallList.value = listOf()
 
-                    // SetlocationFragment의 selectedArea 업데이트
+                    // SetLocationViewModel의 selectedArea 업데이트
                     SetlocationFragment.selectedArea[0] = clickedArea
                     SetlocationFragment.selectedArea[1] = ""
                     SetlocationFragment.selectedArea[2] = ""
+
+                    // 토스트 메세지 출력
+                    Toast.makeText(holder.itemView.context, SetlocationFragment.selectedArea[0], Toast.LENGTH_SHORT).show()
                 }
 
                 // 응답 실패시

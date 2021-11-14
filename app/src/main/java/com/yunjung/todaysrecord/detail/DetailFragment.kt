@@ -15,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
+import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentDetailBinding
 import com.yunjung.todaysrecord.information.InformationFragment
@@ -36,9 +37,6 @@ class DetailFragment : Fragment(){
     // Navigaion component safe args 관련 변수
     val args : DetailFragmentArgs by navArgs()
     private lateinit var photoStudio: PhotoStudio
-
-    // val userId : String = (requireActivity() as MainActivity).viewModel.userId.value ?: "anonymous"
-    val userId : String = "616be2b08346b820364b82b1" // 로그인된 userId
 
     // '찜'버튼 이벤트 관련 변수
     var heartState : Boolean = false
@@ -63,6 +61,7 @@ class DetailFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val userId : String = (requireContext().applicationContext as MyApplication).userId.value.toString() // 로그인된 user의 _id를 가져옴
         var heartState : Boolean = false // user가 현재 사진관을 찜하고 있는지 아닌지를 저장
 
         /* DataBinding & ViewModel 관련 */
@@ -210,7 +209,7 @@ class DetailFragment : Fragment(){
             val shareIntent = Intent().apply {
                 action = Intent.ACTION_SEND
                 type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, "공유할 내용")
+                putExtra(Intent.EXTRA_TEXT, photoStudio.name + "\n주소 : " + photoStudio.address + "\n전화번호 : " + photoStudio.phoneNumber +"\n홈페이지 : " + photoStudio.siteAddress)
             }
             startActivity(Intent.createChooser(shareIntent, null))
         }

@@ -1,6 +1,8 @@
 package com.yunjung.todaysrecord.network.api
 
 import com.yunjung.todaysrecord.models.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -30,6 +32,16 @@ interface IRetrofit {
         @Field("profileImage") profileImage : String? = null,
         @Field("nickname") nickname : String? = null
     ) : Call<User>
+
+    @Multipart
+    @POST("UploadReview")
+    fun uploadReview(
+        @Part ("psId") psId: RequestBody,
+        @Part ("userId") userId: RequestBody,
+        @Part("rating") rating: RequestBody,
+        @Part ("content") content: RequestBody,
+        @Part image: MultipartBody.Part
+    ) : Call<Review>
 
     // Read (GET)
     @GET("/getPhotoStudioByAreaAndType")

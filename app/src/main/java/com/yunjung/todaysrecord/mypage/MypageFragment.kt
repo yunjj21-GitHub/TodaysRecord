@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.firebase.ui.auth.ui.phone.CheckPhoneNumberFragment.TAG
+import com.google.android.material.snackbar.Snackbar
+import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentMypageBinding
 import com.yunjung.todaysrecord.main.MainActivity
@@ -27,8 +29,6 @@ class MypageFragment : Fragment(){
     lateinit var binding : FragmentMypageBinding
     lateinit var viewModel: MypageViewModel
 
-    // var userId : String = (requireActivity() as MainActivity).viewModel.userId.value ?: "anonymous"
-    var userId : String = "616be2b08346b820364b82b1"
     var userProfile : String? = null
 
     companion object{
@@ -52,6 +52,10 @@ class MypageFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(MypageViewModel::class.java)
+
+        // 로그인된 user의 _id를 가져옴
+        val userId : String = (requireContext().applicationContext as MyApplication).userId.value.toString()
+        // requireContext().applicationContext == requireActivity().applicationContext
 
         if(userId != "anonymous"){
             val call : Call<User> = RetrofitManager.iRetrofit?.getUserById(_id = userId)
@@ -96,7 +100,8 @@ class MypageFragment : Fragment(){
         // 관심목록 버튼 클릭 이벤트 설정
         binding.interestsBtn.setOnClickListener {
             if(userId == "anonymous"){ // 로그인이 되어 있지 않을 때
-                Toast.makeText(context, "먼저 로그인을 해주세요", Toast.LENGTH_LONG)
+                Toast.makeText(requireContext(), "먼저 로그인을 해주세요", Toast.LENGTH_LONG).show()
+                // Snackbar.make(binding.root, "먼저 로그인을 해주세요", Snackbar.LENGTH_LONG).show()
             }else { // 로그인이 되어 있을 때
                 findNavController().navigate(R.id.action_mypageFragment_to_myinterestsFragment)
             }
@@ -105,7 +110,7 @@ class MypageFragment : Fragment(){
         // 리뷰관리 버튼 클릭 이벤트 설정
         binding.reviewBtn.setOnClickListener {
             if(userId == "anonymous"){ // 로그인이 되어 있지 않을 때
-                Toast.makeText(context, "먼저 로그인을 해주세요", Toast.LENGTH_LONG)
+                Toast.makeText(context, "먼저 로그인을 해주세요", Toast.LENGTH_LONG).show()
             }else { // 로그인이 되어 있을 때
                 findNavController().navigate(R.id.action_mypageFragment_to_myreviewFragment)
             }
@@ -114,9 +119,10 @@ class MypageFragment : Fragment(){
         // 로그아웃 버튼 클릭 이벤트 설정
         binding.logoutBtn.setOnClickListener {
             if(userId == "anonymous"){ // 로그인이 되어 있지 않을 때
-                Toast.makeText(context, "이미 로그아웃된 상태 입니다.", Toast.LENGTH_LONG)
+                Toast.makeText(context, "이미 로그아웃된 상태 입니다.", Toast.LENGTH_LONG).show()
             }else { // 로그인이 되어 있을 때
-                // (requireActivity() as MainActivity).viewModel.updateUserId("anonymous")
+                (requireContext().applicationContext as MyApplication).userId.value = "anonymous"
+                Toast.makeText(context, "성공적으로 로그아웃 되었습니다.", Toast.LENGTH_LONG).show()
             }
         }
     }

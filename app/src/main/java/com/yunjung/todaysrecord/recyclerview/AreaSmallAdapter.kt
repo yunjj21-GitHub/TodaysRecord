@@ -2,14 +2,17 @@ package com.yunjung.todaysrecord.recyclerview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.databinding.ItemAreaSmallBinding
 import com.yunjung.todaysrecord.models.AreaSmall
 import com.yunjung.todaysrecord.setlocation.SetlocationFragment
+import com.yunjung.todaysrecord.setlocation.SetlocationViewModel
 
-class AreaSmallAdapter : ListAdapter<AreaSmall, AreaSmallAdapter.AreaSmallViewHolder>(AreaSmallDiff){
+class AreaSmallAdapter(val setlocationViewModel : SetlocationViewModel)
+    : ListAdapter<AreaSmall, AreaSmallAdapter.AreaSmallViewHolder>(AreaSmallDiff){
     // 뷰홀더 정의
     class AreaSmallViewHolder(private val binding : ItemAreaSmallBinding) :
         RecyclerView.ViewHolder(binding.root){
@@ -54,8 +57,15 @@ class AreaSmallAdapter : ListAdapter<AreaSmall, AreaSmallAdapter.AreaSmallViewHo
             var clickedArea = ""
             if(getItem(position).name != "전체") clickedArea = getItem(position).name ?: ""
 
-            // SetlocationFragment의 selectedArea 업데이트
+            // SetLocationViewModel의 selectedArea 업데이트
             SetlocationFragment.selectedArea[2] = clickedArea
+
+            // 토스트 메세지 출력
+            if(clickedArea == ""){
+                Toast.makeText(holder.itemView.context, SetlocationFragment.selectedArea[0] + " " + SetlocationFragment.selectedArea[1] + " " + "전체", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(holder.itemView.context, SetlocationFragment.selectedArea[0] + " " + SetlocationFragment.selectedArea[1] + " " + SetlocationFragment.selectedArea[2], Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentEditprofileBinding
 import com.yunjung.todaysrecord.detail.DetailFragmentArgs
@@ -26,10 +27,6 @@ import retrofit2.Response
 class EditprofileFragment : Fragment(){
     lateinit var binding : FragmentEditprofileBinding
     lateinit var viewModel: EditprofileViewModel
-
-    // 로그인된 userId
-    // var userId : String = (requireActivity() as MainActivity).viewModel.userId.value ?: "anonymous"
-    var userId : String = "616be2b08346b820364b82b1"
 
     // Navigaion component safe args 관련 변수
     val args : EditprofileFragmentArgs by navArgs()
@@ -53,6 +50,8 @@ class EditprofileFragment : Fragment(){
     // 뷰가 완전히 생성 되었을 때
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val userId : String = (requireContext().applicationContext as MyApplication).userId.value.toString() // 로그인된 user의 _id를 가져옴
 
         viewModel = ViewModelProvider(this).get(EditprofileViewModel::class.java)
 
@@ -89,7 +88,7 @@ class EditprofileFragment : Fragment(){
                 }
             })
 
-            findNavController().popBackStack() // 뒤로감
+            findNavController().navigateUp() // 뒤로감
         }
     }
 }
