@@ -2,11 +2,15 @@ package com.yunjung.todaysrecord.review
 
 import android.content.ContentValues
 import android.content.ContentValues.TAG
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentReviewBinding
 import com.yunjung.todaysrecord.detail.DetailFragmentArgs
@@ -55,6 +60,9 @@ class ReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(ReviewViewModel::class.java)
+
+        // 로그인된 userId
+        val userId : String = (requireContext().applicationContext as MyApplication).userId.value.toString()
 
         // 서버로부터 해당 사진관의 리뷰를 가져옴
         val call : Call<List<Review>> = RetrofitManager.iRetrofit.getReviewByPsId(photoStudio._id)
@@ -99,15 +107,30 @@ class ReviewFragment : Fragment() {
                 }
                 viewModel.getRating(fiveStar, fourStar, threeStar, twoStar, oneStar)
 
-                /* '리뷰 사진 모아보기'란의 URL 이미지 처리 */
-                if(result.isNotEmpty()){
-                    var preImage1 : String? = viewModel.reviewList.value!![0].image
-                    Glide.with(view).load(preImage1).into(binding.preImageView1)
-                }
-                if(result.size >= 2){
-                    var preImage2 : String? = viewModel.reviewList.value!![1].image
-                    Glide.with(view).load(preImage2).into(binding.preImageView2)
-                }
+                /* '리뷰 사진 모아보기'란의 이미지 처리 */
+                // 해당 사진관의 사진 리뷰만 가져옴
+                val call : Call<List<Review>>? = RetrofitManager.iRetrofit?.getImageReviewByPsId(photoStudio._id)
+                call?.enqueue(object : retrofit2.Callback<List<Review>> {
+                    // 응답 성공시
+                    override fun onResponse(
+                        call: Call<List<Review>>,
+                        response: Response<List<Review>>
+                    ) {
+                        if(response.body()!!.isNotEmpty()){
+                            val preImage1 = stringToBitmap(response.body()!![0].image.toString())
+                            binding.preImageView1.setImageBitmap(preImage1)
+                        }
+                        if(response.body()!!.size >= 2){
+                            val preImage2 = stringToBitmap(response.body()!![1].image.toString())
+                            binding.preImageView2.setImageBitmap(preImage2)
+                        }
+                    }
+
+                    // 응답 실패시
+                    override fun onFailure(call: Call<List<Review>>, t: Throwable) {
+                        Log.e(ContentValues.TAG, t.localizedMessage)
+                    }
+                })
 
                 /* 리사이클러뷰 적용 */
                 initRecycler()
@@ -131,8 +154,12 @@ class ReviewFragment : Fragment() {
 
         /* '리뷰 작성하기' 버튼 클릭 이벤트 설정 */
         binding.writeReviewBtn.setOnClickListener {
-            val directions = WriteReivewFragmentDirections.actionGlobalWriteReivewFragment(photoStudio._id.toString())
-            it.findNavController().navigate(directions)
+            if(userId != "anonymous"){ // 로그인이 되어 있다면
+                val directions = WriteReivewFragmentDirections.actionGlobalWriteReivewFragment(photoStudio._id.toString())
+                it.findNavController().navigate(directions)
+            }else{ // 로그인이 되어 있지 않다면
+                Toast.makeText(requireContext(), "먼저 로그인을 해주세요", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -147,5 +174,11 @@ class ReviewFragment : Fragment() {
         viewModel.reviewList.observe(viewLifecycleOwner, {
             (binding.recyclerViewReview.adapter as ReviewAdapter).submitList(it)
         })
+    }
+
+    // String을 Bitmap으로 변환
+    fun stringToBitmap(encodedString : String) : Bitmap? {
+        val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
     }
 }

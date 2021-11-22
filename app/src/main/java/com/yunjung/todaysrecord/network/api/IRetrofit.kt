@@ -22,7 +22,7 @@ interface IRetrofit {
         @Field("userId") userId : String? = null,
         @Field("rating") rating : Int? = null,
         @Field("content") content : String? = null,
-        @Field("image") image : String? = null,
+        @Field("image") image : String? = null
     ) : Call<Review>
 
     @FormUrlEncoded
@@ -32,16 +32,6 @@ interface IRetrofit {
         @Field("profileImage") profileImage : String? = null,
         @Field("nickname") nickname : String? = null
     ) : Call<User>
-
-    @Multipart
-    @POST("UploadReview")
-    fun uploadReview(
-        @Part ("psId") psId: RequestBody,
-        @Part ("userId") userId: RequestBody,
-        @Part("rating") rating: RequestBody,
-        @Part ("content") content: RequestBody,
-        @Part image: MultipartBody.Part
-    ) : Call<Review>
 
     // Read (GET)
     @GET("/getPhotoStudioByAreaAndType")

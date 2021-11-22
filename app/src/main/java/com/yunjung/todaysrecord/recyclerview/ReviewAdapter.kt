@@ -2,6 +2,9 @@ package com.yunjung.todaysrecord.recyclerview
 
 import android.content.ContentValues
 import android.content.ContentValues.TAG
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -54,9 +57,17 @@ class ReviewAdapter :
                 }
             })
 
-            // URL 이미지 처리
-            var reviewImage : String? = review.image
-            Glide.with(binding.root.context).load(reviewImage).into(binding.reviewImage)
+            // reviewImage 디스플레이
+            if(review.image != null){
+                val bitmap = stringToBitmap(review.image.toString())
+                binding.reviewImage.setImageBitmap(bitmap)
+            }
+        }
+
+        // String을 Bitmap으로 변환
+        fun stringToBitmap(encodedString : String) : Bitmap? {
+            val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
+            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
         }
     }
 

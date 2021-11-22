@@ -1,5 +1,8 @@
 package com.yunjung.todaysrecord.recyclerview
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -18,9 +21,14 @@ class ImageAdapter : ListAdapter<Review, ImageAdapter.ImageViewHolder>(ReviewDif
         fun initBinding(review: Review) {
             binding.item = review
 
-            // URL 이미지 처리
-            var image : String = review.image!!
-            Glide.with(binding.root.context).load(image).into(binding.imageView)
+            val bitmap = stringToBitmap(review.image.toString())
+            binding.imageView.setImageBitmap(bitmap)
+        }
+
+        // String을 Bitmap으로 변환
+        fun stringToBitmap(encodedString : String) : Bitmap? {
+            val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
+            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
         }
     }
 
