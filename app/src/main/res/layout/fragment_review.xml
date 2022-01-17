@@ -69,7 +69,7 @@
                                 android:id="@+id/reviewNum"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.reviewNum.toString()}"
+                                android:text="0"
                                 android:textColor="#000000"
                                 android:textSize="16sp" />
 
@@ -99,7 +99,7 @@
                                 android:id="@+id/reviewAvg"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.reviewAvg.toString()}"
+                                android:text="0"
                                 android:textColor="#000000" />
 
                             <TextView
@@ -117,7 +117,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="26dp"
                             android:numStars="5"
-                            android:rating="@{viewModel.reviewAvg}"
+                            android:rating="5"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
@@ -191,7 +191,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/textView33" />
 
                         <ProgressBar
-                            android:id="@+id/progressBar"
+                            android:id="@+id/fiveStar"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -199,14 +199,14 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
-                            android:progress="@{viewModel.fiveStarRatio}"
+                            android:progress="5"
                             app:layout_constraintBottom_toBottomOf="@+id/textView30"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView30"
                             app:layout_constraintTop_toTopOf="@+id/textView30" />
 
                         <ProgressBar
-                            android:id="@+id/progressBar2"
+                            android:id="@+id/fourStar"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -214,14 +214,14 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
-                            android:progress="@{viewModel.fourStarRatio}"
+                            android:progress="4"
                             app:layout_constraintBottom_toBottomOf="@+id/textView31"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView31"
                             app:layout_constraintTop_toTopOf="@+id/textView31" />
 
                         <ProgressBar
-                            android:id="@+id/progressBar3"
+                            android:id="@+id/threeStar"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -229,14 +229,14 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
-                            android:progress="@{viewModel.threeStarRatio}"
+                            android:progress="3"
                             app:layout_constraintBottom_toBottomOf="@+id/textView32"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView32"
                             app:layout_constraintTop_toTopOf="@+id/textView32" />
 
                         <ProgressBar
-                            android:id="@+id/progressBar4"
+                            android:id="@+id/twoStar"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -244,14 +244,14 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
-                            android:progress="@{viewModel.twoStarRatio}"
+                            android:progress="2"
                             app:layout_constraintBottom_toBottomOf="@+id/textView33"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView33"
                             app:layout_constraintTop_toTopOf="@+id/textView33" />
 
                         <ProgressBar
-                            android:id="@+id/progressBar5"
+                            android:id="@+id/oneStar"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -259,7 +259,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
-                            android:progress="@{viewModel.oneStarRatio}"
+                            android:progress="1"
                             app:layout_constraintBottom_toBottomOf="@+id/textView34"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView34"

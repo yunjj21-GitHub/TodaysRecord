@@ -1,6 +1,5 @@
 package com.yunjung.todaysrecord.mypage
 
-import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,23 +12,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.firebase.ui.auth.ui.phone.CheckPhoneNumberFragment.TAG
-import com.google.android.material.snackbar.Snackbar
 import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentMypageBinding
-import com.yunjung.todaysrecord.main.MainActivity
-import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.models.User
-import com.yunjung.todaysrecord.network.RetrofitManager
-import com.yunjung.todaysrecord.recyclerview.PhotoStudioAdapter
-import retrofit2.Call
-import retrofit2.Response
 
 class MypageFragment : Fragment(){
     lateinit var binding : FragmentMypageBinding
     lateinit var viewModel: MypageViewModel
-
-    var userProfile : String? = null
 
     companion object{
         fun newInstance() : MypageFragment {
@@ -50,78 +40,72 @@ class MypageFragment : Fragment(){
     // 뷰가 완전히 생성 되었을 때
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel = ViewModelProvider(this).get(MypageViewModel::class.java)
+        binding.viewModel = viewModel
 
-        // 로그인된 user의 _id를 가져옴
-        val userId : String = (requireContext().applicationContext as MyApplication).userId.value.toString()
-        // requireContext().applicationContext == requireActivity().applicationContext
+        // user 업데이트
+        viewModel.updateUser((requireContext().applicationContext as MyApplication).user.value!!)
 
-        if(userId != "anonymous"){
-            val call : Call<User> = RetrofitManager.iRetrofit?.getUserById(_id = userId)
-            call?.enqueue(object : retrofit2.Callback<User>{
-                // 응답 성공시
-                override fun onResponse(
-                    call: Call<User>,
-                    response: Response<User>
-                ) {
-                    viewModel.updateUserNickname(response.body()!!.nickname.toString())
-
-                    // 유저 프로필 이미지 설정 (URL 이미지 처리)
-                    userProfile = response.body()!!.profileImage ?: null
-                    Glide.with(binding.root.context)
-                        .load(userProfile)
-                        .fallback(R.drawable.ic_profile)
-                        .into(binding.userProfile)
-
-                    binding.viewModel = viewModel
-                }
-
-                // 응답 실패시
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                    Log.e(ContentValues.TAG, t.localizedMessage)
-                }
-            })
-        }else{
-            viewModel.updateUserNickname("로그인해주세요")
-            binding.viewModel = viewModel
-        }
+        // 유저 프로필 이미지 설정
+        displayUserProfile()
 
         // 내 정보 수정 버튼 이벤트 설정
-        binding.editProfileBtn.setOnClickListener {
-            if(userId == "anonymous"){ // 로그인이 되어 있지 않을 때
-                findNavController().navigate(R.id.action_mypageFragment_to_loginFragment)
-            }else { // 로그인이 되어 있을 때
-                val direction = MypageFragmentDirections.actionMypageFragmentToEditFragment(viewModel.userNickname.value.toString(), userProfile)
-                findNavController().navigate(direction)
-            }
-        }
+        initEditProfileBtn()
 
         // 관심목록 버튼 클릭 이벤트 설정
+        initInterestsBtn()
+
+        // 리뷰관리 버튼 클릭 이벤트 설정
+        initReviewBtn()
+
+        // 로그아웃 버튼 클릭 이벤트 설정
+        initLogoutBtn()
+    }
+
+    private fun displayUserProfile(){
+        Glide.with(binding.root.context)
+            .load(viewModel.user.value!!.profileImage)
+            .fallback(R.drawable.ic_profile)
+            .into(binding.userProfile)
+    }
+
+    private fun initEditProfileBtn(){
+        binding.editProfileBtn.setOnClickListener {
+            if(viewModel.user.value!!._id == "anonymous"){ // 로그인이 되어 있지 않을 때
+                findNavController().navigate(R.id.action_mypageFragment_to_loginFragment)
+            }else { // 로그인이 되어 있을 때
+                findNavController().navigate(R.id.action_mypageFragment_to_editFragment)
+            }
+        }
+    }
+
+    private fun initInterestsBtn(){
         binding.interestsBtn.setOnClickListener {
-            if(userId == "anonymous"){ // 로그인이 되어 있지 않을 때
+            if(viewModel.user.value!!._id == "anonymous"){ // 로그인이 되어 있지 않을 때
                 Toast.makeText(requireContext(), "먼저 로그인을 해주세요", Toast.LENGTH_LONG).show()
-                // Snackbar.make(binding.root, "먼저 로그인을 해주세요", Snackbar.LENGTH_LONG).show()
             }else { // 로그인이 되어 있을 때
                 findNavController().navigate(R.id.action_mypageFragment_to_myinterestsFragment)
             }
         }
+    }
 
-        // 리뷰관리 버튼 클릭 이벤트 설정
+    private fun initReviewBtn(){
         binding.reviewBtn.setOnClickListener {
-            if(userId == "anonymous"){ // 로그인이 되어 있지 않을 때
+            if(viewModel.user.value!!._id == "anonymous"){ // 로그인이 되어 있지 않을 때
                 Toast.makeText(context, "먼저 로그인을 해주세요", Toast.LENGTH_LONG).show()
             }else { // 로그인이 되어 있을 때
                 findNavController().navigate(R.id.action_mypageFragment_to_myreviewFragment)
             }
         }
+    }
 
-        // 로그아웃 버튼 클릭 이벤트 설정
+    private fun initLogoutBtn(){
         binding.logoutBtn.setOnClickListener {
-            if(userId == "anonymous"){ // 로그인이 되어 있지 않을 때
+            if(viewModel.user.value!!._id == "anonymous"){ // 로그인이 되어 있지 않을 때
                 Toast.makeText(context, "이미 로그아웃된 상태 입니다.", Toast.LENGTH_LONG).show()
             }else { // 로그인이 되어 있을 때
-                (requireContext().applicationContext as MyApplication).userId.value = "anonymous"
+                (requireContext().applicationContext as MyApplication).user.value=
+                    User("anonymous", "로그인해주세요", null, null) // 로그아웃 처리
                 Toast.makeText(context, "성공적으로 로그아웃 되었습니다.", Toast.LENGTH_LONG).show()
             }
         }

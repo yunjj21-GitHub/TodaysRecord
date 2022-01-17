@@ -6,15 +6,8 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
-// Retrofit Api 인터페이스 (어노테이션과 파라미터만 지정해 주면 Retrofit이 자동으로 구현)
 interface IRetrofit {
-    /*
-    * 접근하는 주소에 따라, Path 또는 Query 지정 가능
-    * @HTTP method("/uri") // baseUrl + uri
-    * fun 메소드명(@Query("쿼리 명") 매개변수 명 : 매개변수 타입, ... ) : Call<받아올 data model>
-    */
-
-    // Creat (POST)
+    // Create (POST)
     @FormUrlEncoded
     @POST("/postReview")
     fun postReview(
@@ -98,8 +91,8 @@ interface IRetrofit {
 
     @GET("/checkIfEmailAlreadySingedUp")
     fun checkIfEmailAlreadySingedUp(
-        @Query("email") email : String? = null
-    ) : Call<List<User>>
+        @Query("email") email : String
+    ) : Call<User>
 
     // Update
     // 전체를 수정하는 PUT

@@ -18,85 +18,56 @@ import com.yunjung.todaysrecord.setlocation.SetlocationViewModel
 import retrofit2.Call
 import retrofit2.Response
 
-class AreaLargeAdapter(val setlocationViewModel : SetlocationViewModel)
+class AreaLargeAdapter(val setLocationViewModel : SetlocationViewModel)
     : ListAdapter<AreaLarge, AreaLargeAdapter.AreaLargeViewHolder>(AreaLargeDiff){
-
 
     // 뷰홀더 정의
     class AreaLargeViewHolder(private val binding : ItemAreaLargeBinding) :
         RecyclerView.ViewHolder(binding.root){
-
-        // 초기화
         fun initBinding(areaLarge: AreaLarge) {
             binding.item = areaLarge
         }
     }
+
     // 뷰홀더가 생성 되었을 때 실행
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): AreaLargeAdapter.AreaLargeViewHolder {
-        // 연결할 레이아웃 설정
-        val layoutInflater = LayoutInflater.from(parent.context) // layoutInflater 초기화
-        val binding = ItemAreaLargeBinding.inflate(layoutInflater) // binding 초기화
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = ItemAreaLargeBinding.inflate(layoutInflater)
 
         setMatchParentToRecyclerView(binding)
 
         return AreaLargeViewHolder(binding)
     }
 
-    // 각 item이 recyclerView를 가득 채우도록 함
-    private fun setMatchParentToRecyclerView(binding : ItemAreaLargeBinding){
-        val layoutParams =  RecyclerView.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        binding.root.layoutParams = layoutParams
-    }
-
     // 뷰와 뷰홀더가 묶였을 때 실행
     override fun onBindViewHolder(holder: AreaLargeAdapter.AreaLargeViewHolder, position: Int) {
-        // position : 해당 뷰홀더가 리사이클러뷰에서 보여지는 위치 정보를 가지고 있음
-        // getItem(position) : 위치에 해당하는 데이터를 가져옴
         holder.initBinding(getItem(position))
 
         // 아이템 클릭 이벤트 설정
         holder.itemView.setOnClickListener {
-            var clickedArea = getItem(position).name ?: ""
+            val clickedArea = getItem(position).name
 
-            val call : Call<List<AreaMedium>>? = RetrofitManager.iRetrofit?.getAreaMediumByBelong(clickedArea)
-            call?.enqueue(object : retrofit2.Callback<List<AreaMedium>> {
-                // 응답 성공시
-                override fun onResponse(
-                    call: Call<List<AreaMedium>>,
-                    response: Response<List<AreaMedium>>
-                ) {
-                    // SetLocationViewModel의 areaMediumList 업데이트
-                    setlocationViewModel.areaMediumList.value = response.body() ?: listOf()
+            // setLocationViewModel의 townList 업데이트
+            setLocationViewModel.updateTownList(clickedArea!!)
 
-                    // SetLocationViewModel의 areaSmallList 업데이트 (빈 리스트로 만듦)
-                    setlocationViewModel.areaSmallList.value = listOf()
+            // SetLocationViewModel의 villageList를 빈 리스트로 업데이트
+            setLocationViewModel.updateVillageList("초기화")
 
-                    // SetLocationViewModel의 selectedArea 업데이트
-                    SetlocationFragment.selectedArea[0] = clickedArea
-                    SetlocationFragment.selectedArea[1] = ""
-                    SetlocationFragment.selectedArea[2] = ""
+            // SetLocationViewModel의 selectedArea 업데이트
+            setLocationViewModel.updateCity(clickedArea!!)
+            setLocationViewModel.updateTown("")
+            setLocationViewModel.updateVillage("")
 
-                    // 토스트 메세지 출력
-                    Toast.makeText(holder.itemView.context, SetlocationFragment.selectedArea[0], Toast.LENGTH_SHORT).show()
-                }
-
-                // 응답 실패시
-                override fun onFailure(call: Call<List<AreaMedium>>, t: Throwable) {
-                    Log.e(ContentValues.TAG, t.localizedMessage)
-                }
-            })
+            // 토스트 메세지 출력
+            Toast.makeText(holder.itemView.context, setLocationViewModel.city.value, Toast.LENGTH_SHORT).show()
         }
     }
 
     // 데이터가 변경되었을 때 실행
     object AreaLargeDiff : DiffUtil.ItemCallback<AreaLarge>() {
-        // 데이터의 고유한 값 1개만 비교
         override fun areItemsTheSame(oldItem: AreaLarge, newItem: AreaLarge): Boolean {
             return oldItem._id == newItem._id
         }
@@ -104,5 +75,14 @@ class AreaLargeAdapter(val setlocationViewModel : SetlocationViewModel)
         override fun areContentsTheSame(oldItem: AreaLarge, newItem: AreaLarge): Boolean {
             return oldItem == newItem
         }
+    }
+
+    // 각 아이템이 리사이클러뷰를 가득 채우도록 함
+    private fun setMatchParentToRecyclerView(binding : ItemAreaLargeBinding){
+        val layoutParams =  RecyclerView.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        binding.root.layoutParams = layoutParams
     }
 }

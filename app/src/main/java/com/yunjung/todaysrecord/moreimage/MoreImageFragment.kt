@@ -31,9 +31,8 @@ class MoreImageFragment : Fragment(){
     lateinit var binding : FragmentMoreImageBinding
     lateinit var viewModel: MoreImageViewModel
 
-    // Navigaion component safe args 관련 변수
-    val args : MoreImageFragmentArgs by navArgs()
-    private lateinit var photoStudio: PhotoStudio
+    // Navigation component safe args
+    private val args : MoreImageFragmentArgs by navArgs()
 
     companion object{
         fun newInstance() : MoreImageFragment {
@@ -58,43 +57,27 @@ class MoreImageFragment : Fragment(){
         viewModel = ViewModelProvider(this).get(MoreImageViewModel::class.java)
         binding.viewModel = viewModel
 
-        /* Navigaion component safe args 관련 */
-        photoStudio = args.photoStudio!! // 이전 프래그먼트에서 보낸값을 받아옴
+        // photoStudio 업데이트
+        viewModel.updatePhotoStudio(args.photoStudio!!)
 
-        // 서버로 부터 받아온 사진관 정보와 대응되는 사진을 포함한 리뷰 리스트를 가져옴
-        val call : Call<List<Review>>? = RetrofitManager.iRetrofit?.getImageReviewByPsId(ReviewFragment.photoStudio._id)
-        call?.enqueue(object : retrofit2.Callback<List<Review>> {
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<List<Review>>,
-                response: Response<List<Review>>
-            ) {
-                val result : List<Review>? = response.body()
-                viewModel.getReviewList(result) // viewModel에 가져온 리뷰리스트를 넘겨줌
+        // imageReviewList 업데이트
+        viewModel.getImageReviewList()
 
-                // 리사이클러뷰 적용
-                initRecycler()
-                subscribeStudioList()
-            }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<List<Review>>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
-        })
+        // 리사이클러뷰 관련 설정
+        initRecycler()
+        subscribeStudioList()
     }
 
-    // 리사이클러뷰 초기설정
+    // 리사이클러뷰에 어댑터 설정
     private fun initRecycler(){
         binding.recyclerImage.adapter = ImageAdapter()
-        // binding.recyclerImage.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         binding.recyclerImage.layoutManager = GridLayoutManager(requireContext(), 3)
 
     }
 
-    // 리사이클러뷰에 보여지는 데이터가 변경시 어댑터에게 알림
+    // 어댑터가 imageReviewList를 옵저버
     private fun subscribeStudioList() {
-        viewModel.reviewList.observe(viewLifecycleOwner, {
+        viewModel.imageReviewList.observe(viewLifecycleOwner, {
             (binding.recyclerImage.adapter as ImageAdapter).submitList(it)
         })
     }

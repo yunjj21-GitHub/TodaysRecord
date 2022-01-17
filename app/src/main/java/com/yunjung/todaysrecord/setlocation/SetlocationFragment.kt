@@ -38,8 +38,6 @@ class SetlocationFragment : Fragment(){
         fun newInstance() : SetlocationFragment {
             return SetlocationFragment()
         }
-
-        var selectedArea = mutableListOf("", "", "")
     }
 
     // 뷰가 생성될 때 실행
@@ -52,105 +50,73 @@ class SetlocationFragment : Fragment(){
         return binding.root
     }
 
-    // 뷰가 완전히 생성 되었을 때
+    // 뷰가 완전히 생성 되었을 때 실행
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(SetlocationViewModel::class.java)
         binding.viewModel = viewModel
 
-        // 화면 구성에 필요한 3개의 recyclerView를 모두 적용
+        // cityList 업데이트
+        viewModel.updateCityList()
 
-        // '시도' 지역 리스트를 보여주는 recyclerView
-        val call : Call<List<AreaLarge>>? = RetrofitManager.iRetrofit?.getAreaLarge()
-        call?.enqueue(object : retrofit2.Callback<List<AreaLarge>>{
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<List<AreaLarge>>,
-                response: Response<List<AreaLarge>>
-            ) {
-                viewModel.areaLargeList.value = response.body() ?: listOf() // areaLargeList 업데이트
+        // 3개의 리사이클러뷰 초기 설정
+        initRecycler()
+        subscribeList()
 
-                // 리사이클러뷰 적용
-                initRecycler("Large")
-                subscribeList("Large")
-            }
+        // finishBtn 클릭 이벤트 설정
+        initFinishBtn()
+    }
 
-            // 응답 실패시
-            override fun onFailure(call: Call<List<AreaLarge>>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
-        })
-
-        // '시군구' 지역 리스트를 보여주는 recyclerView
-        initRecycler("Medium")
-        subscribeList("Medium")
-
-        // '동읍면' 지역 리스트를 보여주는 recyclerView
-        initRecycler("Small")
-        subscribeList("Small")
-
-        // '완료' 버튼 클릭 이벤트 설정
+    private fun initFinishBtn(){
         binding.finishBtn.setOnClickListener {
-            if(selectedArea[0] == "" && selectedArea[1] == "" && selectedArea[2] == ""){
+            if(viewModel.city.value == "" &&
+                viewModel.town.value == "" &&
+                viewModel.village.value == ""){
                 Toast.makeText(context, "선택하신 지역이 없습니다.", Toast.LENGTH_LONG)
             }else{
+                // 사용자 지역 업데이트
                 when {
-                    selectedArea[2] != "" -> {
+                    viewModel.village.value != "" -> {
                         (requireActivity() as MainActivity).viewModel.updateUerArea(
-                            selectedArea[2])
+                            viewModel.village.value.toString())
                     }
-                    selectedArea[1] != "" -> {
+                    viewModel.town.value != "" -> {
                         (requireActivity() as MainActivity).viewModel.updateUerArea(
-                            selectedArea[1]
+                            viewModel.town.value.toString()
                         )
                     }
-                    selectedArea[0] != "" -> {
+                    viewModel.city.value != "" -> {
                         (requireActivity() as MainActivity).viewModel.updateUerArea(
-                            selectedArea[0]
+                            viewModel.city.value.toString()
                         )
                     }
                 }
             }
-
-            findNavController().navigateUp()
+            findNavController().navigateUp() // 뒤로감
         }
     }
 
-    private fun initRecycler(recyclerName : String){
-        when (recyclerName) {
-            "Large" -> {
-                binding.recyclerAreaLarge.adapter = AreaLargeAdapter(viewModel)
-                binding.recyclerAreaLarge.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            }
-            "Medium" -> {
-                binding.recyclerAreaMedium.adapter = AreaMediumAdapter(viewModel)
-                binding.recyclerAreaMedium.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            }
-            else -> { // recyclerName == "Small"
-                binding.recyclerAreaSmall.adapter = AreaSmallAdapter(viewModel)
-                binding.recyclerAreaSmall.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            }
-        }
+    private fun initRecycler(){
+        binding.cityRecyclerView.adapter = AreaLargeAdapter(viewModel)
+        binding.cityRecyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+
+        binding.townRecyclerView.adapter = AreaMediumAdapter(viewModel)
+        binding.townRecyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+
+        binding.villageRecyclerView.adapter = AreaSmallAdapter(viewModel)
+        binding.villageRecyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
     }
 
-    private fun subscribeList(recyclerName: String){
-        when (recyclerName) {
-            "Large" -> {
-                viewModel.areaLargeList.observe(viewLifecycleOwner,{
-                    (binding.recyclerAreaLarge.adapter as AreaLargeAdapter).submitList(it)
-                })
-            }
-            "Medium" -> {
-                viewModel.areaMediumList.observe(viewLifecycleOwner,{
-                    (binding.recyclerAreaMedium.adapter as AreaMediumAdapter).submitList(it)
-                })
-            }
-            else -> { // recyclerName == "Small"
-                viewModel.areaSmallList.observe(viewLifecycleOwner,{
-                    (binding.recyclerAreaSmall.adapter as AreaSmallAdapter).submitList(it)
-                })
-            }
-        }
+    private fun subscribeList() {
+        viewModel.cityList.observe(viewLifecycleOwner, {
+            (binding.cityRecyclerView.adapter as AreaLargeAdapter).submitList(it)
+        })
+        viewModel.townList.observe(viewLifecycleOwner, {
+            (binding.townRecyclerView.adapter as AreaMediumAdapter).submitList(it)
+        })
+        viewModel.villageList.observe(viewLifecycleOwner, {
+            (binding.villageRecyclerView.adapter as AreaSmallAdapter).submitList(it)
+        })
     }
 }

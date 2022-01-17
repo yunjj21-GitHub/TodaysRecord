@@ -26,7 +26,7 @@ class JoinMembershipFragment : Fragment(){
     lateinit var binding : FragmentJoinMembershipBinding
     lateinit var viewModel: JoinMembershipViewModel
 
-    val args : JoinMembershipFragmentArgs by navArgs()
+    private val args : JoinMembershipFragmentArgs by navArgs()
 
     companion object{
         fun newInstance() : JoinMembershipFragment{
@@ -44,35 +44,47 @@ class JoinMembershipFragment : Fragment(){
         return binding.root
     }
 
+    // 뷰가 완전히 생성된 후에 실행
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(JoinMembershipViewModel::class.java)
-
         binding.viewModel = viewModel
 
-        // userProfile 이미지 디스플레이
+        // user 업데이트
+        viewModel.updateUser(args.email, args.profileImage)
+
+        // profile 이미지 디스플레이
+        displayProfileImage()
+
+        // finishBtn 클릭 이벤트 설정
+        initFinishBtn()
+    }
+
+    private fun displayProfileImage(){
         Glide.with(binding.root.context)
-            .load(args.profileImage)
+            .load(viewModel.user.value!!.profileImage)
             .fallback(R.drawable.ic_profile)
             .into(binding.userProfile)
+    }
 
-        // 입력된 정보를 바탕으로 회원가입 완료
+    private fun initFinishBtn(){
         binding.finishBtn.setOnClickListener {
-            val email : String = args.email
-            val profileImage : String = args.profileImage
-            val nickname : String = binding.userNickname.text.toString()
+            val email: String = viewModel.user.value!!.email.toString()
+            val profileImage: String = viewModel.user.value!!.profileImage.toString()
+            // 유저의 입력값을 받아옴
+            val nickname: String = binding.userNickname.text.toString()
 
-            // 서버에 입력된 정보를 넘겨줌
-            val call : Call<User> = RetrofitManager.iRetrofit?.postUser(email = email, profileImage = profileImage, nickname = nickname)
-            call?.enqueue(object : retrofit2.Callback<User>{
+            // 유저를 생성
+            val call: Call<User> = RetrofitManager.iRetrofit?.postUser(email = email, profileImage = profileImage, nickname = nickname)
+            call?.enqueue(object : retrofit2.Callback<User> {
                 // 응답 성공시
                 override fun onResponse(
                     call: Call<User>,
                     response: Response<User>
                 ) {
-                    // MainViewModel의 userId 업데이트 (어플 내 로그인 처리)
-                    (requireContext().applicationContext as MyApplication).userId.value = response.body()!!._id
+                    // 로그인 처리
+                    (requireContext().applicationContext as MyApplication).user.value = response.body()!!
 
                     // myPageFragment로 이동
                     findNavController().navigate(JoinMembershipFragmentDirections.actionJoinMembershipFragmentToMypageFragment())

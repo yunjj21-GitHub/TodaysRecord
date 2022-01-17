@@ -14,7 +14,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/signInBtn"
+        android:id="@+id/googleSignInBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

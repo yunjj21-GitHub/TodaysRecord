@@ -1,19 +1,36 @@
 package com.yunjung.todaysrecord.booth
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.yunjung.todaysrecord.models.PhotoBooth
+import com.yunjung.todaysrecord.network.RetrofitManager
+import retrofit2.Call
+import retrofit2.Response
 
 class BoothViewModel : ViewModel() {
-    // 수정 가능한 라이브 데이터 (클래스 내부에서만 사용), 초기화 값 0
-    private val _cur = MutableLiveData<Int>(0)
+    private val _adjBoothList = MutableLiveData<List<PhotoBooth>>()
 
-    // 수정 불 가능한 라이브 데이터 (클래스 외부에서 접근 시 사용)
-    val cur: LiveData<Int>
-        get() = _cur // 클래스 내부에서 사용하는 변수를 get()으로 가져와 반환
+    val adjBoothList: LiveData<List<PhotoBooth>>
+        get() = _adjBoothList
 
-    // ViewModel이 가지고 있는 값을 업데이트
-    fun updateValue() {
+    fun updateAdjBoothList(lng : String, lat : String) {
+        val call : Call<List<PhotoBooth>>? = RetrofitManager.iRetrofit?.getPhotoboothByLocation(lng, lat)
+        call?.enqueue(object : retrofit2.Callback<List<PhotoBooth>> {
+            // 응답 성공시
+            override fun onResponse(
+                call: Call<List<PhotoBooth>>,
+                response: Response<List<PhotoBooth>>
+            ) {
+                _adjBoothList.value = response.body() ?: listOf()
+            }
 
+            // 응답 실패시
+            override fun onFailure(call: Call<List<PhotoBooth>>, t: Throwable) {
+                Log.e(ContentValues.TAG, t.localizedMessage)
+            }
+        })
     }
 }

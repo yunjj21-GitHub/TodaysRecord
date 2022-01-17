@@ -48,14 +48,18 @@ class StudioFragment : Fragment(){
         return binding.root
     }
 
-    // 뷰가 완전히 생성 되었을 때
+    // 뷰가 완전히 생성 되었을 때 실행
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(StudioViewModel::class.java)
         binding.viewModel = viewModel
 
-        /* ViewPager & TabLayout 관련 */
+        // 뷰페이저에 어댑터 부착
+        initViewPager()
+    }
+
+    private fun initViewPager(){
         // 뷰페이저에 어댑터 부착
         val pagerAdapter = ViewpagerAdapter(requireActivity())
         pagerAdapter.addFragment(PhotostudioIdFragment.newInstance())

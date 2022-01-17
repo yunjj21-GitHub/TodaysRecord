@@ -1,64 +1,109 @@
 package com.yunjung.todaysrecord.review
 
+import android.content.ContentValues
+import android.content.ContentValues.TAG
+import android.util.Log
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.models.Review
+import com.yunjung.todaysrecord.models.User
+import com.yunjung.todaysrecord.network.RetrofitManager
+import retrofit2.Call
+import retrofit2.Response
 
 class ReviewViewModel : ViewModel() {
-    // 클래스 내부에서만 사용
-    private val _reviewList = MutableLiveData<List<Review>?>() // 해당 사진관의 리뷰리스트
-    private val _reviewNum = MutableLiveData<Int>(0) // 해당 사진관의 리뷰 개수
-    private val _reviewAvg = MutableLiveData<Int>(0) // 해당 사진관의 리뷰 평점
+    private val _user = MutableLiveData<User>()
+    private val _photoStudio = MutableLiveData<PhotoStudio>()
+    private val _reviewList = MutableLiveData<List<Review>>() // 사진관의 리뷰리스트
+    private val _reviewNum = MutableLiveData(0) // 리뷰의 개수
+    private val _starNum = MutableLiveData<MutableList<Int>>(mutableListOf(0, 0, 0, 0, 0)) // 각 별점의 개수
+    private val _starRatio = MutableLiveData<MutableList<Int>>(mutableListOf(0, 0, 0, 0, 0)) // 각 별점의 비율을 저장
+    private val _reviewAvg = MutableLiveData<Int>(0)
 
-    private val _fiveStarRatio = MutableLiveData<Int>(0) // 별점 5점 리뷰의 개수
-    private val _fourStarRatio = MutableLiveData<Int>(0) // 별점 5점 리뷰의 개수
-    private val _threeStarRatio = MutableLiveData<Int>(0) // 별점 5점 리뷰의 개수
-    private val _twoStarRatio = MutableLiveData<Int>(0) // 별점 5점 리뷰의 개수
-    private val _oneStarRatio = MutableLiveData<Int>(0) // 별점 5점 리뷰의 개수
+    val user : LiveData<User>
+        get() = _user
 
-    // 클래스 외부에서도 접근 가능
-    val reviewList: LiveData<List<Review>?>
+    val photoStudio : LiveData<PhotoStudio>
+        get() = _photoStudio
+
+    val reviewList : LiveData<List<Review>>
         get() = _reviewList
 
-    val reviewNum: LiveData<Int>
+    val reviewNum : LiveData<Int>
         get() = _reviewNum
 
-    val reviewAvg: LiveData<Int>
+    val starNum : LiveData<MutableList<Int>>
+        get() = _starNum
+
+    val starRatio : LiveData<MutableList<Int>>
+        get() = _starRatio
+
+    val reviewAvg : LiveData<Int>
         get() = _reviewAvg
 
-    val fiveStarRatio: LiveData<Int>
-        get() = _fiveStarRatio
 
-    val fourStarRatio: LiveData<Int>
-        get() = _fourStarRatio
-
-    val threeStarRatio: LiveData<Int>
-        get() = _threeStarRatio
-
-    val twoStarRatio: LiveData<Int>
-        get() = _twoStarRatio
-
-    val oneStarRatio: LiveData<Int>
-        get() = _oneStarRatio
-
-    fun getReviewList(tmpList : List<Review>?) {
-        _reviewList.value = tmpList
+    fun updateUser(user : User){
+        _user.value = user
     }
 
-    fun getReviewNum(num : Int){
-        _reviewNum.value = num
+    fun updatePhotoStudio(photoStudio: PhotoStudio){
+        _photoStudio.value = photoStudio
     }
 
-    fun getReviewAvg(avg : Int){
-        _reviewAvg.value = avg
+    fun updateReviewList(){
+        val call : Call<List<Review>> = RetrofitManager.iRetrofit.getReviewByPsId(photoStudio.value!!._id)
+        call.enqueue(object : retrofit2.Callback<List<Review>> {
+            // 응답 성공시
+            override fun onResponse(
+                call: Call<List<Review>>,
+                response: Response<List<Review>>
+            ) {
+                _reviewList.value = response.body() ?: listOf()
+                _reviewNum.value = (response.body() ?: listOf()).size
+                updateStarNum()
+
+            }
+            // 응답 실패시
+            override fun onFailure(call: Call<List<Review>>, t: Throwable) {
+                Log.e(ContentValues.TAG, t.localizedMessage)
+            }
+        })
     }
 
-    fun getRating(fiveStar : Int, fourStar : Int, threeStar : Int, twoStar : Int, oneStar : Int){
-        _fiveStarRatio.value = fiveStar
-        _fourStarRatio.value = fourStar
-        _threeStarRatio.value = threeStar
-        _twoStarRatio.value = twoStar
-        _oneStarRatio.value = oneStar
+    fun updateStarNum(){
+        if(reviewList.value!!.isEmpty()) return
+
+        var total = 0
+        for(review in reviewList.value!!) {
+            total += review.rating!!
+            when(review.rating){
+                5 -> _starNum.value!![0]++
+                4 -> _starNum.value!![1]++
+                3 -> _starNum.value!![2]++
+                2 -> _starNum.value!![3]++
+                1 -> _starNum.value!![4]++
+            }
+        }
+        updateStarRatio()
+        updateReviewAvg(total)
+    }
+
+    private fun updateStarRatio(){
+        if(reviewList.value!!.isEmpty()) return
+
+        _starRatio.value!![0] = (starNum.value!![0]*100)/reviewList.value!!.size
+        _starRatio.value!![1] = (starNum.value!![1]*100)/reviewList.value!!.size
+        _starRatio.value!![2] = (starNum.value!![2]*100)/reviewList.value!!.size
+        _starRatio.value!![3] = (starNum.value!![3]*100)/reviewList.value!!.size
+        _starRatio.value!![4] = (starNum.value!![4]*100)/reviewList.value!!.size
+    }
+
+    private fun updateReviewAvg(total : Int){
+        if(reviewList.value!!.isEmpty()) return
+
+        _reviewAvg.value = total / _reviewList.value!!.size
     }
 }

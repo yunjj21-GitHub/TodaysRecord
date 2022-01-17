@@ -58,13 +58,6 @@
         android:id="@+id/editFragment"
         android:name="com.yunjung.todaysrecord.editprofile.EditprofileFragment"
         android:label="EditFragment" >
-        <argument
-            android:name="userNickname"
-            app:argType="string" />
-        <argument
-            android:name="userProfile"
-            app:argType="string"
-            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/myinterestsFragment"

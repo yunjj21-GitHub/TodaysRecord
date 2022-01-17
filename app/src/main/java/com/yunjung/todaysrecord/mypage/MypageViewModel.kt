@@ -3,17 +3,15 @@ package com.yunjung.todaysrecord.mypage
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.yunjung.todaysrecord.models.User
 
 class MypageViewModel  : ViewModel() {
-    // 수정 가능한 라이브 데이터 (클래스 내부에서만 사0용), 초기화 값 0
-    private val _userNickname = MutableLiveData<String>()
+    private val _user = MutableLiveData<User>()
 
-    // 수정 불가능한 라이브 데이터 (클래스 외부에서 접근 시 사용)
-    val userNickname: LiveData<String>
-        get() = _userNickname // 클래스 내부에서 사용하는 변수를 get()으로 가져와 반환
+    val user: LiveData<User>
+        get() = _user
 
-    // ViewModel이 가지고 있는 값을 업데이트
-    fun updateUserNickname(nickname : String) {
-        _userNickname.value = nickname
+    fun updateUser(user: User) {
+        _user.value = user
     }
 }

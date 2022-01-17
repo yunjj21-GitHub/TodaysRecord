@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,38 +44,27 @@ class MyreviewFragment : Fragment(){
     // 뷰가 완전히 생성 되었을 때
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel = ViewModelProvider(this).get(MyreviewViewModel::class.java)
         binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
-        val userId : String = (requireContext().applicationContext as MyApplication).userId.value.toString()
+        // 실시간으로 변하는 값 옵저버 (reviewNum)
+        initObserver()
+
+        // user 업데이트
+        viewModel.updateUser((requireContext().applicationContext as MyApplication).user.value!!)
 
         // Review의 userId가 로그인된 userId와 일치하는 것을 가져옴
-        val call : Call<List<Review>> = RetrofitManager.iRetrofit?.getReviewByUserId(userId = userId)
-        call?.enqueue(object : retrofit2.Callback<List<Review>>{
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<List<Review>>,
-                response: Response<List<Review>>
-            ) {
+        viewModel.updateReviewList()
 
-                // viewModel 업데이트
-                val result : List<Review> = response.body() ?: listOf()
-                viewModel.updateReviewList(result)
-                viewModel.updateReviewNum(result.size)
+        initRecycler() // 리사이클러뷰에 어댑터 부착
+        subscribeStudioList() // 어댑터가 reviewList 옵저버
+    }
 
-                // 리사이클러뷰 적용
-                initRecycler()
-                subscribeStudioList()
-
-                // 레이아웃과 연결
-                binding.viewModel = viewModel
-            }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<List<Review>>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
+    // 실시간으로 변하는 값 옵저버
+    private fun initObserver(){
+        viewModel.reviewNum.observe(viewLifecycleOwner, Observer {
+            binding.reviewNum.text = it.toString()
         })
     }
 

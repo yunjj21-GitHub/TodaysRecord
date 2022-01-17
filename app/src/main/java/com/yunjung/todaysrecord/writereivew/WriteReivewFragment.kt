@@ -1,5 +1,6 @@
 package com.yunjung.todaysrecord.writereivew
 
+import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,6 +14,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -38,15 +42,14 @@ import java.io.InputStream
 
 class WriteReivewFragment : Fragment() {
     // DataBinding & ViewModel 관련 변수
-    lateinit var binding : FragmentWriteReviewBinding
-    lateinit var viewModel : WriteReviewViewModel
+    private lateinit var binding : FragmentWriteReviewBinding
+    private lateinit var viewModel : WriteReviewViewModel
 
-    // Navigaion component safe args 관련 변수
-    val args : WriteReivewFragmentArgs by navArgs()
-    private lateinit var psId: String
+    // Navigation component safe args 관련 변수
+    private val args : WriteReivewFragmentArgs by navArgs()
 
     // 사진 업로드 관련
-    var reviewImage : String? = null
+    private lateinit var activityResultLauncher: ActivityResultLauncher<String>
 
     companion object{
         fun  newInstance() : WriteReivewFragment{
@@ -60,6 +63,9 @@ class WriteReivewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_write_review, container, false)
+
+        initActivityResultLauncher() // 이미지를 얻어오는 화면의 결과를 처리하는 런처 초기화
+
         return binding.root
     }
 
@@ -68,74 +74,80 @@ class WriteReivewFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(WriteReviewViewModel::class.java)
 
-        // 로그인된 userId
-        val userId : String = (requireActivity().applicationContext as MyApplication).userId.value.toString()
+        // user 업데이트
+        viewModel.updateUser((requireActivity().applicationContext as MyApplication).user.value!!)
 
-        // Navigaion component safe args 관련
-        psId = args.psId!!
+        // psId 업데이트
+        viewModel.updatePsId(args.psId)
 
-        // '등록' 버튼 클릭 이벤트 설정 (해당 사진관에 리뷰 등록 & 뒤로 감)
+        // finishBtn 클릭 이벤트 설정 (해당 사진관에 리뷰 등록 & 뒤로 감)
+        initFinishBtn()
+
+        // cancelBtn 클릭 이벤트 설정 (뒤로 감)
+        initCancelBtn()
+
+        // attachImageBtn 클릭 이벤트 설정 (디바이스에서 이미지를 얻어옴)
+        initAttachImageBtn()
+    }
+
+    private fun initFinishBtn(){
         binding.finishBtn.setOnClickListener {
             val rating : Int = binding.ratingBar.numStars
             val content : String = binding.reviewContent.text.toString()
-            // userId, psId, reviewImage
 
-            // 서버에 전달
-            val call : Call<Review>? = RetrofitManager.iRetrofit?.postReview(psId, userId, rating, content, reviewImage)
+            // 리뷰 등록
+            val call : Call<Review>? = RetrofitManager.iRetrofit.
+            postReview(viewModel.psId.value, viewModel.user.value!!._id, rating, content, viewModel.reviewImage.value)
             call?.enqueue(object : retrofit2.Callback<Review>{
                 // 응답 성공시
                 override fun onResponse(call: Call<Review>, response: Response<Review>) {
-                    Log.e(TAG, "응답 성공")
+                    Log.e(TAG, "리뷰 등록 성공")
                 }
 
                 // 응답 실패시
                 override fun onFailure(call: Call<Review>, t: Throwable) {
-                    Log.e(TAG, "응답 실패")
+                    Log.e(TAG, "리뷰 등록 실패")
                 }
             })
 
             it.findNavController().navigateUp() // 뒤로 감
         }
+    }
 
-        // '취소' 버튼 클릭 이벤트 설정 (뒤로 감)
+    private fun initCancelBtn(){
         binding.cancelBtn.setOnClickListener {
             it.findNavController().navigateUp() // 아무런 동작없이 뒤로 감
         }
+    }
 
-        // '사진 첨부하기' 버튼 클릭 이벤트 설정
+    private fun initAttachImageBtn(){
         binding.attachImageBtn.setOnClickListener {
             getPicture() // 디바이스의 갤러리에서 이미지를 얻어옴
         }
     }
 
-    fun getPicture(){ // 디바이스에서 갤러리를 접근하여 이미지를 얻어옴
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.setType("image/*")
-        startActivityForResult(intent, 1000)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if(requestCode == 1000){
-            val inputStream : InputStream = requireActivity().contentResolver.openInputStream(data!!.data!!)!!
+    private fun initActivityResultLauncher(){
+        activityResultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri : Uri? ->
+            val inputStream : InputStream = requireActivity().contentResolver.openInputStream(uri!!)!!
             var bitmap : Bitmap = BitmapFactory.decodeStream(inputStream)
             inputStream.close()
 
-            // bitamp 이미지 resize
-            bitmap = Bitmap.createScaledBitmap(bitmap,150,150,true);
+            // bitmap 이미지 resize
+            bitmap = Bitmap.createScaledBitmap(bitmap,150,150,true)
 
             // selectedImage에 선택된 이미지 디스플레이
             binding.selectedImage.setImageBitmap(bitmap)
 
-            // 선택된 이미지(Bitmap)을 String으로 변환
-            reviewImage = bitmapToString(bitmap)
-            Log.e("bitmap", reviewImage.toString())
+            // 선택된 이미지(Bitmap)을 문자열로 변환
+            viewModel.updateReviewImage(bitmapToString(bitmap))
         }
     }
 
-    // bitmap 이미지를 (String)으로 변경
+    private fun getPicture(){
+        activityResultLauncher.launch("image/*") // 이미지를 얻어옴
+    }
+
+    // bitmap 이미지를 문자열로 변환
     private fun bitmapToString(bitmap : Bitmap): String {
         val byteArrayOutputStream = ByteArrayOutputStream()
 

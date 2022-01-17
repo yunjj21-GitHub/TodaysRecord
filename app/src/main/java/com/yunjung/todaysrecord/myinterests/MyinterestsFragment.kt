@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,50 +43,41 @@ class MyinterestsFragment: Fragment(){
         return binding.root
     }
 
-    // 뷰가 완전히 생성 되었을 때
+    // 뷰가 완전히 생성 되었을 때 실행
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel = ViewModelProvider(this).get(MyinterestsViewModel::class.java)
         binding.viewModel = viewModel
+        binding.lifecycleOwner = this
 
-        val userId : String = (requireContext().applicationContext as MyApplication).userId.value.toString() // 로그인된 user의 _id를 가져옴
+        // 실시간으로 변하는 값 옵저버 (interestsNum)
+        initObserver()
 
-        // 해당 user가 찜한 사진관의 리스트를 가져옴
-        val call : Call<List<PhotoStudio>> = RetrofitManager.iRetrofit?.getPhotostudioListByUserId(userId = userId)
-        call?.enqueue(object : retrofit2.Callback<List<PhotoStudio>>{
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<List<PhotoStudio>>,
-                response: Response<List<PhotoStudio>>
-            ) {
-                // viewModel 업데이트
-                val result : List<PhotoStudio> = response.body() ?: listOf()
-                viewModel.updateInterestsList(result)
-                viewModel.updateInterestsNum(result.size)
+        // user 업데이트
+        viewModel.updateUser((requireContext().applicationContext as MyApplication).user.value!!)
 
-                // 리사이클러뷰 적용
-                initRecycler()
-                subscribeStudioList()
+        // 로그인된 유저가 찜한 사진관의 리스트를 가져옴
+        viewModel.updateInterestsList()
 
-                // 레이아웃과 연결
-                binding.viewModel = viewModel
-            }
+        // 리사이클러뷰 관련 설정
+        initRecycler()
+        subscribeStudioList()
+    }
 
-            // 응답 실패시
-            override fun onFailure(call: Call<List<PhotoStudio>>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
+    // 실시간으로 변하는 값 옵저버
+    private fun initObserver(){
+        viewModel.interestsNum.observe(viewLifecycleOwner, Observer {
+            binding.interestsNum.text = it.toString()
         })
     }
 
-    // 리사이클러뷰 초기설정
+    // 리사이클러뷰에 어댑터를 부착
     private fun initRecycler(){
         binding.recyclerView.adapter = PhotoStudioAdapter()
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
     }
 
-    // 리사이클러뷰에 보여지는 데이터가 변경시 어댑터에게 알림
+    // 어댑터가 interestsList를 옵저버
     private fun subscribeStudioList() {
         viewModel.interestsList.observe(viewLifecycleOwner, {
             (binding.recyclerView.adapter as PhotoStudioAdapter).submitList(it)

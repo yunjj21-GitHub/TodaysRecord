@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
@@ -30,16 +31,12 @@ import retrofit2.Call
 import retrofit2.Response
 
 class DetailFragment : Fragment(){
-    // DataBinding & ViewModel 관련 변수
     lateinit var binding : FragmentDetailBinding
     lateinit var viewModel: DetailViewModel
 
-    // Navigaion component safe args 관련 변수
-    val args : DetailFragmentArgs by navArgs()
-    private lateinit var photoStudio: PhotoStudio
+    private val args : DetailFragmentArgs by navArgs()
 
-    // '찜'버튼 이벤트 관련 변수
-    var heartState : Boolean = false
+    private lateinit var pagerAdapter : ViewpagerAdapter
 
     companion object{
         fun newInstance() : DetailFragment{
@@ -60,21 +57,42 @@ class DetailFragment : Fragment(){
     // 뷰가 완전히 생성 되었을 때
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val userId : String = (requireContext().applicationContext as MyApplication).userId.value.toString() // 로그인된 user의 _id를 가져옴
-        var heartState : Boolean = false // user가 현재 사진관을 찜하고 있는지 아닌지를 저장
-
-        /* DataBinding & ViewModel 관련 */
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
         binding.viewModel = viewModel
 
-        /* Navigaion component safe args 관련 */
-        photoStudio = args.photoStudio!! // 이전 프래그먼트에서 보낸값을 받아옴
-        viewModel.updateValue(photoStudio) // 전달받은 값으로 viewModel update
+        // user 업데이트
+        viewModel.updateUser((requireContext().applicationContext as MyApplication).user.value!!)
 
-        /* ViewPager & TabLayout 관련 */
+        // photoStudio 업데이트
+        viewModel.updatePhotoStudio(args.photoStudio!!)
+
+        // 찜버튼 디스플레이 결정
+        if(viewModel.user.value!!._id != "anonymous") viewModel.updateHeartState()
+        if(viewModel.heartState.value!!){ // 찜 하고 있다면
+            binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
+        }else{ // 찜 하고 있지 않다면
+            binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
+        }
+
+        // 사진관 이미지 설정
+        setPhotoStudioImage()
+
+        // 뷰페이저 초기설정
+        initViewPager()
+
+        // 페이지 변경 이벤트 설정 (리사이즈)
+        setPageChangeEvent()
+
+        // 찜버튼 클릭 이벤트 설정
+        initHeartBtn()
+
+        // shareBtn 클릭 이벤트 설정
+        initShareBtn()
+    }
+
+    private fun initViewPager(){
         // 뷰페이저에 어댑터 부착
-        val pagerAdapter = ViewpagerAdapter(requireActivity())
+        pagerAdapter = ViewpagerAdapter(requireActivity())
         pagerAdapter.addFragment(InformationFragment.newInstance(args)) // Information Fragment 생성시 args 객체를 전달
         pagerAdapter.addFragment(ReviewFragment.newInstance(args)) // Review Fragment 생성시 args 객체를 전달
         binding.viewPager.adapter = pagerAdapter
@@ -87,8 +105,10 @@ class DetailFragment : Fragment(){
                 1 -> tab.text = "리뷰"
             }
         }.attach()
+    }
 
-        /* 뷰페이저 페이지 변경 이벤트 설정(resize ViewPager) */
+    private fun setPageChangeEvent(){
+        // 페이지가 변경 될 때마다 실행
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -105,113 +125,106 @@ class DetailFragment : Fragment(){
                 }
             }
         })
+    }
 
-        /* 찜 버튼 관련 */
-        // user가 현재 사진관을 찜하고 있는지 확인
-        if(userId != "anonymous"){
-            val call : Call<Boolean> = RetrofitManager.iRetrofit.checkUserIdInPhotostudioInterested(_id = photoStudio._id, userId = userId)
-            call.enqueue(object : retrofit2.Callback<Boolean>{
-                // 응답 성공시
-                override fun onResponse(
-                    call: Call<Boolean>,
-                    response: Response<Boolean>
-                ) {
-                    heartState = response.body()!!
-                    if(heartState){ // 찜 하고 있다면 (true)
-                        binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
-                    }else{ // 찜 하고 있지 않다면 (false)
-                        binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
-                    }
-                }
-
-                // 응답 실패시
-                override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                    Log.e(ContentValues.TAG, t.localizedMessage)
-                }
-            })
-        }
-
-        // 찜 버튼 클릭 이벤트 설정
-        binding.heartBtn.setOnClickListener {
-            if(userId != "anonymous"){
-                if(heartState){ // user가 현재 사진관을 찜하고 있었다면
-                    val call : Call<PhotoStudio> = RetrofitManager.iRetrofit.pullUserIdInPhotostudioInterested(_id = photoStudio._id, userId = userId)
-                    call.enqueue(object : retrofit2.Callback<PhotoStudio>{
-                        // 응답 성공시
-                        override fun onResponse(
-                            call: Call<PhotoStudio>,
-                            response: Response<PhotoStudio>
-                        ) {
-                            heartState = false
-                            binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
-                        }
-
-                        // 응답 실패시
-                        override fun onFailure(call: Call<PhotoStudio>, t: Throwable) {
-                            Log.e(ContentValues.TAG, t.localizedMessage)
-                        }
-                    })
-                }
-                else { // user가 현재 사진관을 찜하지 않고 있었다면
-                    val call : Call<PhotoStudio> = RetrofitManager.iRetrofit.addUserIdInPhotostudioInterested(_id = photoStudio._id, userId = userId)
-                    call.enqueue(object : retrofit2.Callback<PhotoStudio>{
-                        // 응답 성공시
-                        override fun onResponse(
-                            call: Call<PhotoStudio>,
-                            response: Response<PhotoStudio>
-                        ) {
-                            heartState = true
-                            binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
-                        }
-
-                        // 응답 실패시
-                        override fun onFailure(call: Call<PhotoStudio>, t: Throwable) {
-                            Log.e(ContentValues.TAG, t.localizedMessage)
-                        }
-                    })
-                }
-            }else{
-                Toast.makeText(context, "로그인을 먼저 해주세요", Toast.LENGTH_LONG).show()
-            }
-        }
-
-        /* 사진관 메인 이미지 디스플레이 */
-        var photoStudioImage : String = photoStudio.image!![0]
+    private fun setPhotoStudioImage(){
+        var photoStudioImage : String = viewModel.photoStudio.value!!.image!![0]
         Glide.with(this).load(photoStudioImage).into(binding.photoStudioImage)
 
-        /* 이미지 왼오 버튼 클릭 이벤트 설정  */
-        var idx : Int = 0 // 보여질 사진관의 이미지의 인덱스를 저장
-        binding.leftBtn.setOnClickListener { // 왼 버튼
+        // 왼오 버튼 클릭 이벤트 설정
+        var idx = 0 // 보여질 사진관의 이미지의 인덱스를 저장
+        binding.leftBtn.setOnClickListener { // 왼 버튼 클릭 이벤트 설정
             if(idx == 0){
-                idx = photoStudio.image!!.size - 1
+                idx = viewModel.photoStudio.value!!.image!!.size - 1
             }
             else idx--
 
-            photoStudioImage = photoStudio.image!![idx]
+            photoStudioImage = viewModel.photoStudio.value!!.image!![idx]
             Glide.with(this).load(photoStudioImage).into(binding.photoStudioImage)
         }
 
-        binding.rightBtn.setOnClickListener {
-            if(idx == photoStudio.image!!.size-1){
+        binding.rightBtn.setOnClickListener { // 오 버튼 클릭 이벤트 설정
+            if(idx == viewModel.photoStudio.value!!.image!!.size-1){
                 idx = 0
             }
             else idx++
 
-            photoStudioImage = photoStudio.image!![idx]
+            photoStudioImage = viewModel.photoStudio.value!!.image!![idx]
             Glide.with(this).load(photoStudioImage).into(binding.photoStudioImage)
         }
+    }
 
-
-
-        /* 공유하기 버튼 클릭 이벤트 설정 */
+    private fun initShareBtn(){
         binding.shareBtn.setOnClickListener {
-            // 공유하기 창을 띄운다
+            // 공유하기 창을 띄움
             val shareIntent = Intent().apply {
                 action = Intent.ACTION_SEND
                 type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, photoStudio.name + "\n주소 : " + photoStudio.address + "\n전화번호 : " + photoStudio.phoneNumber +"\n홈페이지 : " + photoStudio.siteAddress)
+                putExtra(Intent.EXTRA_TEXT,
+                    viewModel.photoStudio.value!!.name + "\n주소 : "
+                            + viewModel.photoStudio.value!!.address + "\n전화번호 : "
+                            + viewModel.photoStudio.value!!.phoneNumber +"\n홈페이지 : "
+                            + viewModel.photoStudio.value!!.siteAddress)
             }
             startActivity(Intent.createChooser(shareIntent, null))
         }
+    }
+
+    private fun initHeartBtn(){
+        // 찜 버튼 클릭 이벤트 설정
+        binding.heartBtn.setOnClickListener {
+            if(viewModel.user.value!!._id != "anonymous"){ // 로그인 되어 있다면
+                if(viewModel.heartState.value!!){ // 찜 되어 있었다면
+                    removeUserIdByPhotoStudioInterested()
+                }
+                else { // 찜 되어 있지 않았다면
+                    addUserIdInPhotoStudioInterested()
+                }
+            }else{ // 로그인 되어 있지 않다면
+                Toast.makeText(context, "로그인을 먼저 해주세요", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    // 유저의 아이디를 사진관의 interested 목록에서 제거
+    private fun removeUserIdByPhotoStudioInterested(){
+        val call : Call<PhotoStudio> = RetrofitManager.iRetrofit
+            .pullUserIdInPhotostudioInterested(_id = viewModel.photoStudio.value!!._id, userId = viewModel.user.value!!._id)
+        call.enqueue(object : retrofit2.Callback<PhotoStudio>{
+            // 응답 성공시
+            override fun onResponse(
+                call: Call<PhotoStudio>,
+                response: Response<PhotoStudio>
+            ) {
+                viewModel.updateHeartState() // 찜상태 업데이트
+                binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray) // 찜버튼 디스플레이 변경
+            }
+
+            // 응답 실패시
+            override fun onFailure(call: Call<PhotoStudio>, t: Throwable) {
+                Log.e(ContentValues.TAG, t.localizedMessage)
+            }
+        })
+    }
+
+    // 유저의 아이디를 사진관의 interested 목록에 추가
+    private fun addUserIdInPhotoStudioInterested(){
+        val call : Call<PhotoStudio> = RetrofitManager.iRetrofit
+            .addUserIdInPhotostudioInterested(_id = viewModel.photoStudio.value!!._id, userId = viewModel.user.value!!._id)
+        call.enqueue(object : retrofit2.Callback<PhotoStudio>{
+            // 응답 성공시
+            override fun onResponse(
+                call: Call<PhotoStudio>,
+                response: Response<PhotoStudio>
+            ) {
+                viewModel.updateHeartState() // 찜상태 업데이트
+                binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red) // 찜버튼 디스플레이 변경
+            }
+
+            // 응답 실패시
+            override fun onFailure(call: Call<PhotoStudio>, t: Throwable) {
+                Log.e(ContentValues.TAG, t.localizedMessage)
+            }
+        })
     }
 }

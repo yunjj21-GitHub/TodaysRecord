@@ -24,10 +24,10 @@ class InformationFragment : Fragment(), OnMapReadyCallback{
     lateinit var viewModel: InformationViewModel
 
     private lateinit var naverMap: NaverMap
+    private lateinit var mapFragment : MapFragment
 
     companion object{
-        // Fragment가 생성될 때 DetailFragmentArgs 객체를 전달 받음
-        lateinit var photoStudio: PhotoStudio
+        private lateinit var photoStudio : PhotoStudio
         fun newInstance(args: DetailFragmentArgs) : InformationFragment {
             photoStudio = args.photoStudio!!
             return InformationFragment()
@@ -45,58 +45,60 @@ class InformationFragment : Fragment(), OnMapReadyCallback{
         return binding.root
     }
 
-    // 뷰가 완전히 생성 되었을 때
+    // 뷰가 완전히 생성 되었을 때 실행
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(InformationViewModel::class.java)
         binding.viewModel = viewModel
 
-        // photoStudio 객체 사용가능
-        viewModel.updateValue(photoStudio)
+        // photoStudio 업데이트
+        viewModel.updatePhotoStudio(photoStudio)
 
-        // null data 처리
+        // 가격정보 디스플레이 설정
         if(viewModel.photoStudio.value!!.cost == null) binding.costText.text = "가격 정보 없음"
 
-        /* 네이버 지도 관련  */
-        val fragmentManager = childFragmentManager
-
-        // 카메라 초기 위치 설정
-        val options = NaverMapOptions()
-            .camera(CameraPosition(LatLng(photoStudio.location!![1], photoStudio.location!![0]), 16.0))
-
-        // 네이버 지도 객체 생성
-        val mapFragment = fragmentManager.findFragmentById(R.id.map) as MapFragment?
-            ?: MapFragment.newInstance(options).also {
-                fragmentManager.beginTransaction().add(R.id.map, it).commit()
-            }
-
+        // 네이버 지도 관련 설정
+        initNaverMap()
         mapFragment.getMapAsync(this) // 비동기로 naverMap 객체를 얻어옴
     }
 
-    // NaverMap 객체를 얻어 올 수 있음
+    private fun initNaverMap(){
+        val fragmentManager = childFragmentManager
+
+        // 네이버 지도의 카메라 초기 위치 설정
+        val options = NaverMapOptions()
+            .camera(CameraPosition(LatLng(viewModel.photoStudio.value!!.location!![1], viewModel.photoStudio.value!!.location!![0]), 16.0))
+
+        // 네이버 지도 객체 생성
+        mapFragment = fragmentManager.findFragmentById(R.id.map) as MapFragment?
+            ?: MapFragment.newInstance(options).also {
+                fragmentManager.beginTransaction().add(R.id.map, it).commit()
+            }
+    }
+
+    // NaverMap 객체가 준비되면 실행
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
 
-        // 해당 사진관 마커 추가
-        val marker = Marker()
-        marker.position = LatLng(photoStudio.location!![1], photoStudio.location!![0]) // LatLng(latitude, longitude)
-        marker.captionText = photoStudio.name.toString()
-        marker.captionRequestedWidth = 200
-        marker.map = this.naverMap
+        displayPhotoStudioMarker()
     }
 
     // 해당 프래그먼트가 재개될 때 실행
     override fun onResume() {
         super.onResume()
 
-        if(this::naverMap.isInitialized) { // naverMap 객체가 초기화 되었다면
+        if(this::naverMap.isInitialized) {
             // 해당 사진관 마커 다시 추가
-            val marker = Marker()
-            marker.position = LatLng(photoStudio.location!![1], photoStudio.location!![0])
-            marker.captionText = photoStudio.name.toString()
-            marker.captionRequestedWidth = 200
-            marker.map = this.naverMap
+            displayPhotoStudioMarker()
         }
+    }
+
+    private fun displayPhotoStudioMarker(){
+        val marker = Marker()
+        marker.position = LatLng(viewModel.photoStudio.value!!.location!![1], viewModel.photoStudio.value!!.location!![0])
+        marker.captionText = photoStudio.name.toString()
+        marker.captionRequestedWidth = 200
+        marker.map = this.naverMap
     }
 }
