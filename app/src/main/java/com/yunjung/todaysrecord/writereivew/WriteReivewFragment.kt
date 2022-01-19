@@ -1,43 +1,34 @@
 package com.yunjung.todaysrecord.writereivew
 
-import android.app.Activity
 import android.content.ContentValues.TAG
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentWriteReviewBinding
-import com.yunjung.todaysrecord.detail.DetailFragmentArgs
-import com.yunjung.todaysrecord.main.MainActivity
-import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.models.Review
 import com.yunjung.todaysrecord.network.RetrofitManager
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.io.InputStream
 
 class WriteReivewFragment : Fragment() {
@@ -96,20 +87,11 @@ class WriteReivewFragment : Fragment() {
             val content : String = binding.reviewContent.text.toString()
 
             // 리뷰 등록
-            val call : Call<Review>? = RetrofitManager.iRetrofit.
-            postReview(viewModel.psId.value, viewModel.user.value!!._id, rating, content, viewModel.reviewImage.value)
-            call?.enqueue(object : retrofit2.Callback<Review>{
-                // 응답 성공시
-                override fun onResponse(call: Call<Review>, response: Response<Review>) {
-                    Log.e(TAG, "리뷰 등록 성공")
-                }
-
-                // 응답 실패시
-                override fun onFailure(call: Call<Review>, t: Throwable) {
-                    Log.e(TAG, "리뷰 등록 실패")
-                }
-            })
-
+            lifecycleScope.launch(Dispatchers.IO) {
+                RetrofitManager.service.postReview(
+                    viewModel.psId.value, viewModel.user.value!!._id, rating, content,
+                    viewModel.reviewImage.value)
+            }
             it.findNavController().navigateUp() // 뒤로 감
         }
     }

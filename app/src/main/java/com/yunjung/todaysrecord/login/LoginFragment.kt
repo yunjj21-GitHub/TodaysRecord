@@ -1,7 +1,6 @@
 package com.yunjung.todaysrecord.login
 
 import android.app.Activity
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -16,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -29,6 +29,9 @@ import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentLoginBinding
 import com.yunjung.todaysrecord.models.User
 import com.yunjung.todaysrecord.network.RetrofitManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 
@@ -129,29 +132,19 @@ class LoginFragment : Fragment() {
 
     private fun todaysRecordSignUp(acct : GoogleSignInAccount){
         // 가입된 이메일인지 확인
-        val call : Call<User> = RetrofitManager.iRetrofit.checkIfEmailAlreadySingedUp(email = acct.email)
-        call.enqueue(object : retrofit2.Callback<User>{
-            // 서버 응답 성공시
-            override fun onResponse(
-                call: Call<User>,
-                response: Response<User>
-            ) {
-                if(response.body() != null) { // 가입되어 있는 이메일이라면 로그인처리
-                    (requireContext().applicationContext as MyApplication).user.value = response.body()!! // 로그인
-                    Toast.makeText(context, "성공적으로 로그인 되었습니다.", Toast.LENGTH_SHORT).show()
-                    findNavController().navigateUp()
-                }else{ // 가입되어 있지 않은 이메일이라면 회원가입처리
-                    // 회원가입 화면으로 이동
-                    val direction = LoginFragmentDirections.actionLoginFragmentToJoinMembershipFragment(acct.email, acct.photoUrl.toString())
-                    findNavController().navigate(direction)
-                }
+        lifecycleScope.launch {
+            val response = withContext(Dispatchers.IO){
+                RetrofitManager.service.checkIfEmailAlreadySingedUp(email = acct.email)
             }
-
-            // 서버 응답 실패시
-            override fun onFailure(call: Call<User>, t: Throwable) {
-                Log.e(TAG, "여기서 에러")
-                Log.e(TAG, t.localizedMessage)
+            if(response != null){ // 가입되어 있는 이메일이라면 로그인처리
+                (requireContext().applicationContext as MyApplication).user.value = response // 로그인
+                Toast.makeText(context, "성공적으로 로그인 되었습니다.", Toast.LENGTH_SHORT).show()
+                findNavController().navigateUp()
+            }else{ // 가입되어 있지 않은 이메일이라면 회원가입처리
+                // 회원가입 화면으로 이동
+                val direction = LoginFragmentDirections.actionLoginFragmentToJoinMembershipFragment(acct.email, acct.photoUrl.toString())
+                findNavController().navigate(direction)
             }
-        })
+        }
     }
 }

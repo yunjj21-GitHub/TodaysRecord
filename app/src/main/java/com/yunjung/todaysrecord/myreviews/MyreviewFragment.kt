@@ -1,8 +1,6 @@
 package com.yunjung.todaysrecord.myreviews
 
-import android.content.ContentValues
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,11 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentMyreviewsBinding
-import com.yunjung.todaysrecord.models.Review
-import com.yunjung.todaysrecord.network.RetrofitManager
 import com.yunjung.todaysrecord.recyclerview.ReviewAdapter
-import retrofit2.Call
-import retrofit2.Response
 
 class MyreviewFragment : Fragment(){
     lateinit var binding : FragmentMyreviewsBinding

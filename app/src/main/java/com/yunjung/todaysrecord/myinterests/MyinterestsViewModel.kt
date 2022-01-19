@@ -1,15 +1,17 @@
 package com.yunjung.todaysrecord.myinterests
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yunjung.todaysrecord.models.PhotoStudio
-import com.yunjung.todaysrecord.models.Review
 import com.yunjung.todaysrecord.models.User
 import com.yunjung.todaysrecord.network.RetrofitManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 
@@ -32,26 +34,12 @@ class MyinterestsViewModel : ViewModel() {
     }
 
     fun updateInterestsList() {
-        val call : Call<List<PhotoStudio>> = RetrofitManager.iRetrofit?.
-        getPhotostudioListByUserId(userId = user.value!!._id)
-        call?.enqueue(object : retrofit2.Callback<List<PhotoStudio>>{
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<List<PhotoStudio>>,
-                response: Response<List<PhotoStudio>>
-            ) {
-                _interestsList.value = response.body() ?: listOf()
-                _interestsNum.value = (response.body() ?: listOf()).size
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO){
+                RetrofitManager.service.getPhotostudioListByUserId(userId = user.value!!._id)
             }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<List<PhotoStudio>>, t: Throwable) {
-                Log.e(TAG, t.localizedMessage)
-            }
-        })
-    }
-
-    fun updateInterestsNum(){
-        _interestsNum.value = 5
+            _interestsList.value = response ?: listOf()
+            _interestsNum.value = (response ?: listOf()).size
+        }
     }
 }

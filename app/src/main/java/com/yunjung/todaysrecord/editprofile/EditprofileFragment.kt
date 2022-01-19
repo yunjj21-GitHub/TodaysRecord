@@ -1,6 +1,5 @@
 package com.yunjung.todaysrecord.editprofile
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
@@ -10,17 +9,18 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withCreated
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentEditprofileBinding
-import com.yunjung.todaysrecord.detail.DetailFragmentArgs
-import com.yunjung.todaysrecord.main.MainActivity
-import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.models.User
 import com.yunjung.todaysrecord.network.RetrofitManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 
@@ -70,23 +70,10 @@ class EditprofileFragment : Fragment(){
     private fun initFinishBtn(){
         binding.finishBtn.setOnClickListener {
             val newUserNickname : String = binding.editTextUserNickname.text.toString()
-            val call : Call<User> = RetrofitManager.iRetrofit
-                .patchUserNicknameById(_id = viewModel.user.value!!._id, nickname = newUserNickname)
-            call.enqueue(object : retrofit2.Callback<User>{
-                // 응답 성공시
-                override fun onResponse(
-                    call: Call<User>,
-                    response: Response<User>
-                ) {
-                    Log.e(TAG, "수정완료")
-                }
-
-                // 응답 실패시
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                    Log.e(TAG, t.localizedMessage)
-                }
-            })
-
+            lifecycleScope.launch(Dispatchers.IO) {
+                RetrofitManager.service
+                    .patchUserNicknameById(_id = viewModel.user.value!!._id, nickname = newUserNickname)
+            }
             findNavController().navigateUp() // 뒤로감
         }
     }

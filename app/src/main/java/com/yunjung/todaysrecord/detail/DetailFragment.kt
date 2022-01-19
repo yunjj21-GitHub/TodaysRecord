@@ -10,9 +10,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
@@ -20,13 +21,13 @@ import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentDetailBinding
 import com.yunjung.todaysrecord.information.InformationFragment
-import com.yunjung.todaysrecord.main.MainActivity
 import com.yunjung.todaysrecord.models.PhotoStudio
-import com.yunjung.todaysrecord.models.User
 import com.yunjung.todaysrecord.network.RetrofitManager
-import com.yunjung.todaysrecord.recyclerview.PhotoStudioAdapter
 import com.yunjung.todaysrecord.review.ReviewFragment
 import com.yunjung.todaysrecord.viewpager.ViewpagerAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 
@@ -66,14 +67,6 @@ class DetailFragment : Fragment(){
         // photoStudio 업데이트
         viewModel.updatePhotoStudio(args.photoStudio!!)
 
-        // 찜버튼 디스플레이 결정
-        if(viewModel.user.value!!._id != "anonymous") viewModel.updateHeartState()
-        if(viewModel.heartState.value!!){ // 찜 하고 있다면
-            binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
-        }else{ // 찜 하고 있지 않다면
-            binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
-        }
-
         // 사진관 이미지 설정
         setPhotoStudioImage()
 
@@ -83,7 +76,7 @@ class DetailFragment : Fragment(){
         // 페이지 변경 이벤트 설정 (리사이즈)
         setPageChangeEvent()
 
-        // 찜버튼 클릭 이벤트 설정
+        // 찜버튼 관련 설정
         initHeartBtn()
 
         // shareBtn 클릭 이벤트 설정
@@ -171,6 +164,8 @@ class DetailFragment : Fragment(){
     }
 
     private fun initHeartBtn(){
+        displayHeartState()
+
         // 찜 버튼 클릭 이벤트 설정
         binding.heartBtn.setOnClickListener {
             if(viewModel.user.value!!._id != "anonymous"){ // 로그인 되어 있다면
@@ -185,46 +180,40 @@ class DetailFragment : Fragment(){
             }
         }
     }
-
-    // 유저의 아이디를 사진관의 interested 목록에서 제거
-    private fun removeUserIdByPhotoStudioInterested(){
-        val call : Call<PhotoStudio> = RetrofitManager.iRetrofit
-            .pullUserIdInPhotostudioInterested(_id = viewModel.photoStudio.value!!._id, userId = viewModel.user.value!!._id)
-        call.enqueue(object : retrofit2.Callback<PhotoStudio>{
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<PhotoStudio>,
-                response: Response<PhotoStudio>
-            ) {
-                viewModel.updateHeartState() // 찜상태 업데이트
-                binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray) // 찜버튼 디스플레이 변경
-            }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<PhotoStudio>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
+    
+    private fun displayHeartState(){
+        // 찜버튼 디스플레이 결정
+        if(viewModel.user.value!!._id != "anonymous") viewModel.updateHeartState()
+        viewModel.heartState.observe(viewLifecycleOwner, Observer {
+            if(viewModel.heartState.value == true){ // 찜 하고 있다면
+                binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)
+            }else{
+                binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray)
             }
         })
     }
 
+    // 유저의 아이디를 사진관의 interested 목록에서 제거
+    private fun removeUserIdByPhotoStudioInterested(){
+        lifecycleScope.launch {
+            val response = withContext(Dispatchers.IO){
+                RetrofitManager.service.pullUserIdInPhotostudioInterested(
+                    _id = viewModel.photoStudio.value!!._id, userId = viewModel.user.value!!._id)
+            }
+            viewModel.updateHeartState() // 찜상태 업데이트
+            binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_empty_gray) // 찜버튼 디스플레이 변경
+        }
+    }
+
     // 유저의 아이디를 사진관의 interested 목록에 추가
     private fun addUserIdInPhotoStudioInterested(){
-        val call : Call<PhotoStudio> = RetrofitManager.iRetrofit
-            .addUserIdInPhotostudioInterested(_id = viewModel.photoStudio.value!!._id, userId = viewModel.user.value!!._id)
-        call.enqueue(object : retrofit2.Callback<PhotoStudio>{
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<PhotoStudio>,
-                response: Response<PhotoStudio>
-            ) {
-                viewModel.updateHeartState() // 찜상태 업데이트
-                binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red) // 찜버튼 디스플레이 변경
+        lifecycleScope.launch {
+            val response = withContext(Dispatchers.IO){
+                RetrofitManager.service.addUserIdInPhotostudioInterested(
+                    _id = viewModel.photoStudio.value!!._id, userId = viewModel.user.value!!._id)
             }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<PhotoStudio>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
-        })
+            viewModel.updateHeartState() // 찜상태 업데이트
+            binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red) // 찜버튼 디스플레이 변경
+        }
     }
 }

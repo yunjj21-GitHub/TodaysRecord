@@ -1,12 +1,9 @@
 package com.yunjung.todaysrecord.review
 
-import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,23 +12,23 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentReviewBinding
 import com.yunjung.todaysrecord.detail.DetailFragmentArgs
 import com.yunjung.todaysrecord.models.PhotoStudio
-import com.yunjung.todaysrecord.models.Review
 import com.yunjung.todaysrecord.moreimage.MoreImageFragmentDirections
 import com.yunjung.todaysrecord.network.RetrofitManager
 import com.yunjung.todaysrecord.recyclerview.ReviewAdapter
 import com.yunjung.todaysrecord.writereivew.WriteReivewFragmentDirections
-import retrofit2.Call
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ReviewFragment : Fragment() {
     lateinit var binding: FragmentReviewBinding
@@ -139,28 +136,19 @@ class ReviewFragment : Fragment() {
     }
 
     fun displayImageReviewPreview(){
-        val call : Call<List<Review>>? = RetrofitManager.iRetrofit?.getImageReviewByPsId(viewModel.photoStudio.value!!._id)
-        call?.enqueue(object : retrofit2.Callback<List<Review>> {
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<List<Review>>,
-                response: Response<List<Review>>
-            ) {
-                if(response.body()!!.isNotEmpty()){
-                    val preImage1 = stringToBitmap(response.body()!![0].image.toString())
-                    binding.preImageView1.setImageBitmap(preImage1)
-                }
-                if(response.body()!!.size >= 2){
-                    val preImage2 = stringToBitmap(response.body()!![1].image.toString())
-                    binding.preImageView2.setImageBitmap(preImage2)
-                }
+        lifecycleScope.launch {
+            val response = withContext(Dispatchers.IO){
+                RetrofitManager.service?.getImageReviewByPsId(viewModel.photoStudio.value!!._id)
             }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<List<Review>>, t: Throwable) {
-                Log.e(TAG, t.localizedMessage)
+            if(response.isNotEmpty()){
+                val preImage1 = stringToBitmap(response[0].image.toString())
+                binding.preImageView1.setImageBitmap(preImage1)
             }
-        })
+            if(response.size >= 2){
+                val preImage2 = stringToBitmap(response[1].image.toString())
+                binding.preImageView2.setImageBitmap(preImage2)
+            }
+        }
     }
 
     // 문자열을 Bitmap으로 변환

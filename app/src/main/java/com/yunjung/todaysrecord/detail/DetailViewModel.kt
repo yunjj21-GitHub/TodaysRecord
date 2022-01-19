@@ -5,10 +5,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.yunjung.todaysrecord.R
+import androidx.lifecycle.viewModelScope
 import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.models.User
 import com.yunjung.todaysrecord.network.RetrofitManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 
@@ -35,20 +38,11 @@ class DetailViewModel : ViewModel() {
     }
 
     fun updateHeartState(){
-        val call : Call<Boolean> = RetrofitManager.iRetrofit.checkUserIdInPhotostudioInterested(_id = photoStudio.value!!._id, userId = user.value!!._id)
-        call.enqueue(object : retrofit2.Callback<Boolean>{
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<Boolean>,
-                response: Response<Boolean>
-            ) {
-                _heartState.value = response.body()!!
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO){
+                RetrofitManager.service.checkUserIdInPhotostudioInterested(_id = photoStudio.value!!._id, userId = user.value!!._id)
             }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
-        })
+            _heartState.value = response
+        }
     }
 }

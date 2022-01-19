@@ -46,14 +46,9 @@ class PhotoStudioAdapter :
 
     // 뷰와 뷰홀더가 묶였을 때 실행
     override fun onBindViewHolder(holder: PhotoStudioViewHolder, position: Int) {
-        // position : 해당 뷰홀더가 리사이클러뷰에서 보여지는 위치 정보를 가지고 있음
-        // getItem(position) : 위치에 해당하는 데이터를 가져옴
         holder.initBinding(getItem(position))
         holder.itemView.setOnClickListener {
             // 아이템 클릭시 fragment_detail화면으로 이동
-            // it.findNavController().navigate(R.id.action_studioFragment_to_detailFragment)
-
-            // val direction =  StudioFragmentDirections.actionStudioFragmentToDetailFragment(getItem(position))
             val direction = DetailFragmentDirections.actionGlobalDetailFragment(getItem(position))
             it.findNavController().navigate(direction)
         }

@@ -1,30 +1,19 @@
 package com.yunjung.todaysrecord.moreimage
 
-import android.content.ContentValues
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentMoreImageBinding
-import com.yunjung.todaysrecord.detail.DetailFragmentArgs
-import com.yunjung.todaysrecord.models.PhotoStudio
-import com.yunjung.todaysrecord.models.Review
-import com.yunjung.todaysrecord.network.RetrofitManager
+import com.yunjung.todaysrecord.models.User
 import com.yunjung.todaysrecord.recyclerview.ImageAdapter
-import com.yunjung.todaysrecord.recyclerview.PhotoStudioAdapter
-import com.yunjung.todaysrecord.recyclerview.ReviewAdapter
-import com.yunjung.todaysrecord.review.ReviewFragment
-import retrofit2.Call
-import retrofit2.Response
 
 class MoreImageFragment : Fragment(){
     // DataBinding & ViewModel 관련 변수

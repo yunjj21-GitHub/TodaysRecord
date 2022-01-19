@@ -3,7 +3,6 @@ package com.yunjung.todaysrecord.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.IdRes
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -15,7 +14,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.yunjung.todaysrecord.MainViewModel
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.ActivityMainBinding
-import com.yunjung.todaysrecord.network.RetrofitManager
 
 class MainActivity : AppCompatActivity(){
     // DataBinding & ViewModel 관련 변수

@@ -1,22 +1,14 @@
 package com.yunjung.todaysrecord.recyclerview
 
-import android.content.ContentValues
-import android.util.Log
 import com.yunjung.todaysrecord.models.AreaLarge
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.databinding.ItemAreaLargeBinding
-import com.yunjung.todaysrecord.models.AreaMedium
-import com.yunjung.todaysrecord.network.RetrofitManager
-import com.yunjung.todaysrecord.setlocation.SetlocationFragment
 import com.yunjung.todaysrecord.setlocation.SetlocationViewModel
-import retrofit2.Call
-import retrofit2.Response
 
 class AreaLargeAdapter(val setLocationViewModel : SetlocationViewModel)
     : ListAdapter<AreaLarge, AreaLargeAdapter.AreaLargeViewHolder>(AreaLargeDiff){

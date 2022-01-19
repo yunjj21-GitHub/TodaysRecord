@@ -1,9 +1,6 @@
 package com.yunjung.todaysrecord.photostudid
 
-import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,15 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.yunjung.todaysrecord.MainViewModel
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentPhotostudioIdBinding
 import com.yunjung.todaysrecord.main.MainActivity
-import com.yunjung.todaysrecord.models.PhotoStudio
-import com.yunjung.todaysrecord.network.RetrofitManager
 import com.yunjung.todaysrecord.recyclerview.PhotoStudioAdapter
-import retrofit2.Call
-import retrofit2.Response
 
 class PhotostudioIdFragment : Fragment(){
     lateinit var binding : FragmentPhotostudioIdBinding

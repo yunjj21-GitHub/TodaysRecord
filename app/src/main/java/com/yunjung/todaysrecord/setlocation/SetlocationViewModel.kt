@@ -2,14 +2,17 @@ package com.yunjung.todaysrecord.setlocation
 
 import android.content.ContentValues
 import android.util.Log
-import android.widget.Toast
 import com.yunjung.todaysrecord.models.AreaLarge
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yunjung.todaysrecord.models.AreaMedium
 import com.yunjung.todaysrecord.models.AreaSmall
 import com.yunjung.todaysrecord.network.RetrofitManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 
@@ -55,40 +58,21 @@ class SetlocationViewModel : ViewModel() {
     }
 
     fun updateCityList(){
-        val call : Call<List<AreaLarge>>? = RetrofitManager.iRetrofit?.getAreaLarge()
-        call?.enqueue(object : retrofit2.Callback<List<AreaLarge>>{
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<List<AreaLarge>>,
-                response: Response<List<AreaLarge>>
-            ) {
-                _cityList.value = response.body()!!
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO){
+                RetrofitManager.service.getAreaLarge()
             }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<List<AreaLarge>>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
-        })
+            _cityList.value = response
+        }
     }
 
     fun updateTownList(clickedArea : String){
-        val call : Call<List<AreaMedium>>? = RetrofitManager.iRetrofit?.getAreaMediumByBelong(clickedArea)
-        call?.enqueue(object : retrofit2.Callback<List<AreaMedium>> {
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<List<AreaMedium>>,
-                response: Response<List<AreaMedium>>
-            ) {
-                // townList 업데이트
-                _townList.value = response.body() ?: listOf()
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO){
+                RetrofitManager.service?.getAreaMediumByBelong(clickedArea)
             }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<List<AreaMedium>>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
-        })
+            _townList.value = response ?: listOf()
+        }
     }
 
     fun updateVillageList(clickedArea: String){
@@ -97,21 +81,11 @@ class SetlocationViewModel : ViewModel() {
             return
         }
 
-        val call : Call<List<AreaSmall>>? = RetrofitManager.iRetrofit?.getAreaSmallByBelong(clickedArea)
-        call?.enqueue(object : retrofit2.Callback<List<AreaSmall>>{
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<List<AreaSmall>>,
-                response: Response<List<AreaSmall>>
-            ) {
-                // villageList 업데이트
-                _villageList.value = response.body() ?: listOf()
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO){
+                RetrofitManager.service?.getAreaSmallByBelong(clickedArea)
             }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<List<AreaSmall>>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
-        })
+            _villageList.value = response ?: listOf()
+        }
     }
 }

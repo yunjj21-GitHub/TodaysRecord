@@ -9,16 +9,18 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentJoinMembershipBinding
-import com.yunjung.todaysrecord.main.MainActivity
-import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.models.User
 import com.yunjung.todaysrecord.network.RetrofitManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 
@@ -76,25 +78,16 @@ class JoinMembershipFragment : Fragment(){
             val nickname: String = binding.userNickname.text.toString()
 
             // 유저를 생성
-            val call: Call<User> = RetrofitManager.iRetrofit?.postUser(email = email, profileImage = profileImage, nickname = nickname)
-            call?.enqueue(object : retrofit2.Callback<User> {
-                // 응답 성공시
-                override fun onResponse(
-                    call: Call<User>,
-                    response: Response<User>
-                ) {
-                    // 로그인 처리
-                    (requireContext().applicationContext as MyApplication).user.value = response.body()!!
-
-                    // myPageFragment로 이동
-                    findNavController().navigate(JoinMembershipFragmentDirections.actionJoinMembershipFragmentToMypageFragment())
+            lifecycleScope.launch {
+                val response = withContext(Dispatchers.IO){
+                    RetrofitManager.service.postUser(email = email, profileImage = profileImage, nickname = nickname)
                 }
+                // 로그인 처리
+                (requireContext().applicationContext as MyApplication).user.value = response
+                // myPageFragment로 이동
+                findNavController().navigate(JoinMembershipFragmentDirections.actionJoinMembershipFragmentToMypageFragment())
 
-                // 응답 실패시
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                    Log.e(ContentValues.TAG, t.localizedMessage)
-                }
-            })
+            }
         }
     }
 }

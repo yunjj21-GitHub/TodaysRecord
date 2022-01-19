@@ -1,32 +1,20 @@
 package com.yunjung.todaysrecord.studio
 
-import android.content.ContentValues
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentStudioBinding
-import com.yunjung.todaysrecord.models.AreaLarge
-import com.yunjung.todaysrecord.models.PhotoStudio
-import com.yunjung.todaysrecord.network.RetrofitManager
 import com.yunjung.todaysrecord.photostudid.PhotostudioIdFragment
 import com.yunjung.todaysrecord.photostudiofamily.PhotostudioFamilyFragment
 import com.yunjung.todaysrecord.photostudioother.PhotostudioOtherFragment
 import com.yunjung.todaysrecord.photostudioprofile.PhotostudioProfileFragment
-import com.yunjung.todaysrecord.photostudioprofile.PhotostudioProfileViewModel
-import com.yunjung.todaysrecord.recyclerview.PhotoStudioAdapter
 import com.yunjung.todaysrecord.viewpager.ViewpagerAdapter
-import retrofit2.Call
-import retrofit2.Response
 
 class StudioFragment : Fragment(){
     lateinit var binding : FragmentStudioBinding

@@ -1,34 +1,22 @@
 package com.yunjung.todaysrecord.setlocation
 
-import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.yunjung.todaysrecord.MainViewModel
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentSetlocationBinding
 import com.yunjung.todaysrecord.main.MainActivity
-import com.yunjung.todaysrecord.models.AreaLarge
-import com.yunjung.todaysrecord.models.AreaMedium
-import com.yunjung.todaysrecord.models.AreaSmall
-import com.yunjung.todaysrecord.network.RetrofitManager
 import com.yunjung.todaysrecord.recyclerview.AreaLargeAdapter
 import com.yunjung.todaysrecord.recyclerview.AreaMediumAdapter
 import com.yunjung.todaysrecord.recyclerview.AreaSmallAdapter
-import retrofit2.Call
-import retrofit2.Response
 
 class SetlocationFragment : Fragment(){
     lateinit var binding : FragmentSetlocationBinding

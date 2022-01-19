@@ -1,7 +1,5 @@
 package com.yunjung.todaysrecord.recyclerview
 
-import android.content.ContentValues
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -10,12 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.databinding.ItemAreaMediumBinding
 import com.yunjung.todaysrecord.models.AreaMedium
-import com.yunjung.todaysrecord.models.AreaSmall
-import com.yunjung.todaysrecord.network.RetrofitManager
-import com.yunjung.todaysrecord.setlocation.SetlocationFragment
 import com.yunjung.todaysrecord.setlocation.SetlocationViewModel
-import retrofit2.Call
-import retrofit2.Response
 
 class AreaMediumAdapter(val setLocationViewModel : SetlocationViewModel)
     : ListAdapter<AreaMedium, AreaMediumAdapter.AreaMediumViewHolder>(AreaMediumDiff){

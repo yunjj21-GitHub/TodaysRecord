@@ -5,8 +5,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.network.RetrofitManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 
@@ -26,20 +30,11 @@ class PhotostudioOtherViewModel : ViewModel() {
 
     fun updatePhotoStudioList(){
         // 서버에서 필요한 사진관 리스트 가져오기
-        val call : Call<List<PhotoStudio>>? = RetrofitManager.iRetrofit?.getPhotoStudioByAreaAndType(area = userArea.value, type = "기타")
-        call?.enqueue(object : retrofit2.Callback<List<PhotoStudio>>{
-            // 응답 성공시
-            override fun onResponse(
-                call: Call<List<PhotoStudio>>,
-                response: Response<List<PhotoStudio>>
-            ) {
-                _photoStudioList.value = response.body() ?: listOf()
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO){
+                RetrofitManager.service.getPhotoStudioByAreaAndType(area = userArea.value, type = "기타")
             }
-
-            // 응답 실패시
-            override fun onFailure(call: Call<List<PhotoStudio>>, t: Throwable) {
-                Log.e(ContentValues.TAG, t.localizedMessage)
-            }
-        })
+            _photoStudioList.value = response ?: listOf()
+        }
     }
 }

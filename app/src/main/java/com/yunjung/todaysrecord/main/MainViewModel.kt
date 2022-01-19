@@ -1,14 +1,8 @@
 package com.yunjung.todaysrecord
 
-import android.content.ContentValues
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.yunjung.todaysrecord.models.User
-import com.yunjung.todaysrecord.network.RetrofitManager
-import retrofit2.Call
-import retrofit2.Response
 
 class MainViewModel : ViewModel() {
     // 수정 가능한 라이브 데이터 (클래스 내부에서만 사용), 초기화 값 0
