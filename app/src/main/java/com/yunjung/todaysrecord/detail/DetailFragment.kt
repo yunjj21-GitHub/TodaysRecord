@@ -180,7 +180,7 @@ class DetailFragment : Fragment(){
             }
         }
     }
-    
+
     private fun displayHeartState(){
         // 찜버튼 디스플레이 결정
         if(viewModel.user.value!!._id != "anonymous") viewModel.updateHeartState()

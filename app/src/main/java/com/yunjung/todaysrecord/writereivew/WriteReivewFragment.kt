@@ -110,11 +110,12 @@ class WriteReivewFragment : Fragment() {
 
     private fun initActivityResultLauncher(){
         activityResultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri : Uri? ->
+            // 선택한 이미지의 bitmap 생성
             val inputStream : InputStream = requireActivity().contentResolver.openInputStream(uri!!)!!
             var bitmap : Bitmap = BitmapFactory.decodeStream(inputStream)
             inputStream.close()
 
-            // bitmap 이미지 resize
+            // bitmap 이미지 사이즈 지정
             bitmap = Bitmap.createScaledBitmap(bitmap,150,150,true)
 
             // selectedImage에 선택된 이미지 디스플레이

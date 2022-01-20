@@ -12,7 +12,7 @@ class JoinMembershipViewModel : ViewModel() {
         get() = _user
 
     fun updateUser(email : String, profileImage : String){
-        _user.value!!.email = email
-        _user.value!!.profileImage = profileImage
+        _user.value?.email = email
+        _user.value?.profileImage = profileImage
     }
 }

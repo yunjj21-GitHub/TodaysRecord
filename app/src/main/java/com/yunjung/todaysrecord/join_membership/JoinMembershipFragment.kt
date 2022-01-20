@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -56,18 +57,24 @@ class JoinMembershipFragment : Fragment(){
         // user 업데이트
         viewModel.updateUser(args.email, args.profileImage)
 
-        // profile 이미지 디스플레이
-        displayProfileImage()
+        initObserver()
 
         // finishBtn 클릭 이벤트 설정
         initFinishBtn()
     }
 
     private fun displayProfileImage(){
+        // profile 이미지 디스플레이
         Glide.with(binding.root.context)
-            .load(viewModel.user.value!!.profileImage)
+            .load(viewModel.user.value?.profileImage)
             .fallback(R.drawable.ic_profile)
             .into(binding.userProfile)
+    }
+
+    private fun initObserver(){
+        viewModel.user.observe(viewLifecycleOwner, Observer {
+            displayProfileImage()
+        })
     }
 
     private fun initFinishBtn(){
