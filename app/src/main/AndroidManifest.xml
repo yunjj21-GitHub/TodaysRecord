@@ -29,5 +29,18 @@
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="s88sne1yh3" />
+        <!-- 카카오 로그인 관련 -->
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:host="oauth"
+                    android:scheme="kakao7c93cbfeb40b9cd61f2fa335d6c8d04a" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

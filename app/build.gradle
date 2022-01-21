@@ -110,4 +110,7 @@ dependencies {
     implementation 'com.android.support:support-core-utils:28.0.0'
     implementation 'com.android.support:customtabs:28.0.0'
     implementation 'com.android.support:support-v4:28.0.0'
+
+    // 카카오 로그인 관련
+    implementation "com.kakao.sdk:v2-user:2.8.4"
 }

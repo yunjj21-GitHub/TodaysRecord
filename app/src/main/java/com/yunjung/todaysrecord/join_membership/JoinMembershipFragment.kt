@@ -1,6 +1,7 @@
 package com.yunjung.todaysrecord.join_membership
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -57,7 +58,7 @@ class JoinMembershipFragment : Fragment(){
         // user 업데이트
         viewModel.updateUser(args.email, args.profileImage)
 
-        initObserver()
+        displayProfileImage()
 
         // finishBtn 클릭 이벤트 설정
         initFinishBtn()
@@ -69,12 +70,6 @@ class JoinMembershipFragment : Fragment(){
             .load(viewModel.user.value?.profileImage)
             .fallback(R.drawable.ic_profile)
             .into(binding.userProfile)
-    }
-
-    private fun initObserver(){
-        viewModel.user.observe(viewLifecycleOwner, Observer {
-            displayProfileImage()
-        })
     }
 
     private fun initFinishBtn(){
