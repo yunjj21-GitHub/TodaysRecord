@@ -32,9 +32,15 @@ class PhotostudioProfileViewModel : ViewModel() {
         // 서버에서 필요한 사진관 리스트 가져오기
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO){
-                RetrofitManager.service.getPhotoStudioByAreaAndType(area = userArea.value, type = "프로필사진")
+                try{
+                    RetrofitManager.service.getPhotoStudioByAreaAndType(area = userArea.value, type = "프로필사진")
+                }
+                catch (e : Throwable){
+                    listOf()
+                }
+
             }
-            _photoStudioList.value = response ?: listOf()
+            _photoStudioList.value = response
         }
     }
 }

@@ -36,10 +36,14 @@ class MyreviewViewModel : ViewModel() {
     fun updateReviewList() {
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO){
-                RetrofitManager.service?.getReviewByUserId(userId = user.value!!._id)
+                try {
+                    RetrofitManager.service?.getReviewByUserId(userId = user.value!!._id)
+                }catch (e : Throwable){
+                    listOf()
+                }
             }
-            _reviewList.value = response ?: listOf()
-            _reviewNum.value = (response ?: listOf()).size
+            _reviewList.value = response
+            _reviewNum.value = response.size
         }
     }
 }

@@ -36,10 +36,14 @@ class MyinterestsViewModel : ViewModel() {
     fun updateInterestsList() {
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO){
-                RetrofitManager.service.getPhotostudioListByUserId(userId = user.value!!._id)
+                try{
+                    RetrofitManager.service.getPhotostudioListByUserId(userId = user.value!!._id)
+                }catch (e : Throwable){
+                    listOf()
+                }
             }
-            _interestsList.value = response ?: listOf()
-            _interestsNum.value = (response ?: listOf()).size
+            _interestsList.value = response
+            _interestsNum.value = response.size
         }
     }
 }

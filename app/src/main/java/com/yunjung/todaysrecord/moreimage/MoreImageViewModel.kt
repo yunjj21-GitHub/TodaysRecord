@@ -31,7 +31,12 @@ class MoreImageViewModel  : ViewModel() {
         // 서버로 부터 받아온 사진관 정보와 대응되는 사진을 포함한 리뷰 리스트를 가져옴
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO){
-                RetrofitManager.service?.getImageReviewByPsId(photoStudio.value!!._id)
+                try{
+                    RetrofitManager.service.getImageReviewByPsId(photoStudio.value!!._id)
+                }
+                catch (e : Throwable){
+                    listOf()
+                }
             }
             _imageReviewList.value = response
         }

@@ -196,7 +196,7 @@ class DetailFragment : Fragment(){
     // 유저의 아이디를 사진관의 interested 목록에서 제거
     private fun removeUserIdByPhotoStudioInterested(){
         lifecycleScope.launch {
-            val response = withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO){
                 RetrofitManager.service.pullUserIdInPhotostudioInterested(
                     _id = viewModel.photoStudio.value!!._id, userId = viewModel.user.value!!._id)
             }
@@ -208,7 +208,7 @@ class DetailFragment : Fragment(){
     // 유저의 아이디를 사진관의 interested 목록에 추가
     private fun addUserIdInPhotoStudioInterested(){
         lifecycleScope.launch {
-            val response = withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO){
                 RetrofitManager.service.addUserIdInPhotostudioInterested(
                     _id = viewModel.photoStudio.value!!._id, userId = viewModel.user.value!!._id)
             }

@@ -31,9 +31,13 @@ class PhotostudioIdViewModel : ViewModel() {
     fun updatePhotoStudioList(){
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO){
-                RetrofitManager.service.getPhotoStudioByAreaAndType(area = userArea.value, type = "증명사진")
+                try {
+                    RetrofitManager.service.getPhotoStudioByAreaAndType(area = userArea.value, type = "증명사진")
+                }catch (e : Throwable){
+                    listOf()
+                }
             }
-            _photoStudioList.value = response ?: listOf()
+            _photoStudioList.value = response
         }
     }
 }

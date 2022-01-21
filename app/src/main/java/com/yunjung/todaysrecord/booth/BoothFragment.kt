@@ -5,6 +5,7 @@ import android.content.ContentValues.TAG
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,9 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapFragment
@@ -80,6 +83,11 @@ class BoothFragment : Fragment(), OnMapReadyCallback{
 
         // boothSearchBtn 클릭 이벤트 설정
         initBoothSearchBtn()
+
+        viewModel.adjBoothList.observe(viewLifecycleOwner, Observer {
+            // 주변 사진부스 디스플레이
+            displayAdjPhotoBooth()
+        })
     }
 
     private fun initMapFragment(){
@@ -124,8 +132,6 @@ class BoothFragment : Fragment(), OnMapReadyCallback{
             if (this::naverMap.isInitialized) {
                 // 주변 사진부스 리스트 업데이트
                 viewModel.updateAdjBoothList(userLongitude.toString(), userLatitude.toString())
-                // 주변 사진부스 디스플레이
-                displayAdjPhotoBooth()
             }
         }
     }

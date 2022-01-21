@@ -69,9 +69,14 @@ class SetlocationViewModel : ViewModel() {
     fun updateTownList(clickedArea : String){
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO){
-                RetrofitManager.service?.getAreaMediumByBelong(clickedArea)
+                try {
+                    RetrofitManager.service?.getAreaMediumByBelong(clickedArea)
+                }
+                catch (e : Throwable){
+                    listOf()
+                }
             }
-            _townList.value = response ?: listOf()
+            _townList.value = response
         }
     }
 
@@ -83,9 +88,14 @@ class SetlocationViewModel : ViewModel() {
 
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO){
-                RetrofitManager.service?.getAreaSmallByBelong(clickedArea)
+                try{
+                    RetrofitManager.service?.getAreaSmallByBelong(clickedArea)
+                }
+               catch (e : Throwable){
+                   listOf()
+               }
             }
-            _villageList.value = response ?: listOf()
+            _villageList.value = response
         }
     }
 }

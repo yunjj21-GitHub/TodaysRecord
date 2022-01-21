@@ -58,10 +58,14 @@ class ReviewViewModel : ViewModel() {
     fun updateReviewList(){
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO){
-                RetrofitManager.service.getReviewByPsId(photoStudio.value!!._id)
+                try{
+                    RetrofitManager.service.getReviewByPsId(photoStudio.value!!._id)
+                }catch (e : Throwable){
+                    listOf()
+                }
             }
-            _reviewList.value = response ?: listOf()
-            _reviewNum.value = (response ?: listOf()).size
+            _reviewList.value = response
+            _reviewNum.value = response.size
             updateStarNum()
         }
     }

@@ -23,9 +23,13 @@ class BoothViewModel : ViewModel() {
     fun updateAdjBoothList(lng : String, lat : String) {
         viewModelScope.launch{
             val response = withContext(Dispatchers.IO){
-                RetrofitManager.service.getPhotoboothByLocation(lng, lat)
+                try {
+                    RetrofitManager.service.getPhotoboothByLocation(lng, lat)
+                } catch (e : Throwable){
+                    listOf()
+                }
             }
-            _adjBoothList.value = response ?: listOf()
+            _adjBoothList.value = response
         }
     }
 }

@@ -138,7 +138,12 @@ class ReviewFragment : Fragment() {
     fun displayImageReviewPreview(){
         lifecycleScope.launch {
             val response = withContext(Dispatchers.IO){
-                RetrofitManager.service?.getImageReviewByPsId(viewModel.photoStudio.value!!._id)
+                try{
+                    RetrofitManager.service?.getImageReviewByPsId(viewModel.photoStudio.value!!._id)
+                }
+                catch (e : Throwable){
+                    listOf()
+                }
             }
             if(response.isNotEmpty()){
                 val preImage1 = stringToBitmap(response[0].image.toString())
