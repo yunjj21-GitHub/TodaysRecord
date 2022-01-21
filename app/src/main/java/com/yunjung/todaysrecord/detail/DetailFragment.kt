@@ -1,6 +1,7 @@
 package com.yunjung.todaysrecord.detail
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,7 @@ import com.yunjung.todaysrecord.databinding.FragmentDetailBinding
 import com.yunjung.todaysrecord.information.InformationFragment
 import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.network.RetrofitManager
+import com.yunjung.todaysrecord.photostudioimg.PhotoStudioImgFragment
 import com.yunjung.todaysrecord.review.ReviewFragment
 import com.yunjung.todaysrecord.viewpager.ViewpagerAdapter
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +39,8 @@ class DetailFragment : Fragment(){
 
     private val args : DetailFragmentArgs by navArgs()
 
-    private lateinit var pagerAdapter : ViewpagerAdapter
+    private lateinit var detailViewPagerAdapter : ViewpagerAdapter
+    private lateinit var imageViewPagerAdapter : ViewpagerAdapter
 
     companion object{
         fun newInstance() : DetailFragment{
@@ -67,11 +70,11 @@ class DetailFragment : Fragment(){
         // photoStudio 업데이트
         viewModel.updatePhotoStudio(args.photoStudio!!)
 
-        // 사진관 이미지 설정
-        setPhotoStudioImage()
+        // 사진관 이미지 뷰페이저 설정
+        initImageViewPager()
 
-        // 뷰페이저 초기설정
-        initViewPager()
+        // 사진관 상세 설명 뷰페이저 설정
+        initDetailViewPager()
 
         // 페이지 변경 이벤트 설정 (리사이즈)
         setPageChangeEvent()
@@ -83,15 +86,24 @@ class DetailFragment : Fragment(){
         initShareBtn()
     }
 
-    private fun initViewPager(){
+    private fun initImageViewPager(){
+        imageViewPagerAdapter = ViewpagerAdapter(requireActivity())
+        for(photoStudioImage in viewModel.photoStudio.value!!.image!!){
+            Log.e(TAG, photoStudioImage)
+            imageViewPagerAdapter.addFragment(PhotoStudioImgFragment(photoStudioImage))
+        }
+        binding.imageViewPager.adapter = imageViewPagerAdapter
+    }
+
+    private fun initDetailViewPager(){
         // 뷰페이저에 어댑터 부착
-        pagerAdapter = ViewpagerAdapter(requireActivity())
-        pagerAdapter.addFragment(InformationFragment.newInstance(args)) // Information Fragment 생성시 args 객체를 전달
-        pagerAdapter.addFragment(ReviewFragment.newInstance(args)) // Review Fragment 생성시 args 객체를 전달
-        binding.viewPager.adapter = pagerAdapter
+        detailViewPagerAdapter = ViewpagerAdapter(requireActivity())
+        detailViewPagerAdapter.addFragment(InformationFragment.newInstance(args)) // Information Fragment 생성시 args 객체를 전달
+        detailViewPagerAdapter.addFragment(ReviewFragment.newInstance(args)) // Review Fragment 생성시 args 객체를 전달
+        binding.detailViewPager.adapter = detailViewPagerAdapter
 
         // 뷰페이저에 탭레이아웃 부착
-        TabLayoutMediator(binding.tabLayout, binding.viewPager){ tab, position ->
+        TabLayoutMediator(binding.tabLayout, binding.detailViewPager){ tab, position ->
             // 탭 아이템의 이름 지정
             when(position){
                 0 -> tab.text = "상세정보"
@@ -102,49 +114,22 @@ class DetailFragment : Fragment(){
 
     private fun setPageChangeEvent(){
         // 페이지가 변경 될 때마다 실행
-        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.detailViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
 
-                val view = pagerAdapter.pageFragments[position].view
+                val view = detailViewPagerAdapter.pageFragments[position].view
 
                 view?.post {
                     val wMeasureSpec = View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
                     val hMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
                     view.measure(wMeasureSpec, hMeasureSpec)
-                    if (binding.viewPager.layoutParams.height != view.measuredHeight) {
-                        binding.viewPager.layoutParams = (binding.viewPager.layoutParams).also { lp -> lp.height = view.measuredHeight }
+                    if (binding.detailViewPager.layoutParams.height != view.measuredHeight) {
+                        binding.detailViewPager.layoutParams = (binding.detailViewPager.layoutParams).also { lp -> lp.height = view.measuredHeight }
                     }
                 }
             }
         })
-    }
-
-    private fun setPhotoStudioImage(){
-        var photoStudioImage : String = viewModel.photoStudio.value!!.image!![0]
-        Glide.with(this).load(photoStudioImage).into(binding.photoStudioImage)
-
-        // 왼오 버튼 클릭 이벤트 설정
-        var idx = 0 // 보여질 사진관의 이미지의 인덱스를 저장
-        binding.leftBtn.setOnClickListener { // 왼 버튼 클릭 이벤트 설정
-            if(idx == 0){
-                idx = viewModel.photoStudio.value!!.image!!.size - 1
-            }
-            else idx--
-
-            photoStudioImage = viewModel.photoStudio.value!!.image!![idx]
-            Glide.with(this).load(photoStudioImage).into(binding.photoStudioImage)
-        }
-
-        binding.rightBtn.setOnClickListener { // 오 버튼 클릭 이벤트 설정
-            if(idx == viewModel.photoStudio.value!!.image!!.size-1){
-                idx = 0
-            }
-            else idx++
-
-            photoStudioImage = viewModel.photoStudio.value!!.image!![idx]
-            Glide.with(this).load(photoStudioImage).into(binding.photoStudioImage)
-        }
     }
 
     private fun initShareBtn(){
