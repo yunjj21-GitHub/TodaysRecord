@@ -42,7 +42,6 @@ class PhotoStudioImgFragment(val photoStudioImg: String) : Fragment() {
         binding.viewModel = viewModel
 
         // 뷰모델 업데이트
-        Log.e(TAG, photoStudioImg + " PhotoStudioImg")
         viewModel.updatePhotoSudioImg(photoStudioImg)
 
         // 뷰모델의 photoStudioImg 옵저버
@@ -50,7 +49,6 @@ class PhotoStudioImgFragment(val photoStudioImg: String) : Fragment() {
             //뷰 갱신
             Glide.with(binding.root.context)
                 .load(viewModel.photoStudioImg.value)
-                .fallback(R.drawable.sample_image)
                 .into(binding.photoStudioImg)
         })
     }

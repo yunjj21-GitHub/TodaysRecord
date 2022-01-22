@@ -29,9 +29,11 @@ class PhotoStudioAdapter :
             // cost필드 null일 때 처리
             if(photoStudio.cost == null) binding.costText.text = "가격 정보 없음"
 
-            // URL 이미지 처리
-            var photoStudioImage : String = photoStudio.image!![0]
-            Glide.with(binding.root.context).load(photoStudioImage).into(binding.studioMainImage)
+            // 사진관 대표 이미지 처리
+            if(photoStudio.image!!.isNotEmpty()) {
+                var photoStudioImage : String = photoStudio.image!![0]
+                Glide.with(binding.root.context).load(photoStudioImage).into(binding.studioMainImage)
+            }
         }
     }
 
@@ -48,7 +50,7 @@ class PhotoStudioAdapter :
     override fun onBindViewHolder(holder: PhotoStudioViewHolder, position: Int) {
         holder.initBinding(getItem(position))
         holder.itemView.setOnClickListener {
-            // 아이템 클릭시 fragment_detail화면으로 이동
+            // 아이템 클릭시 DetailFragment 화면으로 이동
             val direction = DetailFragmentDirections.actionGlobalDetailFragment(getItem(position))
             it.findNavController().navigate(direction)
         }

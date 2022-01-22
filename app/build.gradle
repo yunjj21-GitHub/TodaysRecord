@@ -106,11 +106,10 @@ dependencies {
 
     // 네이버 로그인 관련
     implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:support-core-utils:28.0.0'
-    implementation 'com.android.support:customtabs:28.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
 
     // 카카오 로그인 관련
     implementation "com.kakao.sdk:v2-user:2.8.4"
+
+    // 뷰페이저 인디케이터 관련
+    implementation 'com.romandanylyk:pageindicatorview:1.0.3'
 }

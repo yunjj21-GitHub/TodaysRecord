@@ -18,30 +18,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- 사진관 대표 이미지 -->
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/imageViewPager"
+            <FrameLayout
+                android:id="@+id/studioImage"
                 android:layout_width="match_parent"
-                android:layout_height="216dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/studioName"
+                android:layout_height="215dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <!-- 사진관 이미지 뷰페이저 -->
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/imageViewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <!-- 사진관 이미지 뷰페이저의 인디케이터 -->
+                <com.rd.PageIndicatorView
+                    android:id="@+id/pageIndicatorView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp"
+                    android:layout_gravity="center|bottom"
+                    android:layout_marginBottom="8dp"
+                    app:piv_animationType="worm"
+                    app:piv_dynamicCount="true"
+                    app:piv_interactiveAnimation="true"
+                    app:piv_padding="12dp"
+                    app:piv_radius="4dp"
+                    app:piv_selectedColor="@color/mainColor"
+                    app:piv_unselectedColor="#D5E4E4E4"
+                    app:piv_viewPager="@id/imageViewPager" />
+
+            </FrameLayout>
 
             <!-- 사진관 이름 -->
             <TextView
                 android:id="@+id/studioName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="@{viewModel.photoStudio.name}"
                 android:textColor="#000000"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewPager" />
+                app:layout_constraintTop_toBottomOf="@+id/studioImage" />
 
             <View
                 android:id="@+id/divider"

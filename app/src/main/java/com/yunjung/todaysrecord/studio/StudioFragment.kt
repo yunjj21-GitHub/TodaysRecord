@@ -62,7 +62,7 @@ class StudioFragment : Fragment(){
             when(position){
                 0 -> tab.text = "증명사진"
                 1 -> tab.text = "프로필사진"
-                2 -> tab.text = "가족 커플 우정 사진"
+                2 -> tab.text = "가족 커플\n우정 사진"
                 3 -> tab.text = "기타"
             }
         }.attach()

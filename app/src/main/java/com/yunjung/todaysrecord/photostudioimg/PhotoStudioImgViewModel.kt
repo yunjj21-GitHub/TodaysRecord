@@ -14,6 +14,5 @@ class PhotoStudioImgViewModel : ViewModel() {
 
     fun updatePhotoSudioImg(img : String){
         _photoStudioImg.value = img
-        Log.e(ContentValues.TAG, _photoStudioImg.value.toString() + " viewModel")
     }
 }

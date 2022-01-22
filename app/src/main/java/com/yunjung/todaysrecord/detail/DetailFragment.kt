@@ -73,11 +73,14 @@ class DetailFragment : Fragment(){
         // 사진관 이미지 뷰페이저 설정
         initImageViewPager()
 
+        // imgViewPager 페이지 변경 이벤트 설정 (인디케이터)
+        setPageOfImagVPChangeEvent()
+
         // 사진관 상세 설명 뷰페이저 설정
         initDetailViewPager()
 
-        // 페이지 변경 이벤트 설정 (리사이즈)
-        setPageChangeEvent()
+        // detailViewPager 페이지 변경 이벤트 설정 (리사이즈)
+        setPageOfDetailVPChangeEvent()
 
         // 찜버튼 관련 설정
         initHeartBtn()
@@ -93,6 +96,17 @@ class DetailFragment : Fragment(){
             imageViewPagerAdapter.addFragment(PhotoStudioImgFragment(photoStudioImage))
         }
         binding.imageViewPager.adapter = imageViewPagerAdapter
+
+        // 인디케이터에게 페이지 수를 알림
+        binding.pageIndicatorView.count = viewModel.photoStudio.value!!.image!!.size
+    }
+
+    private fun setPageOfImagVPChangeEvent(){
+        binding.imageViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                binding.pageIndicatorView.selection = position
+            }
+        })
     }
 
     private fun initDetailViewPager(){
@@ -112,8 +126,8 @@ class DetailFragment : Fragment(){
         }.attach()
     }
 
-    private fun setPageChangeEvent(){
-        // 페이지가 변경 될 때마다 실행
+    private fun setPageOfDetailVPChangeEvent(){
+        // detailViewPager의 페이지가 변경 될 때마다 실행
         binding.detailViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
