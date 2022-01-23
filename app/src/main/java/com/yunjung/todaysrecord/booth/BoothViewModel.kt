@@ -1,6 +1,7 @@
 package com.yunjung.todaysrecord.booth
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,11 +21,11 @@ class BoothViewModel : ViewModel() {
     val adjBoothList: LiveData<List<PhotoBooth>>
         get() = _adjBoothList
 
-    fun updateAdjBoothList(lng : String, lat : String) {
+    fun updateAdjBoothList(userLng : String, userLat : String) {
         viewModelScope.launch{
             val response = withContext(Dispatchers.IO){
                 try {
-                    RetrofitManager.service.getPhotoboothByLocation(lng, lat)
+                    RetrofitManager.service.getPhotoboothByLocation(userLng, userLat)
                 } catch (e : Throwable){
                     listOf()
                 }

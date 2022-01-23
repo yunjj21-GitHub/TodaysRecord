@@ -15,6 +15,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
@@ -24,6 +28,7 @@ import com.naver.maps.map.util.MarkerIcons
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentBoothBinding
 import com.yunjung.todaysrecord.detail.DetailFragment
+import com.yunjung.todaysrecord.recyclerview.PhotoBoothRecyclerAdapter
 
 class BoothFragment : Fragment(), OnMapReadyCallback{
     // DataBinding & ViewModle 관련 변수
@@ -37,9 +42,9 @@ class BoothFragment : Fragment(), OnMapReadyCallback{
     lateinit var locationSource : FusedLocationSource
     lateinit var naverMap: NaverMap
 
-    // 사용자의 현재 위치 (임의의 값으로 초기화)
-    var userLongitude : Double = 126.97794744812339
-    var userLatitude : Double = 37.566307981726325
+    // 사용자 위치를 저장
+    private var userLatitude : Double = 0.0
+    private var userLongitude : Double = 0.0
 
     companion object{
         fun newInstance() : BoothFragment{
@@ -82,16 +87,28 @@ class BoothFragment : Fragment(), OnMapReadyCallback{
         // boothSearchBtn 클릭 이벤트 설정
         initBoothSearchBtn()
 
+        // Bottom Sheet 초기설정
+        initBottomSheet()
+
         viewModel.adjBoothList.observe(viewLifecycleOwner, Observer {
             // 주변 사진부스 디스플레이
             displayAdjPhotoBooth()
 
             // 검색 결과를 알림
             showSearchResult()
-
-            // 네이버 지도 카메라 위치 변경
-            if(viewModel.adjBoothList.value!!.isNotEmpty()) changeNaverMapCameraPosition()
         })
+
+        // Bottom Sheet 리사이클러 관련
+        initRecycler()
+        subscribeAdjBoothList()
+    }
+
+    // 바텀 시트 초기설정
+    private fun initBottomSheet() {
+        BottomSheetBehavior.from(binding.sheet).apply {
+            peekHeight = 200
+            this.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
     }
 
     private fun initMapFragment(){
@@ -131,6 +148,7 @@ class BoothFragment : Fragment(), OnMapReadyCallback{
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    // 사진부스 검색하기 버튼 클릭 이벤트 설정
     private fun initBoothSearchBtn(){
         binding.boothSearchBtn.setOnClickListener {
             if (this::naverMap.isInitialized) {
@@ -140,6 +158,7 @@ class BoothFragment : Fragment(), OnMapReadyCallback{
         }
     }
 
+    // 사용자에게 인접한 사진관 리스트 업데이트
     private fun displayAdjPhotoBooth(){
         if(viewModel.adjBoothList.value == null) return
 
@@ -167,14 +186,27 @@ class BoothFragment : Fragment(), OnMapReadyCallback{
         }
     }
 
+    // 사진부스 검색 결과를 토스트메세지로 알림
     private fun showSearchResult(){
         val contents = viewModel.adjBoothList.value!!.size.toString() +"개의 사진부스가 검색되었습니다."
         Toast.makeText(context, contents, Toast.LENGTH_SHORT).show()
     }
 
-    private fun changeNaverMapCameraPosition(){
-        val lat = viewModel.adjBoothList.value!![0].location!![1]
-        val log = viewModel.adjBoothList.value!![0].location!![0]
+    // 리사이클러뷰에 어댑터를 부착
+    fun initRecycler(){
+        binding.resultRecycler.adapter = PhotoBoothRecyclerAdapter(this)
+        binding.resultRecycler.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+    }
+
+    // adjBoothList의 데이터가 변경되면 어댑터에게 알림
+    fun subscribeAdjBoothList(){
+        viewModel.adjBoothList.observe(viewLifecycleOwner, {
+            (binding.resultRecycler.adapter as PhotoBoothRecyclerAdapter).submitList(it)
+        })
+    }
+
+    // 네이버 지도 카메라 위치 변경
+    fun changeNaverCameraPosition(lat : Double, log : Double){
         naverMap.cameraPosition = CameraPosition(LatLng(lat, log), 16.0)
     }
 }
