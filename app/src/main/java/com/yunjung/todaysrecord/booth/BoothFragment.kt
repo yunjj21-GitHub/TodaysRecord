@@ -17,15 +17,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.LocationTrackingMode
-import com.naver.maps.map.MapFragment
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentBoothBinding
+import com.yunjung.todaysrecord.detail.DetailFragment
 
 class BoothFragment : Fragment(), OnMapReadyCallback{
     // DataBinding & ViewModle 관련 변수
@@ -87,6 +85,12 @@ class BoothFragment : Fragment(), OnMapReadyCallback{
         viewModel.adjBoothList.observe(viewLifecycleOwner, Observer {
             // 주변 사진부스 디스플레이
             displayAdjPhotoBooth()
+
+            // 검색 결과를 알림
+            showSearchResult()
+
+            // 네이버 지도 카메라 위치 변경
+            if(viewModel.adjBoothList.value!!.isNotEmpty()) changeNaverMapCameraPosition()
         })
     }
 
@@ -161,5 +165,16 @@ class BoothFragment : Fragment(), OnMapReadyCallback{
             }
             marker.map = naverMap
         }
+    }
+
+    private fun showSearchResult(){
+        val contents = viewModel.adjBoothList.value!!.size.toString() +"개의 사진부스가 검색되었습니다."
+        Toast.makeText(context, contents, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun changeNaverMapCameraPosition(){
+        val lat = viewModel.adjBoothList.value!![0].location!![1]
+        val log = viewModel.adjBoothList.value!![0].location!![0]
+        naverMap.cameraPosition = CameraPosition(LatLng(lat, log), 16.0)
     }
 }

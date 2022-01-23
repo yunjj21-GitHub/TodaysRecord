@@ -66,7 +66,7 @@ dependencies {
     // 카드뷰
     implementation "androidx.cardview:cardview:1.0.0"
 
-    // 매테리얼 디자인(bottom navigation menu & TabLayout)
+    // 매테리얼 디자인 (bottom navigation + TabLayout + bottom sheet)
     implementation 'com.google.android.material:material:1.4.0'
 
     // 네비게이션

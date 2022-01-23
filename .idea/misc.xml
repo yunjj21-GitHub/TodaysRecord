@@ -4,8 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/drawable/ic_location.xml" value="0.1" />
+        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/drawable/studio_top_btn_clicked.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_booth.xml" value="0.1" />
+        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_booth.xml" value="0.25" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_detail.xml" value="0.27247191011235955" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_editprofile.xml" value="0.1" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_login.xml" value="0.1" />
