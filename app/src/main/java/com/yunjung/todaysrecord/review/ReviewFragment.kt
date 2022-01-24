@@ -135,7 +135,7 @@ class ReviewFragment : Fragment() {
         }
     }
 
-    fun displayImageReviewPreview(){
+    private fun displayImageReviewPreview(){
         lifecycleScope.launch {
             val response = withContext(Dispatchers.IO){
                 try{

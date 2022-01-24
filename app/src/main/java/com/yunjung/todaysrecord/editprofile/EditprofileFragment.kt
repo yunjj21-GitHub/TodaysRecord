@@ -14,6 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withCreated
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentEditprofileBinding
@@ -64,6 +66,7 @@ class EditprofileFragment : Fragment(){
     private fun displayProfileImage(){
         Glide.with(binding.root.context)
             .load(viewModel.user.value!!.profileImage)
+            .circleCrop()
             .fallback(R.drawable.ic_profile)
             .into(binding.userProfile)
     }

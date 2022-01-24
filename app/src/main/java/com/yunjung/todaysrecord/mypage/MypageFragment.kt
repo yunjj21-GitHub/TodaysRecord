@@ -67,6 +67,7 @@ class MypageFragment : Fragment(){
     private fun displayUserProfile(){
         Glide.with(binding.root.context)
             .load(viewModel.user.value!!.profileImage)
+            .circleCrop()
             .fallback(R.drawable.ic_profile)
             .into(binding.userProfile)
     }

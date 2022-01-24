@@ -68,6 +68,7 @@ class JoinMembershipFragment : Fragment(){
         // profile 이미지 디스플레이
         Glide.with(binding.root.context)
             .load(viewModel.user.value?.profileImage)
+            .circleCrop()
             .fallback(R.drawable.ic_profile)
             .into(binding.userProfile)
     }
