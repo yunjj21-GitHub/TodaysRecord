@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withCreated
@@ -70,11 +71,15 @@ class EditprofileFragment : Fragment(){
     private fun initFinishBtn(){
         binding.finishBtn.setOnClickListener {
             val newUserNickname : String = binding.editTextUserNickname.text.toString()
-            lifecycleScope.launch(Dispatchers.IO) {
-                RetrofitManager.service
-                    .patchUserNicknameById(_id = viewModel.user.value!!._id, nickname = newUserNickname)
+            lifecycleScope.launch {
+                val response = withContext(Dispatchers.IO) {
+                    RetrofitManager.service
+                        .patchUserNicknameById(_id = viewModel.user.value!!._id, nickname = newUserNickname)
+                }
+                // 로그인된 유저 정보 업데이트
+                (requireContext().applicationContext as MyApplication).user.value = response
+                findNavController().navigateUp() // 뒤로감
             }
-            findNavController().navigateUp() // 뒤로감
         }
     }
 }

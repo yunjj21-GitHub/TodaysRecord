@@ -1,6 +1,8 @@
 package com.yunjung.todaysrecord.login_manager
 
+import android.app.Activity
 import android.content.ContentValues
+import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
@@ -91,6 +93,7 @@ class NaverLoginManager(val loginFragment: LoginFragment) {
             }
             if(response != null){ // 가입되어 있는 이메일이라면 로그인처리
                 (context.applicationContext as MyApplication).user.value = response // 로그인
+                saveAutoLoginInfo(response._id!!) // 추후 자동로그인을 위해 로그인 정보 저장
                 Toast.makeText(context, "성공적으로 로그인 되었습니다.", Toast.LENGTH_SHORT).show()
                 findNavController(loginFragment).navigateUp()
             }else{ // 가입되어 있지 않은 이메일이라면 회원가입처리
@@ -98,6 +101,16 @@ class NaverLoginManager(val loginFragment: LoginFragment) {
                 val direction = LoginFragmentDirections.actionLoginFragmentToJoinMembershipFragment(email, profileImage)
                 findNavController(loginFragment).navigate(direction)
             }
+        }
+    }
+
+    // 자동 로그인 정보 저장
+    private fun saveAutoLoginInfo(userId : String){
+        val autoLoginAndSetArea : SharedPreferences =
+            loginFragment.requireContext().getSharedPreferences("autoLoginAndSetArea", Activity.MODE_PRIVATE)
+        with(autoLoginAndSetArea.edit()){
+            putString("userId", userId)
+            commit()
         }
     }
 }

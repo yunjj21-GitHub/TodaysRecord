@@ -26,6 +26,10 @@ import com.yunjung.todaysrecord.network.RetrofitManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import android.content.SharedPreferences
+
+
+
 
 class GoogleLoginManager(val loginFragment : Fragment) {
     private lateinit var auth: FirebaseAuth
@@ -105,6 +109,7 @@ class GoogleLoginManager(val loginFragment : Fragment) {
             }
             if(response != null){ // 가입되어 있는 이메일이라면 로그인처리
                 (loginFragment.requireContext().applicationContext as MyApplication).user.value = response // 로그인
+                saveAutoLoginInfo(response._id!!) // 추후 자동로그인을 위해 로그인 정보 저장
                 Toast.makeText(context, "성공적으로 로그인 되었습니다.", Toast.LENGTH_SHORT).show()
                 findNavController(loginFragment).navigateUp()
             }else{ // 가입되어 있지 않은 이메일이라면 회원가입처리
@@ -112,6 +117,16 @@ class GoogleLoginManager(val loginFragment : Fragment) {
                 val direction = LoginFragmentDirections.actionLoginFragmentToJoinMembershipFragment(email, profileImage)
                 findNavController(loginFragment).navigate(direction)
             }
+        }
+    }
+
+    // 자동 로그인 정보 저장
+    private fun saveAutoLoginInfo(userId : String){
+        val autoLoginAndSetArea : SharedPreferences =
+            loginFragment.requireContext().getSharedPreferences("autoLoginAndSetArea", Activity.MODE_PRIVATE)
+        with(autoLoginAndSetArea.edit()){
+            putString("userId", userId)
+            commit()
         }
     }
 }

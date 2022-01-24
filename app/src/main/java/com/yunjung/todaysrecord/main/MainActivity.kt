@@ -1,12 +1,16 @@
 package com.yunjung.todaysrecord.main
 
+import android.app.Activity
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
@@ -14,8 +18,15 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.yunjung.todaysrecord.MainViewModel
+import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.ActivityMainBinding
+import com.yunjung.todaysrecord.models.User
+import com.yunjung.todaysrecord.network.RetrofitManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity(){
     // DataBinding & ViewModel 관련 변수
@@ -34,6 +45,13 @@ class MainActivity : AppCompatActivity(){
         binding.lifecycleOwner = this
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         binding.viewModel = viewModel
+
+        // 자동 로그인과 자동 지역설정
+        autoLoginAndSetArea()
+
+        viewModel.userArea.observe(this, Observer {
+            saveAutoSetAreaInfo()
+        })
 
         setSupportActionBar(binding.toolbar) // 액션바 지정
         supportActionBar?.setDisplayShowTitleEnabled(false) // 툴바의 타이틀 제거
@@ -150,6 +168,39 @@ class MainActivity : AppCompatActivity(){
     private fun initSetLocationBtn(){
         binding.setLocationBtn.setOnClickListener {
             navController.navigate(R.id.action_studioFragment_to_setlocationFragment)
+        }
+    }
+
+    private fun autoLoginAndSetArea(){
+        // 자동 로그인
+        val autoLoginAndSetArea = getSharedPreferences("autoLoginAndSetArea", MODE_PRIVATE)
+        val userId = autoLoginAndSetArea.getString("userId", null)
+        if(userId != null) {
+            lifecycleScope.launch {
+                val response = withContext(Dispatchers.IO) {
+                    try {
+                        RetrofitManager.service.getUserById(userId)
+                    } catch (e: Throwable) {
+                        User("anonymous", "로그인해주세요", null, null)
+                    }
+                }
+                (applicationContext as MyApplication).user.value = response
+            }
+        }
+
+        // 자동 지역 설정
+        val userArea = autoLoginAndSetArea.getString("userArea", null)
+        if(userArea != null){
+            viewModel.updateUerArea(userArea)
+        }
+    }
+
+    private fun saveAutoSetAreaInfo() {
+        val autoLoginAndSetArea: SharedPreferences =
+            getSharedPreferences("autoLoginAndSetArea", Activity.MODE_PRIVATE)
+        with(autoLoginAndSetArea.edit()) {
+            putString("userArea", viewModel.userArea.value)
+            commit()
         }
     }
 }

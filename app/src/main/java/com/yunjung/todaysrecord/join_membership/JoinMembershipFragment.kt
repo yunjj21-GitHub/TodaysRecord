@@ -88,7 +88,6 @@ class JoinMembershipFragment : Fragment(){
                 (requireContext().applicationContext as MyApplication).user.value = response
                 // myPageFragment로 이동
                 findNavController().navigate(JoinMembershipFragmentDirections.actionJoinMembershipFragmentToMypageFragment())
-
             }
         }
     }

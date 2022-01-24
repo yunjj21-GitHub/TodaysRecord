@@ -1,5 +1,7 @@
 package com.yunjung.todaysrecord.mypage
 
+import android.app.Activity
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -106,8 +108,18 @@ class MypageFragment : Fragment(){
             }else { // 로그인이 되어 있을 때
                 (requireContext().applicationContext as MyApplication).user.value=
                     User("anonymous", "로그인해주세요", null, null) // 로그아웃 처리
+                saveAutoLoginInfo()
                 Toast.makeText(context, "성공적으로 로그아웃 되었습니다.", Toast.LENGTH_LONG).show()
             }
+        }
+    }
+
+    private fun saveAutoLoginInfo(){
+        val autoLoginAndSetArea: SharedPreferences =
+            requireContext().getSharedPreferences("autoLoginAndSetArea", Activity.MODE_PRIVATE)
+        with(autoLoginAndSetArea.edit()) {
+            remove("userId")
+            commit()
         }
     }
 }
