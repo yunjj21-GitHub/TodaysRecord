@@ -29,6 +29,7 @@
                 android:layout_height="match_parent" >
 
             <androidx.appcompat.widget.AppCompatButton
+                android:elevation="10dp"
                 android:id="@+id/boothSearchBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,7 +43,6 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </FrameLayout>
-
         </FrameLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

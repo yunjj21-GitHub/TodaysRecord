@@ -207,6 +207,6 @@ class BoothFragment : Fragment(), OnMapReadyCallback{
 
     // 네이버 지도 카메라 위치 변경
     fun changeNaverCameraPosition(lat : Double, log : Double){
-        naverMap.cameraPosition = CameraPosition(LatLng(lat, log), 16.0)
+        naverMap.cameraPosition = CameraPosition(LatLng(lat, log), 18.0)
     }
 }
