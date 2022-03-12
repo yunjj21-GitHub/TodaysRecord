@@ -1,16 +1,11 @@
 package com.yunjung.todaysrecord.recyclerview
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.yunjung.todaysrecord.booth.BoothFragment
-import com.yunjung.todaysrecord.booth.BoothViewModel
+import com.yunjung.todaysrecord.ui.booth.BoothFragment
 import com.yunjung.todaysrecord.databinding.ItemPhotoboothBinding
 import com.yunjung.todaysrecord.models.PhotoBooth
 

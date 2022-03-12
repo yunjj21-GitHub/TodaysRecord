@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.yunjung.todaysrecord.information.InformationViewModel" />
+            type="com.yunjung.todaysrecord.ui.information.InformationViewModel" />
     </data>
 
         <androidx.core.widget.NestedScrollView

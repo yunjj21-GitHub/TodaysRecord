@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.databinding.ItemAreaMediumBinding
 import com.yunjung.todaysrecord.models.AreaMedium
-import com.yunjung.todaysrecord.setlocation.SetlocationViewModel
+import com.yunjung.todaysrecord.ui.setlocation.SetlocationViewModel
 
 class AreaMediumAdapter(val setLocationViewModel : SetlocationViewModel)
     : ListAdapter<AreaMedium, AreaMediumAdapter.AreaMediumViewHolder>(AreaMediumDiff){

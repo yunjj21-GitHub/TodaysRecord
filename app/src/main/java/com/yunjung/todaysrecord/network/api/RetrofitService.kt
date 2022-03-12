@@ -23,7 +23,8 @@ interface RetrofitService {
     suspend fun postUser(
         @Field("email") email : String? = null,
         @Field("profileImage") profileImage : String? = null,
-        @Field("nickname") nickname : String? = null
+        @Field("nickname") nickname : String? = null,
+        @Field("pwd") pwd : String? = null
     ) : User
 
     // Read (GET)
@@ -92,6 +93,12 @@ interface RetrofitService {
     @GET("/checkIfEmailAlreadySingedUp")
     suspend fun checkIfEmailAlreadySingedUp(
         @Query("email") email : String
+    ) : User
+
+    @GET("/emailLogin")
+    suspend fun emailLogin(
+        @Query("id") id : String,
+        @Query("pwd") pwd : String
     ) : User
 
     // Update

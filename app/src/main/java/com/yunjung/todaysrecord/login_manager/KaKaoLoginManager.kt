@@ -2,6 +2,7 @@ package com.yunjung.todaysrecord.login_manager
 
 import android.app.Activity
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
@@ -12,8 +13,8 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.yunjung.todaysrecord.MyApplication
-import com.yunjung.todaysrecord.login.LoginFragment
-import com.yunjung.todaysrecord.login.LoginFragmentDirections
+import com.yunjung.todaysrecord.ui.login.LoginFragment
+import com.yunjung.todaysrecord.ui.login.LoginFragmentDirections
 import com.yunjung.todaysrecord.network.RetrofitManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

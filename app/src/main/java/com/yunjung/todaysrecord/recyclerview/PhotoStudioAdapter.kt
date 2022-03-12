@@ -1,8 +1,5 @@
 package com.yunjung.todaysrecord.recyclerview
 
-import android.content.ContentValues.TAG
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
@@ -11,9 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.yunjung.todaysrecord.databinding.ItemStudioBinding
-import com.yunjung.todaysrecord.detail.DetailFragmentDirections
+import com.yunjung.todaysrecord.ui.detail.DetailFragmentDirections
 import com.yunjung.todaysrecord.models.PhotoStudio
-import com.yunjung.todaysrecord.studio.StudioFragmentDirections
 
 class PhotoStudioAdapter :
     ListAdapter<PhotoStudio, PhotoStudioAdapter.PhotoStudioViewHolder>(PhotoStudioDiff){

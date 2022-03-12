@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Todays_Record">
-        <activity android:name="com.yunjung.todaysrecord.main.MainActivity">
+        <activity android:name="com.yunjung.todaysrecord.ui.start.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

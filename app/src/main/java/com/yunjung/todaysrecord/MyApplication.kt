@@ -1,19 +1,12 @@
 package com.yunjung.todaysrecord
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.kakao.sdk.common.KakaoSdk
 import com.yunjung.todaysrecord.models.User
-import android.app.Activity
+import dagger.hilt.android.HiltAndroidApp
 
-import android.content.SharedPreferences
-import com.yunjung.todaysrecord.main.MainActivity
-import com.yunjung.todaysrecord.network.RetrofitManager
-import kotlinx.coroutines.*
-
-
+@HiltAndroidApp
 class MyApplication : Application() {
     val user = MutableLiveData<User>(User("anonymous", "로그인해주세요", null, null))
 

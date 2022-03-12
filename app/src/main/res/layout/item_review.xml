@@ -77,13 +77,14 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/removeBtn"
-                android:layout_width="45dp"
+                android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/review_remove"
-                android:text="삭제"
+                android:background="@drawable/ic_review_delete"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/linearLayout7" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:id="@+id/divider15"

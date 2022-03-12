@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.yunjung.todaysrecord.review.ReviewViewModel" />
+            type="com.yunjung.todaysrecord.ui.review.ReviewViewModel" />
     </data>
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -199,7 +199,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
-                            android:progress="5"
+                            android:progress="0"
                             app:layout_constraintBottom_toBottomOf="@+id/textView30"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView30"
@@ -214,7 +214,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
-                            android:progress="4"
+                            android:progress="0"
                             app:layout_constraintBottom_toBottomOf="@+id/textView31"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView31"
@@ -229,7 +229,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
-                            android:progress="3"
+                            android:progress="0"
                             app:layout_constraintBottom_toBottomOf="@+id/textView32"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView32"
@@ -244,7 +244,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
-                            android:progress="2"
+                            android:progress="0"
                             app:layout_constraintBottom_toBottomOf="@+id/textView33"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView33"
@@ -259,7 +259,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginRight="16dp"
-                            android:progress="1"
+                            android:progress="0"
                             app:layout_constraintBottom_toBottomOf="@+id/textView34"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/textView34"

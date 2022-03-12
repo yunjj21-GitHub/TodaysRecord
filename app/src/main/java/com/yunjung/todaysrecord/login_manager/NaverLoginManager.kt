@@ -11,8 +11,8 @@ import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLoginHandler
 import com.nhn.android.naverlogin.ui.view.OAuthLoginButton
 import com.yunjung.todaysrecord.MyApplication
-import com.yunjung.todaysrecord.login.LoginFragment
-import com.yunjung.todaysrecord.login.LoginFragmentDirections
+import com.yunjung.todaysrecord.ui.login.LoginFragment
+import com.yunjung.todaysrecord.ui.login.LoginFragmentDirections
 import com.yunjung.todaysrecord.network.RetrofitManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

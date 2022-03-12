@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.databinding.ItemAreaSmallBinding
 import com.yunjung.todaysrecord.models.AreaSmall
-import com.yunjung.todaysrecord.setlocation.SetlocationFragment
-import com.yunjung.todaysrecord.setlocation.SetlocationViewModel
+import com.yunjung.todaysrecord.ui.setlocation.SetlocationViewModel
 
 class AreaSmallAdapter(val setLocationViewModel : SetlocationViewModel)
     : ListAdapter<AreaSmall, AreaSmallAdapter.AreaSmallViewHolder>(AreaSmallDiff){

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.yunjung.todaysrecord.editprofile.EditprofileViewModel" />
+            type="com.yunjung.todaysrecord.ui.editprofile.EditprofileViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,6 +23,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_profile" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="80dp"
+            android:background="@drawable/profile_image_edit_background"
+            android:padding="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/userProfile"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/userProfile"
+            app:layout_constraintTop_toTopOf="@+id/userProfile"
+            app:srcCompat="@drawable/ic_profile_image_edit" />
 
         <EditText
             android:id="@+id/editTextUserNickname"

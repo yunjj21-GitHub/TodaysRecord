@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/start_nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.yunjung.todaysrecord.ui.login.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_joinMembershipFragment"
+            app:destination="@id/joinMembershipFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_emailLoginFragment"
+            app:destination="@id/emailLoginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/joinMembershipFragment"
+        android:name="com.yunjung.todaysrecord.ui.join_membership.JoinMembershipFragment"
+        android:label="JoinMembershipFragment" >
+        <action
+            android:id="@+id/action_joinMembershipFragment_to_emailLoginFragment"
+            app:destination="@id/emailLoginFragment" />
+        <argument
+            android:name="email"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="profileImage"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/emailLoginFragment"
+        android:name="com.yunjung.todaysrecord.ui.email_login.EmailLoginFragment"
+        android:label="EmailLoginFragment" >
+        <action
+            android:id="@+id/action_emailLoginFragment_to_joinMembershipFragment"
+            app:destination="@id/joinMembershipFragment" />
+    </fragment>
+</navigation>

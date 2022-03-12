@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.databinding.ItemAreaLargeBinding
-import com.yunjung.todaysrecord.setlocation.SetlocationViewModel
+import com.yunjung.todaysrecord.ui.setlocation.SetlocationViewModel
 
 class AreaLargeAdapter(val setLocationViewModel : SetlocationViewModel)
     : ListAdapter<AreaLarge, AreaLargeAdapter.AreaLargeViewHolder>(AreaLargeDiff){

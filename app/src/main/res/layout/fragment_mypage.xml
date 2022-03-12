@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.yunjung.todaysrecord.mypage.MypageViewModel" />
+            type="com.yunjung.todaysrecord.ui.mypage.MypageViewModel" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout

@@ -4,7 +4,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.yunjung.todaysrecord.photostudioimg.PhotoStudioImgViewModel" />
+            type="com.yunjung.todaysrecord.ui.photostudioimg.PhotoStudioImgViewModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

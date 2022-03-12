@@ -21,15 +21,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
-import com.yunjung.todaysrecord.login.LoginFragmentDirections
+import com.yunjung.todaysrecord.ui.login.LoginFragmentDirections
 import com.yunjung.todaysrecord.network.RetrofitManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import android.content.SharedPreferences
-
-
-
 
 class GoogleLoginManager(val loginFragment : Fragment) {
     private lateinit var auth: FirebaseAuth

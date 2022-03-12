@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.yunjung.todaysrecord.photostudiofamily.PhotostudioFamilyViewModel" />
+            type="com.yunjung.todaysrecord.ui.photostudiofamily.PhotostudioFamilyViewModel" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout

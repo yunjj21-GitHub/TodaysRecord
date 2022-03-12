@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.yunjung.todaysrecord.setlocation.SetlocationViewModel" />
+            type="com.yunjung.todaysrecord.ui.setlocation.SetlocationViewModel" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
