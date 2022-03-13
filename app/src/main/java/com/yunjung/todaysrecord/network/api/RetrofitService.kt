@@ -5,6 +5,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
+import javax.annotation.PostConstruct
 
 interface RetrofitService {
     // Create (POST)
@@ -26,6 +27,14 @@ interface RetrofitService {
         @Field("nickname") nickname : String? = null,
         @Field("pwd") pwd : String? = null
     ) : User
+
+    @FormUrlEncoded
+    @POST("/postReviewReport")
+    suspend fun postReviewReport(
+        @Field("reviewId") reviewId : String,
+        @Field("accuser") accuser : String,
+        @Field("reportType") reportType : String,
+    ) : reviewReport
 
     // Read (GET)
     @GET("/getPhotoStudioByAreaAndType")

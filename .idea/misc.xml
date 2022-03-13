@@ -21,7 +21,7 @@
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/drawable/white_button.xml" value="0.22" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/activity_start.xml" value="0.25" />
-        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_booth.xml" value="0.1" />
+        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_booth.xml" value="0.18" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_detail.xml" value="0.27247191011235955" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_editprofile.xml" value="0.25" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_email_login.xml" value="0.25" />
@@ -37,7 +37,8 @@
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_photostudio_other.xml" value="0.1" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_photostudio_profile.xml" value="0.1" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_photostudioimg.xml" value="0.36614583333333334" />
-        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_review.xml" value="0.1" />
+        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_report_dialog.xml" value="0.33" />
+        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_review.xml" value="0.33" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_search_result.xml" value="0.1" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_setlocation.xml" value="0.1" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_studio.xml" value="0.1" />
@@ -46,6 +47,7 @@
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/item_review.xml" value="0.33" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/item_studio.xml" value="0.1" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
+        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/menu/review_more_menu.xml" value="0.21574074074074073" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/mipmap-anydpi-v26/ic_app.xml" value="0.2" />
       </map>
     </option>

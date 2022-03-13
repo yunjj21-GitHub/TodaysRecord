@@ -105,7 +105,7 @@ class ReviewFragment : Fragment() {
 
     // 리사이클러뷰에 어댑터를 부착
     private fun initRecycler(){
-        binding.recyclerViewReview.adapter = ReviewAdapter()
+        binding.recyclerViewReview.adapter = ReviewAdapter(requireFragmentManager())
         binding.recyclerViewReview.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
     }
 

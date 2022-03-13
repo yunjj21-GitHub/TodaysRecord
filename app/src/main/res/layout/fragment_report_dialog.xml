@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.yunjung.todaysrecord.dialog.ReportDialogViewModel" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textView37"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="신고하는\n이유를 알려주세요!"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView39"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="타당한 근거 없이 신고된 내용은 관리자 확인 후 \n반영되지 않을 수 있습니다."
+        app:layout_constraintStart_toStartOf="@+id/textView37"
+        app:layout_constraintTop_toBottomOf="@+id/textView37" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textView39"
+        app:layout_constraintTop_toBottomOf="@+id/textView39">
+
+        <RadioButton
+            android:id="@+id/report1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사진관과 관련없는 내용" />
+
+        <RadioButton
+            android:id="@+id/report2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="음란성, 욕설 등 부적절한 내용" />
+
+        <RadioButton
+            android:id="@+id/report3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="부적절한 홍보 또는 광고" />
+
+        <RadioButton
+            android:id="@+id/report4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사진관과 관련 없는 사진 게시" />
+
+        <RadioButton
+            android:id="@+id/report5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="개인정보 유출 위험" />
+
+        <RadioButton
+            android:id="@+id/report6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="리뷰 작성 취지에 맞지 않는 내용(복사글 등)" />
+
+        <RadioButton
+            android:id="@+id/report7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="저작권 도용 의심(사진 등)" />
+
+    </RadioGroup>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/reportBtn"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/booth_btn"
+        android:text="신고"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

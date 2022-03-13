@@ -1,13 +1,11 @@
 package com.yunjung.todaysrecord.recyclerview
 
-import android.content.ContentValues
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.view.*
+import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,17 +13,15 @@ import com.bumptech.glide.Glide
 import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.ItemReviewBinding
+import com.yunjung.todaysrecord.dialog.ReportDialogFragment
 import com.yunjung.todaysrecord.models.Review
-import com.yunjung.todaysrecord.models.User
 import com.yunjung.todaysrecord.network.RetrofitManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Response
 
-class ReviewAdapter :
+class ReviewAdapter(private val fm: FragmentManager) :
     ListAdapter<Review, ReviewViewHolder>(ReviewDiff){
 
     // 뷰홀더가 생성 되었을 때 실행
@@ -37,7 +33,7 @@ class ReviewAdapter :
         val layoutInflater = LayoutInflater.from(parent.context) // layoutInflater 초기화
         val binding = ItemReviewBinding.inflate(layoutInflater) // binding 초기화
 
-        return ReviewViewHolder(binding)
+        return ReviewViewHolder(binding, fm)
     }
 
     // 뷰와 뷰홀더가 묶였을 때 실행
@@ -59,18 +55,23 @@ class ReviewAdapter :
 }
 
 // 뷰홀더 정의
-class ReviewViewHolder(private val binding : ItemReviewBinding) :
-    RecyclerView.ViewHolder(binding.root){
+class ReviewViewHolder(private val binding : ItemReviewBinding, private val fm : FragmentManager) :
+    RecyclerView.ViewHolder(binding.root), PopupMenu.OnMenuItemClickListener {
+
+    lateinit var review : Review
 
     // 초기화
     fun initBinding(review: Review) {
+        // 전역 변수화
+        this.review = review
+
         binding.item = review // review가 binding객체의 레이아웃의 item변수로 넘어감
 
         displayUserInfo(review.userId!!)
 
         displayReviewImage(review.image.toString())
 
-        setRemoveBtnClickEvent(review)
+        setMoreBtnClickEvent()
     }
 
     private fun displayUserInfo(userId : String){
@@ -99,20 +100,56 @@ class ReviewViewHolder(private val binding : ItemReviewBinding) :
         binding.reviewImage.setImageBitmap(bitmap)
     }
 
-    private fun setRemoveBtnClickEvent(review : Review) {
-        binding.removeBtn.setOnClickListener {
-            val loggedUser = (binding.root.context.applicationContext as MyApplication).user.value!!._id
-            if(loggedUser == review.userId){
-                CoroutineScope(Dispatchers.Main).launch {
-                    val response = withContext(Dispatchers.IO){
-                        RetrofitManager.service.deleteReviewById(review._id)
-                    }
-                    Toast.makeText(binding.root.context, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                }
+    private fun setMoreBtnClickEvent() {
+        binding.moreBtn.setOnClickListener {
+            showPopupMenu(it)
+        }
+    }
+
+    // 팝업메뉴를 띄움
+    private fun showPopupMenu(v: View) {
+        PopupMenu(v.context, v).apply {
+            setOnMenuItemClickListener(this@ReviewViewHolder)
+            inflate(R.menu.review_more_menu)
+            show()
+        }
+    }
+
+    // 팝업 메뉴 아이템 클릭 이벤트 설정
+    override fun onMenuItemClick(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.report -> { // '리뷰 신고하기' 클릭 시
+                reviewReport()
+                true
             }
-            else{
-                Toast.makeText(binding.root.context, "권한이 없습니다.", Toast.LENGTH_SHORT).show()
+            R.id.delete -> { // '삭제하기' 클릭 시
+                reviewDelete()
+                true
             }
+            else -> false
+        }
+    }
+
+    private fun reviewReport() {
+        val reviewId = review._id!!
+        val accuser = (binding.root.context.applicationContext as MyApplication).user.value!!._id
+
+        var dialog = ReportDialogFragment(reviewId, accuser!!)
+        dialog.show(fm, "report dialog fragment")
+    }
+
+    private fun reviewDelete(){
+        // 현재 로그인된 계정의 아이디를 가져옴
+        val loggedUserId = (binding.root.context.applicationContext as MyApplication).user.value!!._id
+        // 로그인된 계정이 해당 리뷰를 삭제할 수 있는지 확인 후 삭제
+        if(loggedUserId == review.userId){
+            CoroutineScope(Dispatchers.IO).launch {
+                RetrofitManager.service.deleteReviewById(review._id)
+            }
+            Toast.makeText(binding.root.context, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            Toast.makeText(binding.root.context, "권한이 없습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 }
