@@ -8,7 +8,7 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class MyApplication : Application() {
-    val user = MutableLiveData<User>(User("anonymous", "로그인해주세요", null, null))
+    val user = MutableLiveData<User>(User("anonymous", null, null, null))
 
     override fun onCreate() {
         super.onCreate()

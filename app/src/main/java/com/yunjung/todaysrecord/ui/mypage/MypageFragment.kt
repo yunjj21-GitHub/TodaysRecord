@@ -72,52 +72,38 @@ class MypageFragment : Fragment(){
 
     private fun initEditProfileBtn(){
         binding.editProfileBtn.setOnClickListener {
-            if(viewModel.user.value!!._id == "anonymous"){ // 로그인이 되어 있지 않을 때
-                // findNavController().navigate(R.id.action_mypageFragment_to_loginFragment)
-            }else { // 로그인이 되어 있을 때
-                findNavController().navigate(R.id.action_mypageFragment_to_editFragment)
-            }
+            findNavController().navigate(R.id.action_mypageFragment_to_editFragment)
         }
     }
 
     private fun initInterestsBtn(){
         binding.interestsBtn.setOnClickListener {
-            if(viewModel.user.value!!._id == "anonymous"){ // 로그인이 되어 있지 않을 때
-                Toast.makeText(requireContext(), "먼저 로그인을 해주세요", Toast.LENGTH_LONG).show()
-            }else { // 로그인이 되어 있을 때
-                findNavController().navigate(R.id.action_mypageFragment_to_myinterestsFragment)
-            }
+            findNavController().navigate(R.id.action_mypageFragment_to_myinterestsFragment)
         }
     }
 
     private fun initReviewBtn(){
         binding.reviewBtn.setOnClickListener {
-            if(viewModel.user.value!!._id == "anonymous"){ // 로그인이 되어 있지 않을 때
-                Toast.makeText(context, "먼저 로그인을 해주세요", Toast.LENGTH_LONG).show()
-            }else { // 로그인이 되어 있을 때
-                findNavController().navigate(R.id.action_mypageFragment_to_myreviewFragment)
-            }
+            findNavController().navigate(R.id.action_mypageFragment_to_myreviewFragment)
         }
     }
 
     private fun initLogoutBtn(){
         binding.logoutBtn.setOnClickListener {
-            if(viewModel.user.value!!._id == "anonymous"){ // 로그인이 되어 있지 않을 때
-                Toast.makeText(context, "이미 로그아웃된 상태 입니다.", Toast.LENGTH_LONG).show()
-            }else { // 로그인이 되어 있을 때
-                (requireContext().applicationContext as MyApplication).user.value=
-                    User("anonymous", "로그인해주세요", null, null) // 로그아웃 처리
-                saveAutoLoginInfo()
-                Toast.makeText(context, "성공적으로 로그아웃 되었습니다.", Toast.LENGTH_LONG).show()
-            }
+            (requireContext().applicationContext as MyApplication).user.value=
+                User("anonymous", null, null, null) // 로그아웃 처리
+            saveAutoLoginAndSetAreaInfo()
+            Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_LONG).show()
+            findNavController().navigate(R.id.action_mypageFragment_to_startActivity)
         }
     }
 
-    private fun saveAutoLoginInfo(){
+    private fun saveAutoLoginAndSetAreaInfo(){
         val autoLoginAndSetArea: SharedPreferences =
             requireContext().getSharedPreferences("autoLoginAndSetArea", Activity.MODE_PRIVATE)
         with(autoLoginAndSetArea.edit()) {
             remove("userId")
+            remove("userArea")
             commit()
         }
     }

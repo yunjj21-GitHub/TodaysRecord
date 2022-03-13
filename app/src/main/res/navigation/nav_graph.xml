@@ -41,6 +41,10 @@
         <action
             android:id="@+id/action_mypageFragment_to_myreviewFragment"
             app:destination="@id/myreviewFragment" />
+        <action
+            android:id="@+id/action_mypageFragment_to_startActivity"
+            app:destination="@id/startActivity"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment
@@ -54,8 +58,7 @@
     <fragment
         android:id="@+id/editFragment"
         android:name="com.yunjung.todaysrecord.ui.editprofile.EditprofileFragment"
-        android:label="EditFragment" >
-    </fragment>
+        android:label="EditFragment" />
     <fragment
         android:id="@+id/myinterestsFragment"
         android:name="com.yunjung.todaysrecord.ui.myinterests.MyinterestsFragment"
@@ -86,5 +89,9 @@
             app:argType="string" />
     </fragment><action android:id="@+id/action_global_writeReivewFragment" app:destination="@id/writeReivewFragment"/>
     <action android:id="@+id/action_global_detailFragment" app:destination="@id/detailFragment"/>
+    <activity
+        android:id="@+id/startActivity"
+        android:name="com.yunjung.todaysrecord.ui.start.StartActivity"
+        android:label="StartActivity" />
 
 </navigation>

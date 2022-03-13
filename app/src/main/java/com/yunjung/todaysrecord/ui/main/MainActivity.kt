@@ -133,12 +133,6 @@ class MainActivity : AppCompatActivity(){
             R.id.moreimageFragment -> {
                 binding.title.text = "사진 더보기"
             }
-            R.id.loginFragment -> {
-                binding.title.text = "로그인"
-            }
-            R.id.joinMembershipFragment -> {
-                binding.title.text = "회원가입"
-            }
             else -> {
                 binding.title.text = "오늘의 기록"
             }
@@ -179,7 +173,7 @@ class MainActivity : AppCompatActivity(){
                     try {
                         RetrofitManager.service.getUserById(userId)
                     } catch (e: Throwable) {
-                        User("anonymous", "로그인해주세요", null, null)
+                        User("anonymous", null, null, null)
                     }
                 }
                 (applicationContext as MyApplication).user.value = response

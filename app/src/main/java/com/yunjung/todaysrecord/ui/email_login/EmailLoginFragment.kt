@@ -1,5 +1,7 @@
 package com.yunjung.todaysrecord.ui.email_login
 
+import android.app.Activity
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentEmailLoginBinding
 import com.yunjung.todaysrecord.network.RetrofitManager
@@ -87,10 +90,25 @@ class EmailLoginFragment : Fragment() {
             }
 
             if(response != null){ // 로그인 성공 시
-                Toast.makeText(context, "성공적으로 로그인 되었습니다.", Toast.LENGTH_SHORT).show()
+                (requireContext().applicationContext as MyApplication).user.value = response // 로그인 처리
+                saveAutoLoginInfo(response._id!!) // 추후 자동로그인을 위해 로그인 정보 저장 (자동 로그인 처리)
+
+                Toast.makeText(context, "로그인 되었습니다.", Toast.LENGTH_SHORT).show()
+
+                findNavController().navigate(R.id.action_emailLoginFragment_to_mainActivity)
             }else{ // 로그인 실패 시
                 Toast.makeText(context, "일치하는 회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    // 자동 로그인 정보 저장
+    private fun saveAutoLoginInfo(userId : String){
+        val autoLoginAndSetArea : SharedPreferences =
+            requireContext().getSharedPreferences("autoLoginAndSetArea", Activity.MODE_PRIVATE)
+        with(autoLoginAndSetArea.edit()){
+            putString("userId", userId)
+            commit()
         }
     }
 

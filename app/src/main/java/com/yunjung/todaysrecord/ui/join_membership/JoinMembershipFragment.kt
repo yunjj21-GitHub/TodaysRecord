@@ -70,6 +70,18 @@ class JoinMembershipFragment : Fragment(){
             displayProfileImage()
         }
 
+        // 다양한 에디트 텍스트 값 변경 이벤트 설정
+        setEditTextValueChangeEvent()
+
+        // 중복확인 버큰 클릭 이벤트 설정
+        initUserIdVerificationBtn()
+
+        // 회원가입 완료 버튼 클릭 이벤트 설정
+        initFinishBtn()
+    }
+
+    // 다양한 에디트 텍스트 값 변경 이벤트 설정
+    private fun setEditTextValueChangeEvent(){
         // 유저 아이디 입력 값이 달라진다면
         binding.userid.doOnTextChanged { text, start, before, count ->
             viewModel.updateUserIdValid(false)
@@ -102,12 +114,6 @@ class JoinMembershipFragment : Fragment(){
         binding.userNickname.doOnTextChanged { text, start, before, count ->
             binding.userNicknameVerificationResult.text = ""
         }
-
-        // 중복확인 버큰 클릭 이벤트 설정
-        initUserIdVerificationBtn()
-
-        // 회원가입 완료 버튼 클릭 이벤트 설정
-        initFinishBtn()
     }
 
     // 프로필 이미지 디스플레이
@@ -153,19 +159,18 @@ class JoinMembershipFragment : Fragment(){
             if(checkUserEmailInputValid() && checkUserPwdInputValid() && checkUserNicknameInputValid()) {
                 // 사용자의 입력값을 받아옴
                 val email: String = binding.userid.text.toString()
-                val profileImage: String = viewModel.userProfileImg.toString()
+                val profileImage: String = viewModel.userProfileImg.value.toString()
                 val nickname: String = binding.userNickname.text.toString()
                 val password : String = binding.userPwd.text.toString()
 
                 // 유저를 생성
                 lifecycleScope.launch {
-                    val response = withContext(Dispatchers.IO){
+                    withContext(Dispatchers.IO){
                         RetrofitManager.service.postUser(email = email, profileImage = profileImage, nickname = nickname, pwd = password)
                     }
-                    // 로그인 처리
-                    (requireContext().applicationContext as MyApplication).user.value = response
-
-                    // 그래프 이동
+                    Toast.makeText(context, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                    // 로그인 화면으로 이동
+                    findNavController().navigateUp()
                 }
             }
         }
@@ -186,7 +191,6 @@ class JoinMembershipFragment : Fragment(){
 
     // 사용자가 입력한 비밀번호가 유효한지 확인
     private fun checkUserPwdInputValid() : Boolean{
-        Log.e(TAG, "ㄴㅇㄹㅇ나ㅣㄴㅇㄹ")
         if(binding.userPwd.text.isBlank()){ // 비밀번호가 입력되었는지 확인
             binding.userPwdVerificationResult.text = "비밀번호를 입력해주세요."
             return false

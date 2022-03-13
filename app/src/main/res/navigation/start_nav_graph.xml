@@ -15,14 +15,15 @@
         <action
             android:id="@+id/action_loginFragment_to_emailLoginFragment"
             app:destination="@id/emailLoginFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_mainActivity"
+            app:destination="@id/mainActivity"
+            app:launchSingleTop="false" />
     </fragment>
     <fragment
         android:id="@+id/joinMembershipFragment"
         android:name="com.yunjung.todaysrecord.ui.join_membership.JoinMembershipFragment"
         android:label="JoinMembershipFragment" >
-        <action
-            android:id="@+id/action_joinMembershipFragment_to_emailLoginFragment"
-            app:destination="@id/emailLoginFragment" />
         <argument
             android:name="email"
             app:argType="string"
@@ -39,5 +40,13 @@
         <action
             android:id="@+id/action_emailLoginFragment_to_joinMembershipFragment"
             app:destination="@id/joinMembershipFragment" />
+        <action
+            android:id="@+id/action_emailLoginFragment_to_mainActivity"
+            app:destination="@id/mainActivity"
+            app:popUpToInclusive="false" />
     </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.yunjung.todaysrecord.ui.main.MainActivity"
+        android:label="MainActivity" />
 </navigation>

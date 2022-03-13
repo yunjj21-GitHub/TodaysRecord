@@ -162,22 +162,18 @@ class DetailFragment : Fragment(){
 
         // 찜 버튼 클릭 이벤트 설정
         binding.heartBtn.setOnClickListener {
-            if(viewModel.user.value!!._id != "anonymous"){ // 로그인 되어 있다면
-                if(viewModel.heartState.value!!){ // 찜 되어 있었다면
-                    removeUserIdByPhotoStudioInterested()
-                }
-                else { // 찜 되어 있지 않았다면
-                    addUserIdInPhotoStudioInterested()
-                }
-            }else{ // 로그인 되어 있지 않다면
-                Toast.makeText(context, "로그인을 먼저 해주세요", Toast.LENGTH_LONG).show()
+            if(viewModel.heartState.value!!){ // 찜 되어 있었다면
+                removeUserIdByPhotoStudioInterested()
+            }
+            else { // 찜 되어 있지 않았다면
+                addUserIdInPhotoStudioInterested()
             }
         }
     }
 
     private fun displayHeartState(){
         // 찜버튼 디스플레이 결정
-        if(viewModel.user.value!!._id != "anonymous") viewModel.updateHeartState()
+        viewModel.updateHeartState()
         viewModel.heartState.observe(viewLifecycleOwner, Observer {
             if(viewModel.heartState.value == true){ // 찜 하고 있다면
                 binding.heartBtn.setBackgroundResource(R.drawable.ic_heart_filled_red)

@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -63,20 +64,15 @@ class StartActivity : AppCompatActivity() {
         // 탐색이 수행 될 마다 실행됨
         navController.addOnDestinationChangedListener { _, destination, _ ->
             // 뒤로가기 버튼 및 타이틀 설정
-            setBackButtonIcon(destination)
-        }
-    }
+            if(destination.id == R.id.loginFragment){
+                binding.title.visibility = View.INVISIBLE
+            }else{
+                binding.title.visibility = View.VISIBLE
+                binding.toolbar.setNavigationIcon(R.drawable.ic_back_s)
 
-    private fun setBackButtonIcon(destination : NavDestination){
-        // 뒤로가기 버튼 및 타이틀 설정
-        if(destination.id == R.id.loginFragment){
-            binding.title.visibility = View.INVISIBLE
-        }else{
-            binding.title.visibility = View.VISIBLE
-            binding.toolbar.setNavigationIcon(R.drawable.ic_back_s)
-
-            if(destination.id == R.id.joinMembershipFragment) binding.title.text = "이메일로 회원가입"
-            else if(destination.id == R.id.emailLoginFragment) binding.title.text = "이메일 로그인"
+                if(destination.id == R.id.joinMembershipFragment) binding.title.text = "이메일로 회원가입"
+                else if(destination.id == R.id.emailLoginFragment) binding.title.text = "이메일 로그인"
+            }
         }
     }
 }
