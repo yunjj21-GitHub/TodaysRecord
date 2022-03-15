@@ -64,17 +64,15 @@ class MainActivity : AppCompatActivity(){
         navController = host.navController
 
         // 최상위 수준의 화면 지정
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.studioFragment, R.id.boothFragment, R.id.mypageFragment))
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.studioFragment, R.id.boothFragment, R.id.mypageFragment, R.id.searchFragment))
 
         setupActionBar() // 액션바와 NavComponent를 연결
 
         // 탐색이 수행 될 때 마다 실행
         navController.addOnDestinationChangedListener { _, destination, _ ->
             // 지역설정 버튼 및 텍스트 보임 여부 설정
-            setSetLocationBtnAndText(destination)
-
-            // 검색 버튼 보임 여부 설정
-            setSearchBtn(destination)
+            setSetLocationBtnAndTextAndSortBtn(destination)
 
             // BackButton 아이콘 설정
             setBackButtonIcon(destination)
@@ -87,16 +85,6 @@ class MainActivity : AppCompatActivity(){
 
         // Bottom Navigation 클릭 이벤트 설정
         initBottomNavigation()
-
-        // 검색 버튼 클릭 이벤트 설정
-        initSearchBtn()
-    }
-
-    // 검색 버튼 클릭 이벤트 설정
-    private fun initSearchBtn() {
-        binding.searchBtn.setOnClickListener {
-            navController.navigate(R.id.action_studioFragment_to_searchFragment)
-        }
     }
 
     // 액션바와 NavComponent를 연결
@@ -114,29 +102,25 @@ class MainActivity : AppCompatActivity(){
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-    // 지역설정 버튼과 텍스트 & 검색 버튼 보임 여부 설정
-    private fun setSetLocationBtnAndText(destination : NavDestination){
+    // 지역설정 버튼과 텍스트 & 검색 버튼, 정렬 버튼 보임 여부 설정
+    private fun setSetLocationBtnAndTextAndSortBtn(destination : NavDestination){
         if(destination.id == R.id.studioFragment){
             binding.setLocationBtn.visibility = View.VISIBLE
             binding.locationText.visibility = View.VISIBLE
+            binding.sortBtn.visibility = View.VISIBLE
         }else{
             binding.setLocationBtn.visibility = View.INVISIBLE
             binding.locationText.visibility = View.INVISIBLE
-        }
-    }
-
-    // 검색 버튼 보임 여부 설정
-    private fun setSearchBtn(destination: NavDestination) {
-        if(destination.id == R.id.studioFragment){
-            binding.searchBtn.visibility = View.VISIBLE
-        }else{
-            binding.searchBtn.visibility = View.INVISIBLE
+            binding.sortBtn.visibility = View.INVISIBLE
         }
     }
 
     // 전환되는 프래그먼트에 따라 뒤로가기 버튼 아이콘 설정
     private fun setBackButtonIcon(destination : NavDestination){
-        if(destination.id != R.id.studioFragment && destination.id != R.id.boothFragment && destination.id != R.id.mypageFragment){
+        if(destination.id != R.id.studioFragment &&
+            destination.id != R.id.boothFragment &&
+            destination.id != R.id.mypageFragment &&
+            destination.id != R.id.searchFragment){
             binding.toolbar.setNavigationIcon(R.drawable.ic_back_white)
         }
     }
@@ -192,6 +176,11 @@ class MainActivity : AppCompatActivity(){
                     val builder = NavOptions.Builder()
                     val options = builder.setPopUpTo(R.id.mypageFragment, true).build()
                     navController.navigate(R.id.action_global_mypageFragment, null, options)
+                }
+                R.id.search -> {
+                    val builder = NavOptions.Builder()
+                    val options = builder.setPopUpTo(R.id.searchFragment, true).build()
+                    navController.navigate(R.id.action_global_searchFragment, null, options)
                 }
             }
             true

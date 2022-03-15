@@ -4,6 +4,12 @@
         android:title="사진관찾기"
         android:id="@+id/studio"
         android:icon="@drawable/ic_studio_empty"/>
+
+    <item
+        android:title="사진관검색"
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search_empty"/>
+
     <item
         android:title="사진부스찾기"
         android:id="@+id/booth"
