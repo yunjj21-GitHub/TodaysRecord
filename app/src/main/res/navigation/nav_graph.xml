@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_studioFragment_to_setlocationFragment"
             app:destination="@id/setlocationFragment" />
+        <action
+            android:id="@+id/action_studioFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
 
     <fragment
@@ -93,5 +96,9 @@
         android:id="@+id/startActivity"
         android:name="com.yunjung.todaysrecord.ui.start.StartActivity"
         android:label="StartActivity" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.yunjung.todaysrecord.ui.search.SearchFragment"
+        android:label="SearchFragment" />
 
 </navigation>

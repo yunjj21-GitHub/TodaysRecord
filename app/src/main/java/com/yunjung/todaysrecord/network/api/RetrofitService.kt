@@ -110,6 +110,11 @@ interface RetrofitService {
         @Query("pwd") pwd : String
     ) : User
 
+    @GET("/getPSListBySearchWord")
+    suspend fun getPSListBySearchWord(
+        @Query("searchWord") searchWord : String
+    ) : List<PhotoStudio>
+
     // Update
     // 전체를 수정하는 PUT
     @PUT("/putReviewById")

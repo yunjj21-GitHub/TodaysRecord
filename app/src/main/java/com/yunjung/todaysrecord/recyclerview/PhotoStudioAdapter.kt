@@ -25,11 +25,9 @@ class PhotoStudioAdapter :
             // cost필드 null일 때 처리
             if(photoStudio.cost == null) binding.costText.text = "가격 정보 없음"
 
-            // 사진관 대표 이미지 처리
-            if(photoStudio.image!!.isNotEmpty()) {
-                var photoStudioImage : String = photoStudio.image!![0]
-                Glide.with(binding.root.context).load(photoStudioImage).into(binding.studioMainImage)
-            }
+            // 사진관 대표 이미지 설정
+            var photoStudioImage : String = photoStudio.image!![0]
+            Glide.with(binding.root.context).load(photoStudioImage).into(binding.studioMainImage)
         }
     }
 

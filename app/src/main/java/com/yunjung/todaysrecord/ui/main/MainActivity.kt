@@ -70,8 +70,11 @@ class MainActivity : AppCompatActivity(){
 
         // 탐색이 수행 될 때 마다 실행
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            // 지역설정 버튼 & 텍스트 보임 여부 설정
+            // 지역설정 버튼 및 텍스트 보임 여부 설정
             setSetLocationBtnAndText(destination)
+
+            // 검색 버튼 보임 여부 설정
+            setSearchBtn(destination)
 
             // BackButton 아이콘 설정
             setBackButtonIcon(destination)
@@ -84,6 +87,16 @@ class MainActivity : AppCompatActivity(){
 
         // Bottom Navigation 클릭 이벤트 설정
         initBottomNavigation()
+
+        // 검색 버튼 클릭 이벤트 설정
+        initSearchBtn()
+    }
+
+    // 검색 버튼 클릭 이벤트 설정
+    private fun initSearchBtn() {
+        binding.searchBtn.setOnClickListener {
+            navController.navigate(R.id.action_studioFragment_to_searchFragment)
+        }
     }
 
     // 액션바와 NavComponent를 연결
@@ -101,7 +114,7 @@ class MainActivity : AppCompatActivity(){
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-    // 지역설정 버튼 & 텍스트 보임 여부 설정
+    // 지역설정 버튼과 텍스트 & 검색 버튼 보임 여부 설정
     private fun setSetLocationBtnAndText(destination : NavDestination){
         if(destination.id == R.id.studioFragment){
             binding.setLocationBtn.visibility = View.VISIBLE
@@ -112,10 +125,19 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
+    // 검색 버튼 보임 여부 설정
+    private fun setSearchBtn(destination: NavDestination) {
+        if(destination.id == R.id.studioFragment){
+            binding.searchBtn.visibility = View.VISIBLE
+        }else{
+            binding.searchBtn.visibility = View.INVISIBLE
+        }
+    }
+
     // 전환되는 프래그먼트에 따라 뒤로가기 버튼 아이콘 설정
     private fun setBackButtonIcon(destination : NavDestination){
         if(destination.id != R.id.studioFragment && destination.id != R.id.boothFragment && destination.id != R.id.mypageFragment){
-            binding.toolbar.setNavigationIcon(R.drawable.ic_back)
+            binding.toolbar.setNavigationIcon(R.drawable.ic_back_white)
         }
     }
 
@@ -139,6 +161,9 @@ class MainActivity : AppCompatActivity(){
             }
             R.id.moreimageFragment -> {
                 binding.title.text = "사진 더보기"
+            }
+            R.id.searchFragment ->{
+                binding.title.text = "검색하기"
             }
             else -> {
                 binding.title.text = "오늘의 기록"

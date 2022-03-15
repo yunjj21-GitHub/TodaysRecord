@@ -7,8 +7,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -104,7 +102,7 @@ class StartActivity : AppCompatActivity() {
                 binding.title.visibility = View.INVISIBLE
             }else{
                 binding.title.visibility = View.VISIBLE
-                binding.toolbar.setNavigationIcon(R.drawable.ic_back_s)
+                binding.toolbar.setNavigationIcon(R.drawable.ic_back_purple)
 
                 if(destination.id == R.id.joinMembershipFragment) binding.title.text = "이메일로 회원가입"
                 else if(destination.id == R.id.emailLoginFragment) binding.title.text = "이메일 로그인"
