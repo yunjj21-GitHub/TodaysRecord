@@ -105,7 +105,7 @@ class ReviewFragment : Fragment() {
 
     // 리사이클러뷰에 어댑터를 부착
     private fun initRecycler(){
-        binding.recyclerViewReview.adapter = ReviewAdapter(requireFragmentManager())
+        binding.recyclerViewReview.adapter = ReviewAdapter(parentFragmentManager)
         binding.recyclerViewReview.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
     }
 
@@ -126,12 +126,8 @@ class ReviewFragment : Fragment() {
 
     private fun initWriteReviewBtn(){
         binding.writeReviewBtn.setOnClickListener {
-            if(viewModel.user.value!!._id != "anonymous"){ // 로그인이 되어 있다면
-                val directions = WriteReivewFragmentDirections.actionGlobalWriteReivewFragment(photoStudio._id.toString())
-                it.findNavController().navigate(directions)
-            }else{ // 로그인이 되어 있지 않다면
-                Toast.makeText(requireContext(), "먼저 로그인을 해주세요", Toast.LENGTH_LONG).show()
-            }
+            val directions = WriteReivewFragmentDirections.actionGlobalWriteReivewFragment(photoStudio._id.toString())
+            it.findNavController().navigate(directions)
         }
     }
 

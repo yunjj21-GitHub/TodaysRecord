@@ -95,10 +95,11 @@ class KaKaoLoginManager(val loginFragment: LoginFragment) {
             if(response != null){ // 가입되어 있는 이메일이라면 로그인처리
                 (context.applicationContext as MyApplication).user.value = response // 로그인
                 saveAutoLoginInfo(response._id!!) // 추후 자동로그인을 위해 로그인 정보 저장
-
                 Toast.makeText(context, "로그인 되었습니다.", Toast.LENGTH_SHORT).show()
-
                 findNavController(loginFragment).navigate(R.id.action_loginFragment_to_mainActivity)
+
+                // StartActivity 종료
+                loginFragment.requireActivity().finish()
             }else{ // 가입되어 있지 않은 이메일이라면 회원가입처리
                 // 회원가입 화면으로 이동
                 val direction = LoginFragmentDirections.actionLoginFragmentToJoinMembershipFragment(email, profileImage)
@@ -109,9 +110,9 @@ class KaKaoLoginManager(val loginFragment: LoginFragment) {
 
     // 자동 로그인 정보 저장
     private fun saveAutoLoginInfo(userId : String){
-        val autoLoginAndSetArea : SharedPreferences =
-            loginFragment.requireContext().getSharedPreferences("autoLoginAndSetArea", Activity.MODE_PRIVATE)
-        with(autoLoginAndSetArea.edit()){
+        val autoLogin : SharedPreferences =
+            loginFragment.requireContext().getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
+        with(autoLogin.edit()){
             putString("userId", userId)
             commit()
         }

@@ -1,9 +1,17 @@
 package com.yunjung.todaysrecord.ui.editprofile
 
+import android.content.ContentValues.TAG
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -17,10 +25,15 @@ import com.yunjung.todaysrecord.network.RetrofitManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
 class EditprofileFragment : Fragment(){
     lateinit var binding : FragmentEditprofileBinding
     lateinit var viewModel: EditprofileViewModel
+
+    // 사진 업로드 관련
+    private lateinit var activityResultLauncher: ActivityResultLauncher<String>
 
     companion object{
         fun newInstance() : EditprofileFragment {
@@ -35,6 +48,9 @@ class EditprofileFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_editprofile, container, false)
+
+        initActivityResultLauncher() // 이미지를 얻어오는 화면의 결과를 처리하는 런처 초기화
+
         return binding.root
     }
 
@@ -52,24 +68,92 @@ class EditprofileFragment : Fragment(){
 
         // finishBtn 클릭 이벤트 설정
         initFinishBtn()
+
+        // 프로필 이미지 변경 버튼 클릭 이벤트 설정
+        initChangeProfileImgBtn()
     }
 
+    // 프로필 이미지 변경 버튼 클릭 이벤트 설정
+    private fun initChangeProfileImgBtn(){
+        binding.changeProfileImgBtn.setOnClickListener {
+            getPicture() // 디바이스의 갤러리에서 이미지를 얻어옴
+        }
+    }
+
+    private fun initActivityResultLauncher(){
+        activityResultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri : Uri? ->
+            // 선택한 이미지의 bitmap 생성
+            val inputStream : InputStream = requireActivity().contentResolver.openInputStream(uri!!)!!
+            var bitmap : Bitmap = BitmapFactory.decodeStream(inputStream)
+            inputStream.close()
+
+            // bitmap 이미지 사이즈 지정
+            bitmap = Bitmap.createScaledBitmap(bitmap,50,50,true)
+
+            // 선택된 이미지(Bitmap)을 문자열로 변환
+            viewModel.updateUserProfileImg(bitmapToString(bitmap))
+
+            // 프로필 이미지뷰에 선택된 이미지 디스플레이
+            displayProfileImage()
+        }
+    }
+
+    private fun getPicture(){
+        activityResultLauncher.launch("image/*") // 이미지를 얻어옴
+    }
+
+    // bitmap을 string으로 변환
+    private fun bitmapToString(bitmap : Bitmap): String {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+
+        val byteArray = byteArrayOutputStream.toByteArray()
+
+        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    }
+
+    // string을 bitmap으로 변환
+    private fun stringToBitmap(encodedString : String) : Bitmap {
+        val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+    }
+
+    // 프로필 이미지 디스플레이
     private fun displayProfileImage(){
-        Glide.with(binding.root.context)
-            .load(viewModel.user.value!!.profileImage)
-            .circleCrop()
-            .fallback(R.drawable.ic_profile)
-            .into(binding.userProfile)
+        if(viewModel.user.value!!.profileImage == null) return
+
+        if(viewModel.user.value!!.profileImage!!.substring(0, 5) == "https") { // 웹 url 이미지라면
+            Glide.with(binding.root.context)
+                .load(viewModel.user.value!!.profileImage)
+                .circleCrop()
+                .into(binding.userProfile)
+            return
+        }else{ // bitmap string 이미지라면
+            Glide.with(binding.root.context)
+                .load(stringToBitmap(viewModel.user.value!!.profileImage.toString()))
+                .circleCrop()
+                .into(binding.userProfile)
+            return
+        }
     }
 
     private fun initFinishBtn(){
         binding.finishBtn.setOnClickListener {
+            // 입력된 nickname을 받아옴
             val newUserNickname : String = binding.editTextUserNickname.text.toString()
+
+            // 변경된 이미지를 받아옴
+            val newUserProfileImg : String = (viewModel.user.value!!.profileImage ?: null).toString()
+
             lifecycleScope.launch {
                 val response = withContext(Dispatchers.IO) {
                     RetrofitManager.service
-                        .patchUserNicknameById(_id = viewModel.user.value!!._id, nickname = newUserNickname)
+                        .patchUserById(_id = viewModel.user.value!!._id,
+                            profileImg = newUserProfileImg,
+                            nickname = newUserNickname)
                 }
+
                 // 로그인된 유저 정보 업데이트
                 (requireContext().applicationContext as MyApplication).user.value = response
                 findNavController().navigateUp() // 뒤로감

@@ -121,16 +121,11 @@ interface RetrofitService {
     ) : Review
 
     // 부분을 수정하는 PATCH
-    @PATCH("/patchUserNicknameById")
-    suspend fun patchUserNicknameById(
+    @PATCH("/patchUserById")
+    suspend fun patchUserById(
         @Query("_id") _id : String? = null,
+        @Query("profileImg") profileImg : String? = null,
         @Query("nickname") nickname : String? = null
-    ) : User
-
-    @PATCH("/patchUserProfileImageById")
-    suspend fun patchUserProfileImageById(
-        @Query("_id") _id : String? = null,
-        @Query("profileImage") profileImage : String? = null
     ) : User
 
     // 유저의 interests에 특정 photostudio _id를 추가하는 API

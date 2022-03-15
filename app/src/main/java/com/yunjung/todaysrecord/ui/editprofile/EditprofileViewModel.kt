@@ -14,4 +14,8 @@ class EditprofileViewModel : ViewModel() {
     fun updateUser(user : User){
         _user.value = user
     }
+
+    fun updateUserProfileImg(newProfileImg : String){
+        _user.value!!.profileImage = newProfileImg
+    }
 }

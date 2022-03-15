@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -44,15 +45,19 @@ class MainActivity : AppCompatActivity(){
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         binding.viewModel = viewModel
 
-        // 자동 로그인과 자동 지역설정
-        autoLoginAndSetArea()
+        // 자동 지역설정
+        autoSetArea()
 
         viewModel.userArea.observe(this, Observer {
+            // 자동 지역설정 정보 저장
             saveAutoSetAreaInfo()
         })
 
-        setSupportActionBar(binding.toolbar) // 액션바 지정
-        supportActionBar?.setDisplayShowTitleEnabled(false) // 툴바의 타이틀 제거
+        // 지역설정 버튼 클릭 이벤트 설정
+        initSetLocationBtn()
+
+        setSupportActionBar(binding.toolbar) // 레이아웃의 툴바를 액션바로 지정
+        supportActionBar?.setDisplayShowTitleEnabled(false) // 안드로이드에서 자동으로 넣는 툴바의 타이틀 제거
 
         // NavController 객체 얻기
         host = supportFragmentManager.findFragmentById(R.id.fragment_frame) as NavHostFragment? ?: return
@@ -62,8 +67,6 @@ class MainActivity : AppCompatActivity(){
         appBarConfiguration = AppBarConfiguration(setOf(R.id.studioFragment, R.id.boothFragment, R.id.mypageFragment))
 
         setupActionBar() // 액션바와 NavComponent를 연결
-
-        setupBottomNavMenu() // BottomNav와 NavComponent를 연결
 
         // 탐색이 수행 될 때 마다 실행
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -77,17 +80,18 @@ class MainActivity : AppCompatActivity(){
             setToolbarText(destination)
         }
 
+        setupBottomNavMenu() // BottomNav와 NavComponent를 연결
+
         // Bottom Navigation 클릭 이벤트 설정
         initBottomNavigation()
-
-        // 지역설정 버튼 클릭 이벤트 설정
-        initSetLocationBtn()
     }
 
+    // 액션바와 NavComponent를 연결
     private fun setupActionBar() {
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
+    // BottomNav와 NavComponent를 연결
     private fun setupBottomNavMenu() {
         binding.bottomNavigation?.setupWithNavController(navController)
     }
@@ -97,6 +101,7 @@ class MainActivity : AppCompatActivity(){
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
+    // 지역설정 버튼 & 텍스트 보임 여부 설정
     private fun setSetLocationBtnAndText(destination : NavDestination){
         if(destination.id == R.id.studioFragment){
             binding.setLocationBtn.visibility = View.VISIBLE
@@ -107,12 +112,14 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
+    // 전환되는 프래그먼트에 따라 뒤로가기 버튼 아이콘 설정
     private fun setBackButtonIcon(destination : NavDestination){
         if(destination.id != R.id.studioFragment && destination.id != R.id.boothFragment && destination.id != R.id.mypageFragment){
             binding.toolbar.setNavigationIcon(R.drawable.ic_back)
         }
     }
 
+    // 전환되는 프래그먼트에 따라 타이틀 설정
     private fun setToolbarText(destination : NavDestination){
         when(destination.id){
             R.id.boothFragment->{
@@ -139,58 +146,54 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
+    // Bottom Navigation 클릭 이벤트 설정
     private fun initBottomNavigation(){
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when(menuItem.itemId) {
                 R.id.studio->{
-                    navController.navigate(R.id.action_global_studioFragment)
+                    // popUpTo와 popUpToInclusive 옵션 설정
+                    val builder = NavOptions.Builder()
+                    val options = builder.setPopUpTo(R.id.studioFragment, true).build()
+
+                    navController.navigate(R.id.action_global_studioFragment, null, options)
                 }
                 R.id.booth -> {
-                    navController.navigate(R.id.action_global_boothFragment)
+                    val builder = NavOptions.Builder()
+                    val options = builder.setPopUpTo(R.id.boothFragment, true).build()
+                    navController.navigate(R.id.action_global_boothFragment, null, options)
                 }
 
                 R.id.myPage -> {
-                    navController.navigate(R.id.action_global_mypageFragment)
+                    val builder = NavOptions.Builder()
+                    val options = builder.setPopUpTo(R.id.mypageFragment, true).build()
+                    navController.navigate(R.id.action_global_mypageFragment, null, options)
                 }
             }
             true
         }
     }
 
+    // 지역설정 버튼 클릭 이벤트 설정
     private fun initSetLocationBtn(){
         binding.setLocationBtn.setOnClickListener {
             navController.navigate(R.id.action_studioFragment_to_setlocationFragment)
         }
     }
 
-    private fun autoLoginAndSetArea(){
-        // 자동 로그인
-        val autoLoginAndSetArea = getSharedPreferences("autoLoginAndSetArea", MODE_PRIVATE)
-        val userId = autoLoginAndSetArea.getString("userId", null)
-        if(userId != null) {
-            lifecycleScope.launch {
-                val response = withContext(Dispatchers.IO) {
-                    try {
-                        RetrofitManager.service.getUserById(userId)
-                    } catch (e: Throwable) {
-                        User("anonymous", null, null, null)
-                    }
-                }
-                (applicationContext as MyApplication).user.value = response
-            }
-        }
-
-        // 자동 지역 설정
-        val userArea = autoLoginAndSetArea.getString("userArea", null)
+    // 자동 지역설정
+    private fun autoSetArea(){
+        val autoSetArea = getSharedPreferences("autoSetArea", MODE_PRIVATE)
+        val userArea = autoSetArea.getString("userArea", null)
         if(userArea != null){
             viewModel.updateUerArea(userArea)
         }
     }
 
+    // 자동 지역설정 정보 저장
     private fun saveAutoSetAreaInfo() {
-        val autoLoginAndSetArea: SharedPreferences =
-            getSharedPreferences("autoLoginAndSetArea", Activity.MODE_PRIVATE)
-        with(autoLoginAndSetArea.edit()) {
+        val autoSetArea: SharedPreferences =
+            getSharedPreferences("autoSetArea", Activity.MODE_PRIVATE)
+        with(autoSetArea.edit()) {
             putString("userArea", viewModel.userArea.value)
             commit()
         }

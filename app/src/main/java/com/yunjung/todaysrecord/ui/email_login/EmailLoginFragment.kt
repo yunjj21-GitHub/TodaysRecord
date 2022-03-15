@@ -92,10 +92,11 @@ class EmailLoginFragment : Fragment() {
             if(response != null){ // 로그인 성공 시
                 (requireContext().applicationContext as MyApplication).user.value = response // 로그인 처리
                 saveAutoLoginInfo(response._id!!) // 추후 자동로그인을 위해 로그인 정보 저장 (자동 로그인 처리)
-
                 Toast.makeText(context, "로그인 되었습니다.", Toast.LENGTH_SHORT).show()
-
                 findNavController().navigate(R.id.action_emailLoginFragment_to_mainActivity)
+
+                // StartActivity 종료
+                requireActivity().finish()
             }else{ // 로그인 실패 시
                 Toast.makeText(context, "일치하는 회원정보가 없습니다.", Toast.LENGTH_SHORT).show()
             }
@@ -104,9 +105,9 @@ class EmailLoginFragment : Fragment() {
 
     // 자동 로그인 정보 저장
     private fun saveAutoLoginInfo(userId : String){
-        val autoLoginAndSetArea : SharedPreferences =
-            requireContext().getSharedPreferences("autoLoginAndSetArea", Activity.MODE_PRIVATE)
-        with(autoLoginAndSetArea.edit()){
+        val autoLogin : SharedPreferences =
+            requireContext().getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
+        with(autoLogin.edit()){
             putString("userId", userId)
             commit()
         }

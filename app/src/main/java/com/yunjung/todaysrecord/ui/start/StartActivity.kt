@@ -5,23 +5,31 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.ActivityStartBinding
+import com.yunjung.todaysrecord.models.User
+import com.yunjung.todaysrecord.network.RetrofitManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class StartActivity : AppCompatActivity() {
-    // Navigation Component 관련 변수
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    lateinit var host : NavHostFragment
-
     // DataBinding & ViewModel 관련 변수
     lateinit var binding : ActivityStartBinding
     lateinit var viewModel : StartViewModel
+
+    // Navigation Component 관련 변수
+    private lateinit var host : NavHostFragment
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,30 +39,58 @@ class StartActivity : AppCompatActivity() {
         binding.viewModel = viewModel // 레이아웃 뷰모델에게 옵저버할 뷰모델을 넘겨줌
 
         /* Navigation Component 관련 */
-        // 레이아웃의 툴바를 액션바로 등록
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false) // 안드로이드에서 자동으로 넣는 타이틀을 제거
+        setSupportActionBar(binding.toolbar) // 레이아웃의 툴바를 액션바로 지정
+        supportActionBar?.setDisplayShowTitleEnabled(false) // 안드로이드에서 자동으로 넣는 툴바의 타이틀 제거
 
-        // NavHost를 이용하여 NavController가져오기
+        // NavController 객체 얻기
         host = supportFragmentManager.findFragmentById(R.id.fragment_frame) as NavHostFragment? ?: return
-        val navController = host.navController
+        navController = host.navController
 
         // 최상위 수준의 화면 지정
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
-        // 액션바에 navController와 appBarConfiguration객체를 설정
-        setupActionBar(navController, appBarConfiguration)
+        // 액션바와 NavComponent를 연결
+        setupActionBar()
 
+        // 전환되는 Fragment에 따라 적절한 Title과 BackButton이 보이도록 함
         setTitleAndBackButton(navController)
+
+        // 자동 로그인 처리
+        autoLogin()
     }
 
-    // 툴바를 액션바로 등록
-    private fun setupActionBar(navController: NavController,
-                               appBarConfig : AppBarConfiguration) {
-        setupActionBarWithNavController(navController, appBarConfig)
+    // 자동 로그인 처리
+    private fun autoLogin() {
+        val autoLogin = getSharedPreferences("autoLogin", MODE_PRIVATE)
+        val userId = autoLogin.getString("userId", null)
+
+        if(userId != null) { // 자동 로그인 정보가 있다면 (이전에 로그인 했던 상태라면)
+            lifecycleScope.launch {
+                val response = withContext(Dispatchers.IO) {
+                    try {
+                        RetrofitManager.service.getUserById(userId)
+                    } catch (e: Throwable) {
+                        User(null, null, null, null)
+                    }
+                }
+                (applicationContext as MyApplication).user.value = response // 로그인 처리
+            }
+
+            // MainActivity로 이동
+            navController.navigate(R.id.action_loginFragment_to_mainActivity)
+
+            // 현재 액티비티 종료
+            finish()
+        }
     }
 
-    // back button이 동작하도록 함
+
+    // 액션바와 NavComponent를 연결
+    private fun setupActionBar() {
+        setupActionBarWithNavController(navController, appBarConfiguration)
+    }
+
+    // 뒤로가기 버튼을 동작하도록 함
     override fun onSupportNavigateUp(): Boolean {
         return host.navController.navigateUp() || super.onSupportNavigateUp()
     }

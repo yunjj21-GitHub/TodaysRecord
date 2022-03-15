@@ -1,8 +1,13 @@
 package com.yunjung.todaysrecord.ui.mypage
 
 import android.app.Activity
+import android.content.ContentValues
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +52,7 @@ class MypageFragment : Fragment(){
         viewModel.updateUser((requireContext().applicationContext as MyApplication).user.value!!)
 
         // 유저 프로필 이미지 설정
-        displayUserProfile()
+        displayProfileImage()
 
         // 내 정보 수정 버튼 이벤트 설정
         initEditProfileBtn()
@@ -62,12 +67,29 @@ class MypageFragment : Fragment(){
         initLogoutBtn()
     }
 
-    private fun displayUserProfile(){
-        Glide.with(binding.root.context)
-            .load(viewModel.user.value!!.profileImage)
-            .circleCrop()
-            .fallback(R.drawable.ic_profile)
-            .into(binding.userProfile)
+    // 프로필 이미지 디스플레이
+    private fun displayProfileImage(){
+        if(viewModel.user.value!!.profileImage == null) return
+
+        if(viewModel.user.value!!.profileImage!!.substring(0, 5) == "https") { // 웹 url 이미지라면
+            Glide.with(binding.root.context)
+                .load(viewModel.user.value!!.profileImage)
+                .circleCrop()
+                .into(binding.userProfile)
+            return
+        }else{ // bitmap string 이미지라면
+            Glide.with(binding.root.context)
+                .load(stringToBitmap(viewModel.user.value!!.profileImage.toString()))
+                .circleCrop()
+                .into(binding.userProfile)
+            return
+        }
+    }
+
+    // string을 bitmap으로 변환
+    private fun stringToBitmap(encodedString : String) : Bitmap {
+        val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
     }
 
     private fun initEditProfileBtn(){
@@ -91,18 +113,30 @@ class MypageFragment : Fragment(){
     private fun initLogoutBtn(){
         binding.logoutBtn.setOnClickListener {
             (requireContext().applicationContext as MyApplication).user.value=
-                User("anonymous", null, null, null) // 로그아웃 처리
-            saveAutoLoginAndSetAreaInfo()
+                User(null, null, null, null) // 로그아웃 처리
+            removeAutoLoginAndSetAreaInfo()
             Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_LONG).show()
             findNavController().navigate(R.id.action_mypageFragment_to_startActivity)
+
+            // MainActivity 종료
+            requireActivity().finish()
         }
     }
 
-    private fun saveAutoLoginAndSetAreaInfo(){
-        val autoLoginAndSetArea: SharedPreferences =
-            requireContext().getSharedPreferences("autoLoginAndSetArea", Activity.MODE_PRIVATE)
-        with(autoLoginAndSetArea.edit()) {
+    // 자동 로그인 & 자동 지역설정 정보 초기화
+    private fun removeAutoLoginAndSetAreaInfo(){
+        // 자동 로그인 정보 초기화
+        val autoLogin: SharedPreferences =
+            requireContext().getSharedPreferences("autoLogin", Activity.MODE_PRIVATE)
+        with(autoLogin.edit()) {
             remove("userId")
+            commit()
+        }
+
+        // 자동 지역설정 정보 초기화
+        val autoSetArea: SharedPreferences =
+            requireContext().getSharedPreferences("autoSetArea", Activity.MODE_PRIVATE)
+        with(autoSetArea.edit()) {
             remove("userArea")
             commit()
         }
