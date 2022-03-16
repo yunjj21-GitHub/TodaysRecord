@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentSearchBinding
 import com.yunjung.todaysrecord.recyclerview.PhotoStudioAdapter
+import com.yunjung.todaysrecord.recyclerview.SearchResultsAdapter
 
 class SearchFragment : Fragment() {
     lateinit var binding : FragmentSearchBinding
@@ -57,7 +58,7 @@ class SearchFragment : Fragment() {
 
     // 리사이클러뷰에 어댑터 부착
     private fun initRecycler() {
-        binding.searchResultRecycler.adapter = PhotoStudioAdapter()
+        binding.searchResultRecycler.adapter = SearchResultsAdapter()
         binding.searchResultRecycler.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
     }
@@ -65,7 +66,7 @@ class SearchFragment : Fragment() {
     // 리사이클러뷰 어댑터가 searchResults를 옵저버
     private fun subscribeSearchResults() {
         viewModel.searchResults.observe(viewLifecycleOwner, {
-            (binding.searchResultRecycler.adapter as PhotoStudioAdapter).submitList(it)
+            (binding.searchResultRecycler.adapter as SearchResultsAdapter).submitList(it)
         })
     }
 }
