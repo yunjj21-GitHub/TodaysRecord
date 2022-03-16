@@ -14,7 +14,7 @@ data class PhotoStudio (
     var type : String? = null,
     var name : String? = null,
     var address : String? = null, // 상세주소
-    var cost : String? = null,
+    var cost : Int? = null,
     var image : List<String>? = null, // 빈 배열이더라도 배열이 온다.
     var phoneNumber : String? = null,
     var siteAddress : String? = null, // 인터넷 주소

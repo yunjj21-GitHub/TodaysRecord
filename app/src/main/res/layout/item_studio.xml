@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{item.cost}"
+                android:text="@{Integer.toString(item.cost)}"
                 android:textColor="#F44336"
                 android:textSize="14sp"
                 android:textStyle="bold"

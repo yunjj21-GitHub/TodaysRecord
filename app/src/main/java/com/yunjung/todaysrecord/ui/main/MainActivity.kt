@@ -1,10 +1,15 @@
 package com.yunjung.todaysrecord.ui.main
 
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import android.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,7 +32,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() , PopupMenu.OnMenuItemClickListener {
     // DataBinding & ViewModel 관련 변수
     private lateinit var binding : ActivityMainBinding
     lateinit var viewModel: MainViewModel
@@ -71,8 +76,8 @@ class MainActivity : AppCompatActivity(){
 
         // 탐색이 수행 될 때 마다 실행
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            // 지역설정 버튼 및 텍스트 보임 여부 설정
-            setSetLocationBtnAndTextAndSortBtn(destination)
+            // 사진관 찾기 옵션 버튼 보임 유무 설정
+            setOptionBtn(destination)
 
             // BackButton 아이콘 설정
             setBackButtonIcon(destination)
@@ -85,6 +90,9 @@ class MainActivity : AppCompatActivity(){
 
         // Bottom Navigation 클릭 이벤트 설정
         initBottomNavigation()
+
+        // 정렬 버튼 클릭 이벤트 설정
+        initSortBtn()
     }
 
     // 액션바와 NavComponent를 연결
@@ -102,16 +110,24 @@ class MainActivity : AppCompatActivity(){
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-    // 지역설정 버튼과 텍스트 & 검색 버튼, 정렬 버튼 보임 여부 설정
-    private fun setSetLocationBtnAndTextAndSortBtn(destination : NavDestination){
+    // 사진관 찾기 옵션 버튼(지역설정 & 정렬) 보임 유무 설정
+    private fun setOptionBtn(destination : NavDestination){
         if(destination.id == R.id.studioFragment){
+            // 지역설정 관련
             binding.setLocationBtn.visibility = View.VISIBLE
             binding.locationText.visibility = View.VISIBLE
+
+            // 정렬 관련
             binding.sortBtn.visibility = View.VISIBLE
+            binding.sortText.visibility = View.VISIBLE
         }else{
+            // 지역설정 관련
             binding.setLocationBtn.visibility = View.INVISIBLE
             binding.locationText.visibility = View.INVISIBLE
+
+            // 정렬 관련
             binding.sortBtn.visibility = View.INVISIBLE
+            binding.sortText.visibility = View.INVISIBLE
         }
     }
 
@@ -171,7 +187,6 @@ class MainActivity : AppCompatActivity(){
                     val options = builder.setPopUpTo(R.id.boothFragment, true).build()
                     navController.navigate(R.id.action_global_boothFragment, null, options)
                 }
-
                 R.id.myPage -> {
                     val builder = NavOptions.Builder()
                     val options = builder.setPopUpTo(R.id.mypageFragment, true).build()
@@ -210,6 +225,39 @@ class MainActivity : AppCompatActivity(){
         with(autoSetArea.edit()) {
             putString("userArea", viewModel.userArea.value)
             commit()
+        }
+    }
+
+    // 정렬 버튼 클릭 이벤트 설정
+    private fun initSortBtn(){
+        binding.sortBtn.setOnClickListener {
+            showSorPopUpMenu(it) // 정렬 메뉴를 보여줌
+        }
+    }
+
+    // 정렬 메뉴를 보여줌
+    private fun showSorPopUpMenu(v : View) {
+        PopupMenu(v.context, v).apply {
+            setOnMenuItemClickListener(this@MainActivity)
+            inflate(R.menu.photostudio_sort_menu)
+            show()
+        }
+    }
+
+    // 팝업 메뉴 아이템 클릭 이벤트 설정
+    override fun onMenuItemClick(item: MenuItem): Boolean {
+        viewModel.updateSortOption(item.toString())
+        return when(item.itemId){
+            R.id.basic -> { // 기본순 정렬
+                true
+            }
+            R.id.popularity -> { // 인기순(찜 많은 순) 정렬
+                true
+            }
+            R.id.cost -> { // 가격순(가격이 낮은 순)정렬
+                true
+            }
+            else -> false
         }
     }
 }

@@ -11,11 +11,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class PhotostudioFamilyViewModel : ViewModel() {
-    private val _userArea = MutableLiveData<String>()
+    private val _userArea = MutableLiveData<String>() // 지역설정 정보 저장
+    private val _sortOption = MutableLiveData<String>() // 정렬옵션 정보 저장
     private val _photoStudioList = MutableLiveData<List<PhotoStudio>>()
 
     val userArea : LiveData<String>
         get() = _userArea
+
+    val sortOption : LiveData<String>
+        get() = _sortOption
 
     val photoStudioList : LiveData<List<PhotoStudio>>
         get() = _photoStudioList
@@ -25,12 +29,61 @@ class PhotostudioFamilyViewModel : ViewModel() {
         _userArea.value = area
     }
 
+    fun updateSortOption(selected : String){
+        _sortOption.value = selected
+    }
+
     fun updatePhotoStudioList(){
-        // 서버에서 필요한 사진관 리스트 가져오기
+        // 지역설정과 정렬옵션에 따라 사진관 리스트 가져오기
+        when (sortOption.value) {
+            "기본순" -> {
+                getPsListOfUserAreaInBasicOrder()
+            }
+            "인기순" -> {
+                getPsListOfUserAreaInPopularityOrder()
+            }
+            "가격순" -> {
+                getPsListOfUserAreaInCostOrder()
+            }
+        }
+    }
+
+    // 기본순으로 선택한 지역 사진관 가져오기
+    private fun getPsListOfUserAreaInBasicOrder(){
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO){
                 try {
                     RetrofitManager.service.getPhotoStudioByAreaAndType(area = userArea.value, type = "가족 커플 우정 사진")
+                }
+                catch (e : Throwable){
+                    listOf()
+                }
+            }
+            _photoStudioList.value = response
+        }
+    }
+
+    // 인기순으로 선택한 지역 사진관 가져오기
+    private fun getPsListOfUserAreaInPopularityOrder(){
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO){
+                try {
+                    RetrofitManager.service.getPsListOfUserAreaInPopularityOrder(area = userArea.value, type = "가족 커플 우정 사진")
+                }
+                catch (e : Throwable){
+                    listOf()
+                }
+            }
+            _photoStudioList.value = response
+        }
+    }
+
+    // 가격순으로 선택한 지역 사진관 가져오기
+    private fun getPsListOfUserAreaInCostOrder(){
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO){
+                try {
+                    RetrofitManager.service.getPsListOfUserAreaInCostOrder(area = userArea.value, type = "가족 커플 우정 사진")
                 }
                 catch (e : Throwable){
                     listOf()

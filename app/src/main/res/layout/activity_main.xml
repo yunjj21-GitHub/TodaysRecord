@@ -40,16 +40,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/setLocationBtn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/ic_location"
-            app:layout_constraintBottom_toTopOf="@+id/fragment_frame"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <!-- 프레그먼트 프레임 -->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_frame"
@@ -78,6 +68,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_nav_menu" />
 
+        <!-- 지역설정 -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/setLocationBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/ic_location"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_frame"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/locationText"
             android:layout_width="wrap_content"
@@ -89,6 +90,7 @@
             app:layout_constraintStart_toEndOf="@+id/setLocationBtn"
             app:layout_constraintTop_toTopOf="@+id/setLocationBtn" />
 
+        <!-- 정렬 -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/sortBtn"
             android:layout_width="30dp"
@@ -98,6 +100,17 @@
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="@+id/toolbar"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/sortText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.sortOption}"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/sortBtn"
+            app:layout_constraintEnd_toStartOf="@+id/sortBtn"
+            app:layout_constraintTop_toTopOf="@+id/sortBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

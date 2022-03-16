@@ -102,12 +102,12 @@ class ReviewViewHolder(private val binding : ItemReviewBinding, private val fm :
 
     private fun setMoreBtnClickEvent() {
         binding.moreBtn.setOnClickListener {
-            showPopupMenu(it)
+            showReviewMorePopupMenu(it)
         }
     }
 
-    // 팝업메뉴를 띄움
-    private fun showPopupMenu(v: View) {
+    // 리뷰 더보기 메뉴를 보여줌
+    private fun showReviewMorePopupMenu(v: View) {
         PopupMenu(v.context, v).apply {
             setOnMenuItemClickListener(this@ReviewViewHolder)
             inflate(R.menu.review_more_menu)

@@ -37,12 +37,6 @@ interface RetrofitService {
     ) : reviewReport
 
     // Read (GET)
-    @GET("/getPhotoStudioByAreaAndType")
-    suspend fun getPhotoStudioByAreaAndType(
-        @Query("area") area : String? = null,
-        @Query("type") type : String? = null
-    ) : List<PhotoStudio>
-
     @GET("/getReviewByPsId")
     suspend fun getReviewByPsId(
         @Query("psId") psId : String? = null
@@ -114,6 +108,28 @@ interface RetrofitService {
     suspend fun getPSListBySearchWord(
         @Query("searchWord") searchWord : String
     ) : List<PhotoStudio>
+
+    // 기본순
+    @GET("/getPhotoStudioByAreaAndType")
+    suspend fun getPhotoStudioByAreaAndType(
+        @Query("area") area : String? = null,
+        @Query("type") type : String? = null
+    ) : List<PhotoStudio>
+
+    // 인기순
+    @GET("/getPsListOfUserAreaInPopularityOrder")
+    suspend fun getPsListOfUserAreaInPopularityOrder(
+        @Query("area") area : String? = null,
+        @Query("type") type : String? = null
+    ) : List<PhotoStudio>
+
+    // 가격순
+    @GET("/getPsListOfUserAreaInCostOrder")
+    suspend fun getPsListOfUserAreaInCostOrder(
+        @Query("area") area : String? = null,
+        @Query("type") type : String? = null
+    ) : List<PhotoStudio>
+
 
     // Update
     // 전체를 수정하는 PUT

@@ -22,9 +22,6 @@ class PhotoStudioAdapter :
         fun initBinding(photoStudio: PhotoStudio) {
             binding.item = photoStudio // photoStudio가 binding객체의 레이아웃의 item변수로 넘어감
 
-            // cost필드 null일 때 처리
-            if(photoStudio.cost == null) binding.costText.text = "가격 정보 없음"
-
             // 사진관 대표 이미지 설정
             var photoStudioImage : String = photoStudio.image!![0]
             Glide.with(binding.root.context).load(photoStudioImage).into(binding.studioMainImage)
