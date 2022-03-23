@@ -2,6 +2,7 @@ package com.yunjung.todaysrecord.ui.mypage
 
 import android.app.Activity
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -78,6 +79,7 @@ class MypageFragment : Fragment(){
                 .into(binding.userProfile)
             return
         }else{ // bitmap string 이미지라면
+            Log.e(TAG, "프로필 사진 변경 에러 잡기")
             Glide.with(binding.root.context)
                 .load(stringToBitmap(viewModel.user.value!!.profileImage.toString()))
                 .circleCrop()

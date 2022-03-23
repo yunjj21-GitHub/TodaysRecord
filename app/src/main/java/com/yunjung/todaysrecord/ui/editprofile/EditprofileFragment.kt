@@ -35,6 +35,9 @@ class EditprofileFragment : Fragment(){
     // 사진 업로드 관련
     private lateinit var activityResultLauncher: ActivityResultLauncher<String>
 
+    // 선택된 새로운 이미지
+    private var newProfileImg : String? = null
+
     companion object{
         fun newInstance() : EditprofileFragment {
             return EditprofileFragment()
@@ -62,6 +65,8 @@ class EditprofileFragment : Fragment(){
 
         // user 업데이트
         viewModel.updateUser((requireContext().applicationContext as MyApplication).user.value!!)
+        // 선택된 이미지 기존 이미지로 초기화
+        newProfileImg = viewModel.user.value!!.profileImage.toString()
 
         // userProfile 이미지 디스플레이
         displayProfileImage()
@@ -90,8 +95,7 @@ class EditprofileFragment : Fragment(){
             // bitmap 이미지 사이즈 지정
             bitmap = Bitmap.createScaledBitmap(bitmap,50,50,true)
 
-            // 선택된 이미지(Bitmap)을 문자열로 변환
-            viewModel.updateUserProfileImg(bitmapToString(bitmap))
+            newProfileImg = bitmapToString(bitmap) // 선택된 이미지(Bitmap)을 문자열로 변환
 
             // 프로필 이미지뷰에 선택된 이미지 디스플레이
             displayProfileImage()
@@ -121,36 +125,34 @@ class EditprofileFragment : Fragment(){
 
     // 프로필 이미지 디스플레이
     private fun displayProfileImage(){
-        if(viewModel.user.value!!.profileImage == null) return
+        if(newProfileImg == null) return
 
-        if(viewModel.user.value!!.profileImage!!.substring(0, 5) == "https") { // 웹 url 이미지라면
+        if(newProfileImg!!.substring(0, 5) == "https") { // 웹 url 이미지라면
             Glide.with(binding.root.context)
-                .load(viewModel.user.value!!.profileImage)
+                .load(newProfileImg)
                 .circleCrop()
                 .into(binding.userProfile)
             return
         }else{ // bitmap string 이미지라면
             Glide.with(binding.root.context)
-                .load(stringToBitmap(viewModel.user.value!!.profileImage.toString()))
+                .load(stringToBitmap(newProfileImg.toString()))
                 .circleCrop()
                 .into(binding.userProfile)
             return
         }
     }
 
+    // 완료 버튼 클릭 이벤트 설정
     private fun initFinishBtn(){
         binding.finishBtn.setOnClickListener {
             // 입력된 nickname을 받아옴
             val newUserNickname : String = binding.editTextUserNickname.text.toString()
 
-            // 변경된 이미지를 받아옴
-            val newUserProfileImg : String = (viewModel.user.value!!.profileImage ?: null).toString()
-
             lifecycleScope.launch {
                 val response = withContext(Dispatchers.IO) {
                     RetrofitManager.service
                         .patchUserById(_id = viewModel.user.value!!._id,
-                            profileImg = newUserProfileImg,
+                            profileImg = newProfileImg,
                             nickname = newUserNickname)
                 }
 
