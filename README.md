@@ -3,7 +3,7 @@
 ### 👀 Screen Preview
 ![프리뷰](https://user-images.githubusercontent.com/83576096/160437366-3b057c06-8616-4f43-b33b-8e6d31620f31.PNG)
 
-### 📌 Main Functions
+### 💡 Main Functions
 * 로그인 및 회원가입
 * 지역별, 사진 유형별 사진관 검색 및 정렬
 * 각 사진관 상세정보 안내
@@ -39,7 +39,7 @@
 * 로그아웃
 
 ---
-### Tech Stack Used
+### 📌 Tech Stack Used
 * Android
 * Kotlin
 * Amazon EC2
@@ -49,10 +49,10 @@
 * MongoDB
 * Git
 
-### Architecture used
+### 📌 Architecture used
 * MVVM 
 
-### Library used
+### 📌 Library used
 * Glide
 * Material Design
 * AAC
