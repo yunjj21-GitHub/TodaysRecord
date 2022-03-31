@@ -1,10 +1,12 @@
 package com.yunjung.todaysrecord.ui.writereivew
 
+import android.content.ContentValues.TAG
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +24,7 @@ import com.yunjung.todaysrecord.databinding.FragmentWriteReviewBinding
 import com.yunjung.todaysrecord.network.RetrofitManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 
@@ -81,12 +84,17 @@ class WriteReivewFragment : Fragment() {
             val content : String = binding.reviewContent.text.toString()
 
             // 리뷰 등록
-            lifecycleScope.launch(Dispatchers.IO) {
-                RetrofitManager.service.postReview(
-                    viewModel.psId.value, viewModel.user.value!!._id, rating, content,
-                    viewModel.reviewImage.value)
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO){
+                    RetrofitManager.service.postReview(
+                        viewModel.psId.value,
+                        viewModel.user.value!!._id,
+                        rating,
+                        content,
+                        viewModel.reviewImage.value)
+                }
+                it.findNavController().navigateUp() // 뒤로 감
             }
-            it.findNavController().navigateUp() // 뒤로 감
         }
     }
 
