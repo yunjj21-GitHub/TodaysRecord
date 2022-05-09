@@ -28,9 +28,11 @@ import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentJoinMembershipBinding
 import com.yunjung.todaysrecord.network.RetrofitManager
+import com.yunjung.todaysrecord.ui.writereivew.WriteReivewFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 
@@ -42,6 +44,8 @@ class JoinMembershipFragment : Fragment(){
 
     // 사진 업로드 관련
     private lateinit var activityResultLauncher: ActivityResultLauncher<String>
+
+    var newProfileImageBitmap : Bitmap? = null
 
     companion object{
         fun newInstance() : JoinMembershipFragment{
@@ -80,7 +84,10 @@ class JoinMembershipFragment : Fragment(){
             binding.userIdVerificationResult.text = "사용 가능한 이메일 입니다."
         }
         if(viewModel.userProfileImg.value != null) {
-            displayProfileImage()
+            Glide.with(binding.root.context)
+                .load(viewModel.userProfileImg.value)
+                .circleCrop()
+                .into(binding.userProfile)
         }
 
         // 다양한 에디트 텍스트 값 변경 이벤트 설정
@@ -105,41 +112,25 @@ class JoinMembershipFragment : Fragment(){
 
     private fun initActivityResultLauncher(){
         activityResultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri : Uri? ->
-            // 선택한 이미지의 bitmap 생성
+            // 새로 선택한 프로필 이미지로 bitmap 생성
             val inputStream : InputStream = requireActivity().contentResolver.openInputStream(uri!!)!!
             var bitmap : Bitmap = BitmapFactory.decodeStream(inputStream)
             inputStream.close()
+            bitmap = Bitmap.createScaledBitmap(bitmap,500,500,true) // bitmap 리사이즈
 
-            // bitmap 이미지 사이즈 지정
-            bitmap = Bitmap.createScaledBitmap(bitmap,150,150,true)
+            // 새로 선택한 이미지 임시 저장
+            newProfileImageBitmap = bitmap
 
-            // 선택된 이미지(Bitmap)을 문자열로 변환
-            viewModel.updateUserProfileImg(bitmapToString(bitmap))
-
-            // 프로필 이미지뷰에 선택된 이미지 디스플레이
-            displayProfileImage()
+            // 새로 선택한 이미지 디스플레이
+            Glide.with(binding.root.context)
+                .load(newProfileImageBitmap)
+                .circleCrop()
+                .into(binding.userProfile)
         }
     }
 
     private fun getPicture(){
         activityResultLauncher.launch("image/*") // 이미지를 얻어옴
-    }
-
-    // bitmap을 string으로 변환
-    private fun bitmapToString(bitmap : Bitmap): String {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-
-        val byteArray = byteArrayOutputStream.toByteArray()
-
-        return Base64.encodeToString(byteArray, Base64.DEFAULT)
-    }
-
-    // string을 bitmap으로 변환
-    private fun stringToBitmap(encodedString : String) : Bitmap {
-        val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
     }
 
     // 다양한 에디트 텍스트 값 변경 이벤트 설정
@@ -178,25 +169,6 @@ class JoinMembershipFragment : Fragment(){
         }
     }
 
-    // 프로필 이미지 디스플레이
-    private fun displayProfileImage(){
-        if(viewModel.userProfileImg.value == null) return
-
-        if(viewModel.userProfileImg.value!!.substring(0, 5) == "https") { // 웹 url 이미지라면
-            Glide.with(binding.root.context)
-                .load(viewModel.userProfileImg.value)
-                .circleCrop()
-                .into(binding.userProfile)
-            return
-        }else{ // bitmap string 이미지라면
-            Glide.with(binding.root.context)
-                .load(stringToBitmap(viewModel.userProfileImg.value.toString()))
-                .circleCrop()
-                .into(binding.userProfile)
-            return
-        }
-    }
-
     // 중복확인 버튼 클릭 이벤트
     private fun initUserIdVerificationBtn() {
         // 이미 가입된 이메일인지 확인
@@ -219,30 +191,6 @@ class JoinMembershipFragment : Fragment(){
                         binding.userIdVerificationResult.text = "사용 가능한 이메일 입니다."
                         viewModel.updateUserIdValid(true)
                     }
-                }
-            }
-        }
-    }
-
-    // 회원가입 완료 버튼 클릭 이벤트 설정
-    private fun initFinishBtn(){
-        binding.finishBtn.setOnClickListener {
-            // 사용가능한 이메일인지 확인
-            if(checkUserEmailInputValid() && checkUserPwdInputValid() && checkUserNicknameInputValid()) {
-                // 사용자의 입력값을 받아옴
-                val email: String = binding.userid.text.toString()
-                val profileImage: String = viewModel.userProfileImg.value.toString()
-                val nickname: String = binding.userNickname.text.toString()
-                val password : String = binding.userPwd.text.toString()
-
-                // 유저를 생성
-                lifecycleScope.launch {
-                    withContext(Dispatchers.IO){
-                        RetrofitManager.service.postUser(email = email, profileImage = profileImage, nickname = nickname, pwd = password)
-                    }
-                    Toast.makeText(context, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                    // 로그인 화면으로 이동
-                    findNavController().navigateUp()
                 }
             }
         }
@@ -284,5 +232,57 @@ class JoinMembershipFragment : Fragment(){
             return false
         }
         return true
+    }
+
+    // 회원가입 완료 버튼 클릭 이벤트 설정
+    private fun initFinishBtn(){
+        binding.finishBtn.setOnClickListener {
+            // 사용가능한 이메일인지 확인
+            if(checkUserEmailInputValid() && checkUserPwdInputValid() && checkUserNicknameInputValid()) {
+                // 사용자의 입력값을 받아옴
+                val email: String = binding.userid.text.toString()
+                val nickname: String = binding.userNickname.text.toString()
+                val password : String = binding.userPwd.text.toString()
+                var profileImage: String = getProfileImage()
+
+                // 유저를 생성
+                lifecycleScope.launch {
+                    withContext(Dispatchers.IO){
+                        RetrofitManager.service.postUser(email = email, profileImage = profileImage, nickname = nickname, pwd = password)
+                    }
+                    Toast.makeText(context, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                    // 로그인 화면으로 이동
+                    findNavController().navigateUp()
+                }
+            }
+        }
+    }
+
+    // 회원가입을 완료할 프로필 이미지를 가져온다.
+    private fun getProfileImage() : String {
+        if(newProfileImageBitmap == null) { // 새로 선택된 이미지가 없다면
+            return viewModel.userProfileImg.value.toString()
+        }else { // 새로 선택된 이미지가 있다면
+            // 업로드할 이미지명
+            val profileImageName =
+                "anonymous" + System.currentTimeMillis().toString() + ".jpg"
+            // bitmap으로 MultipartBody.Part 생성
+            val bitmapRequestBody =
+                newProfileImageBitmap.let { WriteReivewFragment.BitmapRequestBody(it !!) }
+            val bitmapMultipartBody = MultipartBody.Part.createFormData(
+                "profileImage" ,
+                profileImageName ,
+                bitmapRequestBody
+            )
+
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    // 서버에 선택된 이미지 업로드
+                    RetrofitManager.service.profileImageUpload(bitmapMultipartBody)
+                }
+            }
+
+            return "http://192.168.0.11/$profileImageName"
+        }
     }
 }

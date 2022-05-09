@@ -15,6 +15,12 @@ interface RetrofitService {
         @Part reviewImage : MultipartBody.Part
     ) : String
 
+    @Multipart
+    @POST("/profileImageUpload")
+    suspend fun profileImageUpload(
+        @Part profileImage : MultipartBody.Part
+    ) : String
+
     @FormUrlEncoded
     @POST("/postReview")
     suspend fun postReview(
