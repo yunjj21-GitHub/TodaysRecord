@@ -282,7 +282,7 @@ class JoinMembershipFragment : Fragment(){
                 }
             }
 
-            return "http://192.168.0.11/$profileImageName"
+            return "http://13.209.25.227/$profileImageName"
         }
     }
 }

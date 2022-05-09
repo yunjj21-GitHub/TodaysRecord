@@ -44,9 +44,6 @@ import java.io.File
 import java.io.InputStream
 import retrofit2.http.Multipart
 
-
-
-
 class WriteReivewFragment : Fragment() {
     // DataBinding & ViewModel 관련 변수
     private lateinit var binding : FragmentWriteReviewBinding
@@ -101,30 +98,43 @@ class WriteReivewFragment : Fragment() {
         binding.finishBtn.setOnClickListener {
             val rating : Int = binding.ratingBar.numStars
             val content : String = binding.reviewContent.text.toString()
-
-            // 업로드할 이미지명
-            val reviewImageName = viewModel.user.value!!._id + System.currentTimeMillis().toString() + ".jpg"
-            // bitmap으로 MultipartBody.Part 생성
-            val bitmapRequestBody = viewModel.reviewImageBitmap.value.let { BitmapRequestBody(it!!) }
-            val bitmapMultipartBody = MultipartBody.Part.createFormData("reviewImage", reviewImageName, bitmapRequestBody)
+            val image : String? = getReviewImage()
 
             lifecycleScope.launch {
-                withContext(IO){
-                    // 서버에 해당 이미지 업로드
-                    RetrofitManager.service.reviewImageUpload(bitmapMultipartBody)
-
+                withContext(IO) {
                     // 리뷰 등록
                     RetrofitManager.service.postReview(
                         psId = viewModel.psId.value,
                         userId = viewModel.user.value!!._id,
                         rating = rating,
                         content = content,
-                        image = "http://192.168.0.11/$reviewImageName")
+                        image = image)
                 }
                 // 뒤로가기
                 it.findNavController().navigateUp()
             }
         }
+    }
+
+    private fun getReviewImage(): String? {
+        // 선택된 리뷰 이미지가 없다면
+        if(viewModel.reviewImageBitmap.value == null) return null
+
+        // 선택된 리뷰 이미지가 있다면
+        // 업로드할 이미지명
+        val reviewImageName = viewModel.user.value!!._id + System.currentTimeMillis().toString() + ".jpg"
+        // bitmap으로 MultipartBody.Part 생성
+        val bitmapRequestBody = viewModel.reviewImageBitmap.value.let { BitmapRequestBody(it!!) }
+        val bitmapMultipartBody = MultipartBody.Part.createFormData("reviewImage", reviewImageName, bitmapRequestBody)
+
+        lifecycleScope.launch {
+            withContext(IO) {
+                // 서버에 해당 이미지 업로드
+                RetrofitManager.service.reviewImageUpload(bitmapMultipartBody)
+            }
+        }
+
+        return "http://13.209.25.227/$reviewImageName"
     }
 
     private fun initCancelBtn(){

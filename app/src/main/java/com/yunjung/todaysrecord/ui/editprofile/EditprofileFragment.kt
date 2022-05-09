@@ -133,7 +133,7 @@ class EditprofileFragment : Fragment(){
                     // 로그인된 유저 정보 업데이트
                     RetrofitManager.service
                         .patchUserById(_id = viewModel.user.value!!._id,
-                            profileImg = "http://192.168.0.11/$profileImageName",
+                            profileImg = "http://13.209.25.227/$profileImageName",
                             nickname = newUserNickname)
                 }
 

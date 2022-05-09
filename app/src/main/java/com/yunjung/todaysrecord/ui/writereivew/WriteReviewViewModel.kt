@@ -11,7 +11,7 @@ import java.io.File
 class WriteReviewViewModel : ViewModel() {
     private val _user = MutableLiveData<User>()
     private val _psId = MutableLiveData<String>()
-    private val _reviewImageBitmap = MutableLiveData<Bitmap>()
+    private val _reviewImageBitmap = MutableLiveData<Bitmap?>(null)
 
     val user : LiveData<User>
         get() = _user
@@ -19,7 +19,7 @@ class WriteReviewViewModel : ViewModel() {
     val psId : LiveData<String>
         get() = _psId
 
-    val reviewImageBitmap : LiveData<Bitmap>
+    val reviewImageBitmap : LiveData<Bitmap?>
         get() = _reviewImageBitmap
 
     fun updateUser(user : User) {

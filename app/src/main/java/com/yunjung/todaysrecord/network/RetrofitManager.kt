@@ -12,7 +12,7 @@ object RetrofitManager {
 
     // Retrofit Client 인스턴스 생성
     private val retrofitClient = Retrofit.Builder()
-    .baseUrl("http://192.168.0.11:80")
+    .baseUrl("http://13.209.25.227:80")
     .addConverterFactory(GsonConverterFactory.create(gson))
     .build()
 
