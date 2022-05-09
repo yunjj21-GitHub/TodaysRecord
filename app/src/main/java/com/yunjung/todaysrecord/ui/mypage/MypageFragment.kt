@@ -70,28 +70,11 @@ class MypageFragment : Fragment(){
 
     // 프로필 이미지 디스플레이
     private fun displayProfileImage(){
-        if(viewModel.user.value!!.profileImage == null) return
-
-        if(viewModel.user.value!!.profileImage!!.substring(0, 5) == "https") { // 웹 url 이미지라면
-            Glide.with(binding.root.context)
-                .load(viewModel.user.value!!.profileImage)
-                .circleCrop()
-                .into(binding.userProfile)
-            return
-        }else{ // bitmap string 이미지라면
-            Log.e(TAG, "프로필 사진 변경 에러 잡기")
-            Glide.with(binding.root.context)
-                .load(stringToBitmap(viewModel.user.value!!.profileImage.toString()))
-                .circleCrop()
-                .into(binding.userProfile)
-            return
-        }
-    }
-
-    // string을 bitmap으로 변환
-    private fun stringToBitmap(encodedString : String) : Bitmap {
-        val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+        Glide.with(binding.root.context)
+            .load(viewModel.user.value!!.profileImage)
+            .fallback(R.drawable.ic_profile)
+            .circleCrop()
+            .into(binding.userProfile)
     }
 
     private fun initEditProfileBtn(){

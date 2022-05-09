@@ -17,6 +17,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentReviewBinding
@@ -142,19 +143,17 @@ class ReviewFragment : Fragment() {
                 }
             }
             if(response.isNotEmpty()){
-                val preImage1 = stringToBitmap(response[0].image.toString())
-                binding.preImageView1.setImageBitmap(preImage1)
+                val preImage1 = response[0].image.toString()
+                Glide.with(binding.root.context)
+                    .load(preImage1)
+                    .into(binding.preImageView1)
             }
             if(response.size >= 2){
-                val preImage2 = stringToBitmap(response[1].image.toString())
-                binding.preImageView2.setImageBitmap(preImage2)
+                val preImage2 = response[1].image.toString()
+                Glide.with(binding.root.context)
+                    .load(preImage2)
+                    .into(binding.preImageView2)
             }
         }
-    }
-
-    // 문자열을 Bitmap으로 변환
-    private fun stringToBitmap(encodedString : String) : Bitmap? {
-        val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
     }
 }

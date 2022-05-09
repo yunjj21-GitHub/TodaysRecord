@@ -1,10 +1,12 @@
 package com.yunjung.todaysrecord.ui.writereivew
 
 import android.content.ContentValues.TAG
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toFile
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -22,11 +25,27 @@ import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentWriteReviewBinding
 import com.yunjung.todaysrecord.network.RetrofitManager
+import com.yunjung.todaysrecord.network.api.RetrofitService
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.MultipartBody.Part.*
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okio.BufferedSink
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.InputStream
+import retrofit2.http.Multipart
+
+
+
 
 class WriteReivewFragment : Fragment() {
     // DataBinding & ViewModel 관련 변수
@@ -83,17 +102,27 @@ class WriteReivewFragment : Fragment() {
             val rating : Int = binding.ratingBar.numStars
             val content : String = binding.reviewContent.text.toString()
 
-            // 리뷰 등록
+            // 업로드할 이미지명
+            val reviewImageName = viewModel.user.value!!._id + System.currentTimeMillis().toString() + ".jpg"
+            // bitmap으로 MultipartBody.Part 생성
+            val bitmapRequestBody = viewModel.reviewImageBitmap.value.let { BitmapRequestBody(it!!) }
+            val bitmapMultipartBody = MultipartBody.Part.createFormData("reviewImage", reviewImageName, bitmapRequestBody)
+
             lifecycleScope.launch {
-                withContext(Dispatchers.IO){
+                withContext(IO){
+                    // 서버에 해당 이미지 업로드
+                    RetrofitManager.service.reviewImageUpload(bitmapMultipartBody)
+
+                    // 리뷰 등록
                     RetrofitManager.service.postReview(
-                        viewModel.psId.value,
-                        viewModel.user.value!!._id,
-                        rating,
-                        content,
-                        viewModel.reviewImage.value)
+                        psId = viewModel.psId.value,
+                        userId = viewModel.user.value!!._id,
+                        rating = rating,
+                        content = content,
+                        image = "http://192.168.0.11/$reviewImageName")
                 }
-                it.findNavController().navigateUp() // 뒤로 감
+                // 뒤로가기
+                it.findNavController().navigateUp()
             }
         }
     }
@@ -112,19 +141,17 @@ class WriteReivewFragment : Fragment() {
 
     private fun initActivityResultLauncher(){
         activityResultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri : Uri? ->
-            // 선택한 이미지의 bitmap 생성
+            // 갤러리에서 선택한 이미지로 bitmap 생성
             val inputStream : InputStream = requireActivity().contentResolver.openInputStream(uri!!)!!
             var bitmap : Bitmap = BitmapFactory.decodeStream(inputStream)
             inputStream.close()
-
-            // bitmap 이미지 사이즈 지정
-            bitmap = Bitmap.createScaledBitmap(bitmap,150,150,true)
-
-            // selectedImage에 선택된 이미지 디스플레이
+            bitmap = Bitmap.createScaledBitmap(bitmap,500,500,true) // bitmap 리사이즈
+            
+            // 생성한 bitmap을 이미지뷰에 띄움
             binding.selectedImage.setImageBitmap(bitmap)
 
-            // 선택된 이미지(Bitmap)을 문자열로 변환
-            viewModel.updateReviewImage(bitmapToString(bitmap))
+            // viewModel의 reviewImageBitmap 갱신
+            viewModel.updateReviewImageBitmap(bitmap)
         }
     }
 
@@ -132,14 +159,11 @@ class WriteReivewFragment : Fragment() {
         activityResultLauncher.launch("image/*") // 이미지를 얻어옴
     }
 
-    // bitmap 이미지를 문자열로 변환
-    private fun bitmapToString(bitmap : Bitmap): String {
-        val byteArrayOutputStream = ByteArrayOutputStream()
+    class BitmapRequestBody(private val bitmap: Bitmap) : RequestBody() {
+        override fun contentType(): MediaType? = "image/jpeg".toMediaType()
 
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-
-        val byteArray = byteArrayOutputStream.toByteArray()
-
-        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+        override fun writeTo(sink: BufferedSink) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, sink.outputStream())
+        }
     }
 }

@@ -21,14 +21,9 @@ class ImageAdapter : ListAdapter<Review, ImageAdapter.ImageViewHolder>(ReviewDif
         fun initBinding(review: Review) {
             binding.item = review
 
-            val bitmap = stringToBitmap(review.image.toString())
-            binding.imageView.setImageBitmap(bitmap)
-        }
-
-        // String을 Bitmap으로 변환
-        fun stringToBitmap(encodedString : String) : Bitmap? {
-            val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
-            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+            Glide.with(binding.root.context)
+                .load(review.image)
+                .into(binding.imageView)
         }
     }
 

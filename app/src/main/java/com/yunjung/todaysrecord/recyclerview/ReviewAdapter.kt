@@ -94,10 +94,10 @@ class ReviewViewHolder(private val binding : ItemReviewBinding, private val fm :
     }
 
     private fun displayReviewImage(reviewImage : String){
-        val encodeByte = Base64.decode(reviewImage, Base64.DEFAULT)
-        val bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
-
-        binding.reviewImage.setImageBitmap(bitmap)
+        Glide.with(binding.root.context)
+            .load(reviewImage)
+            .override(500, 500)
+            .into(binding.reviewImage)
     }
 
     private fun setMoreBtnClickEvent() {

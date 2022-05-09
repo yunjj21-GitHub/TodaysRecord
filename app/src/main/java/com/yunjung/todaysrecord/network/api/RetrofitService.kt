@@ -9,6 +9,12 @@ import javax.annotation.PostConstruct
 
 interface RetrofitService {
     // Create (POST)
+    @Multipart
+    @POST("/reviewImageUpload")
+    suspend fun reviewImageUpload(
+        @Part reviewImage : MultipartBody.Part
+    ) : String
+
     @FormUrlEncoded
     @POST("/postReview")
     suspend fun postReview(
