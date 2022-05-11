@@ -52,7 +52,7 @@ class PhotostudioIdViewModel : ViewModel() {
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO){
                 try {
-                    RetrofitManager.service.getPhotoStudioByAreaAndType(area = userArea.value, type = "증명사진")
+                    RetrofitManager.service.getPhotoStudioByAreaAndType(area = userArea.value, type = "증명")
                 }
                 catch (e : Throwable){
                     listOf()
@@ -67,7 +67,7 @@ class PhotostudioIdViewModel : ViewModel() {
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO){
                 try {
-                    RetrofitManager.service.getPsListOfUserAreaInPopularityOrder(area = userArea.value, type = "증명사진")
+                    RetrofitManager.service.getPsListOfUserAreaInPopularityOrder(area = userArea.value, type = "증명")
                 }
                 catch (e : Throwable){
                     listOf()
@@ -82,7 +82,7 @@ class PhotostudioIdViewModel : ViewModel() {
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO){
                 try {
-                    RetrofitManager.service.getPsListOfUserAreaInCostOrder(area = userArea.value, type = "증명사진")
+                    RetrofitManager.service.getPsListOfUserAreaInCostOrder(area = userArea.value, type = "증명")
                 }
                 catch (e : Throwable){
                     listOf()

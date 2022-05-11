@@ -11,9 +11,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentStudioBinding
 import com.yunjung.todaysrecord.ui.photostudid.PhotostudioIdFragment
-import com.yunjung.todaysrecord.ui.photostudiofamily.PhotostudioFamilyFragment
-import com.yunjung.todaysrecord.ui.photostudioother.PhotostudioOtherFragment
-import com.yunjung.todaysrecord.ui.photostudioprofile.PhotostudioProfileFragment
+import com.yunjung.todaysrecord.ui.photostudio_family.PhotostudioFamilyFragment
+import com.yunjung.todaysrecord.ui.photostudio_snap.PhotostudioSnapFragment
+import com.yunjung.todaysrecord.ui.photostudio_profile.PhotostudioProfileFragment
+import com.yunjung.todaysrecord.ui.photostudio_self.PhotostudioSelfFragment
 import com.yunjung.todaysrecord.viewpager.ViewpagerAdapter
 
 class StudioFragment : Fragment(){
@@ -53,17 +54,19 @@ class StudioFragment : Fragment(){
         pagerAdapter.addFragment(PhotostudioIdFragment.newInstance())
         pagerAdapter.addFragment(PhotostudioProfileFragment.newInstance())
         pagerAdapter.addFragment(PhotostudioFamilyFragment.newInstance())
-        pagerAdapter.addFragment(PhotostudioOtherFragment.newInstance())
+        pagerAdapter.addFragment(PhotostudioSnapFragment.newInstance())
+        pagerAdapter.addFragment(PhotostudioSelfFragment.newInstance())
         binding.viewPager.adapter = pagerAdapter
 
         // 뷰페이저에 탭레이아웃 부착
         TabLayoutMediator(binding.tabLayout, binding.viewPager){ tab, position ->
             // 탭 아이템의 이름 지정
             when(position){
-                0 -> tab.text = "증명사진"
-                1 -> tab.text = "프로필사진"
-                2 -> tab.text = "가족 커플\n우정 사진"
-                3 -> tab.text = "기타"
+                0 -> tab.text = "증명"
+                1 -> tab.text = "프로필"
+                2 -> tab.text = "가족"
+                3-> tab.text = "스냅\n컨셉"
+                4 -> tab.text = "셀프"
             }
         }.attach()
     }
