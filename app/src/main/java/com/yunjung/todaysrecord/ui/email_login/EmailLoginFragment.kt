@@ -1,8 +1,10 @@
 package com.yunjung.todaysrecord.ui.email_login
 
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentEmailLoginBinding
+import com.yunjung.todaysrecord.models.User
 import com.yunjung.todaysrecord.network.RetrofitManager
 import com.yunjung.todaysrecord.ui.login.LoginFragmentDirections
 import kotlinx.coroutines.Dispatchers
@@ -90,9 +93,9 @@ class EmailLoginFragment : Fragment() {
             }
 
             if(response != null){ // 로그인 성공 시
+                Toast.makeText(context, "로그인 되었습니다.", Toast.LENGTH_SHORT).show()
                 (requireContext().applicationContext as MyApplication).user.value = response // 로그인 처리
                 saveAutoLoginInfo(response._id!!) // 추후 자동로그인을 위해 로그인 정보 저장 (자동 로그인 처리)
-                Toast.makeText(context, "로그인 되었습니다.", Toast.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_emailLoginFragment_to_mainActivity)
 
                 // StartActivity 종료

@@ -282,7 +282,7 @@ class JoinMembershipFragment : Fragment(){
                 }
             }
 
-            return "http://13.209.25.227/$profileImageName"
+            return "http://todaysrecord.co.kr/$profileImageName"
         }
     }
 }

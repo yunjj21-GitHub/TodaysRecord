@@ -134,7 +134,7 @@ class WriteReivewFragment : Fragment() {
             }
         }
 
-        return "http://13.209.25.227/$reviewImageName"
+        return "http:/todaysrecord.co.kr/$reviewImageName"
     }
 
     private fun initCancelBtn(){

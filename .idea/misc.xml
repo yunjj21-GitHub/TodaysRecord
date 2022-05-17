@@ -24,10 +24,10 @@
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/drawable/studio_top_btn_clicked.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/drawable/studio_type_background.xml" value="0.3764102564102564" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/drawable/white_button.xml" value="0.22" />
-        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/activity_start.xml" value="0.25" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_booth.xml" value="0.18" />
-        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_detail.xml" value="0.27247191011235955" />
+        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_detail.xml" value="0.31258644536652835" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_editprofile.xml" value="0.25" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_email_login.xml" value="0.25" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_information.xml" value="0.1" />
@@ -58,6 +58,7 @@
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/menu/photostudio_sort_menu.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/menu/review_more_menu.xml" value="0.1" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/mipmap-anydpi-v26/ic_app.xml" value="0.2" />
+        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/xml/network_security_config.xml" value="0.1" />
       </map>
     </option>
   </component>
