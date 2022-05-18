@@ -72,10 +72,10 @@ class LoginFragment : Fragment() {
         setEmailLoginBtn()
     }
 
-    private fun setEmailSignUpBtn(){
+    private fun setEmailSignUpBtn(){ // 이메일로 회원가입
         binding.emailSignUpBtn.setOnClickListener {
-            // 이메일로 회원가입 화면으로 이동
-            val direction = LoginFragmentDirections.actionLoginFragmentToJoinMembershipFragment(null, null)
+            // 약관 동의 화면으로 이동
+            val direction = LoginFragmentDirections.actionLoginFragmentToConsentFragment(null, null)
             findNavController().navigate(direction)
         }
     }

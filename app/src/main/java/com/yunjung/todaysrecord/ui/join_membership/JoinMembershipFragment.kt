@@ -251,8 +251,9 @@ class JoinMembershipFragment : Fragment(){
                         RetrofitManager.service.postUser(email = email, profileImage = profileImage, nickname = nickname, pwd = password)
                     }
                     Toast.makeText(context, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+
                     // 로그인 화면으로 이동
-                    findNavController().navigateUp()
+                    findNavController().navigate(R.id.action_joinMembershipFragment_to_loginFragment)
                 }
             }
         }

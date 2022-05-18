@@ -101,8 +101,8 @@ class NaverLoginManager(val loginFragment: LoginFragment) {
                 // StartActivity 종료
                 loginFragment.requireActivity().finish()
             }else{ // 가입되어 있지 않은 이메일이라면 회원가입처리
-                // 회원가입 화면으로 이동
-                val direction = LoginFragmentDirections.actionLoginFragmentToJoinMembershipFragment(email, profileImage)
+                // 약관 동의 화면으로 이동
+                val direction = LoginFragmentDirections.actionLoginFragmentToConsentFragment(email, profileImage)
                 findNavController(loginFragment).navigate(direction)
             }
         }

@@ -10,9 +10,6 @@
         android:name="com.yunjung.todaysrecord.ui.login.LoginFragment"
         android:label="LoginFragment" >
         <action
-            android:id="@+id/action_loginFragment_to_joinMembershipFragment"
-            app:destination="@id/joinMembershipFragment" />
-        <action
             android:id="@+id/action_loginFragment_to_emailLoginFragment"
             app:destination="@id/emailLoginFragment" />
         <action
@@ -20,6 +17,9 @@
             app:destination="@id/mainActivity"
             app:launchSingleTop="false"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_loginFragment_to_consentFragment"
+            app:destination="@id/consentFragment" />
     </fragment>
     <fragment
         android:id="@+id/joinMembershipFragment"
@@ -33,21 +33,54 @@
             android:name="profileImage"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_joinMembershipFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/emailLoginFragment"
         android:name="com.yunjung.todaysrecord.ui.email_login.EmailLoginFragment"
         android:label="EmailLoginFragment" >
         <action
-            android:id="@+id/action_emailLoginFragment_to_joinMembershipFragment"
-            app:destination="@id/joinMembershipFragment" />
-        <action
             android:id="@+id/action_emailLoginFragment_to_mainActivity"
             app:destination="@id/mainActivity"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_emailLoginFragment_to_consentFragment"
+            app:destination="@id/consentFragment" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
         android:name="com.yunjung.todaysrecord.ui.main.MainActivity"
         android:label="MainActivity" />
+    <fragment
+        android:id="@+id/consentFragment"
+        android:name="com.yunjung.todaysrecord.ui.consent.ConsentFragment"
+        android:label="ConsentFragment" >
+        <action
+            android:id="@+id/action_consentFragment_to_consentDetailFragment"
+            app:destination="@id/consentDetailFragment" />
+        <action
+            android:id="@+id/action_consentFragment_to_joinMembershipFragment"
+            app:destination="@id/joinMembershipFragment" />
+        <argument
+            android:name="email"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="profileImage"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/consentDetailFragment"
+        android:name="com.yunjung.todaysrecord.ui.consent_detail.ConsentDetailFragment"
+        android:label="ConsentDetailFragment">
+
+        <argument
+            android:name="name"
+            app:argType="string" />
+    </fragment>
 </navigation>

@@ -116,11 +116,11 @@ class EmailLoginFragment : Fragment() {
         }
     }
 
-    // 회원가입 버튼 클릭 이벤트 설정
+    // (이메일로) 회원가입 버튼 클릭 이벤트 설정
     private fun setSignUpBtn(){
         binding.emailSignUp.setOnClickListener {
-            // 이메일로 회원가입 화면으로 이동
-            val direction = EmailLoginFragmentDirections.actionEmailLoginFragmentToJoinMembershipFragment(null, null)
+            // 약관 동의 화면으로 이동
+            val direction = EmailLoginFragmentDirections.actionEmailLoginFragmentToConsentFragment(null, null)
             findNavController().navigate(direction)
         }
     }

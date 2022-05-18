@@ -106,6 +106,8 @@ class StartActivity : AppCompatActivity() {
 
                 if(destination.id == R.id.joinMembershipFragment) binding.title.text = "이메일로 회원가입"
                 else if(destination.id == R.id.emailLoginFragment) binding.title.text = "이메일 로그인"
+                else if(destination.id == R.id.consentFragment ||
+                    destination.id == R.id.consentDetailFragment) binding.title.text = "약관동의"
             }
         }
     }

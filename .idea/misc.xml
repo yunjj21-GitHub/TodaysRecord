@@ -12,6 +12,7 @@
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/drawable/ic_launcher_background.xml" value="0.17592592592592593" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/drawable/ic_location.xml" value="0.1" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/drawable/ic_more.xml" value="0.38229166666666664" />
+        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/drawable/ic_next.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/drawable/ic_profile_image_edit.xml" value="0.17592592592592593" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/drawable/ic_review_delete.xml" value="0.246875" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/drawable/profile_frame.xml" value="0.1824074074074074" />
@@ -27,6 +28,8 @@
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/activity_start.xml" value="0.25" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_booth.xml" value="0.18" />
+        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_consent.xml" value="0.25824175824175827" />
+        <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_consent_detail.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_detail.xml" value="0.31258644536652835" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_editprofile.xml" value="0.25" />
         <entry key="..\:/Users/Desktop/GitHub/Todays_Record/app/src/main/res/layout/fragment_email_login.xml" value="0.25" />
