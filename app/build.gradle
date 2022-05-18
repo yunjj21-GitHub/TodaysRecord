@@ -20,7 +20,7 @@ android {
         applicationId "com.yunjung.todaysrecord"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 9 // 1
+        versionCode 10 // 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

@@ -243,7 +243,7 @@ class JoinMembershipFragment : Fragment(){
                 val email: String = binding.userid.text.toString()
                 val nickname: String = binding.userNickname.text.toString()
                 val password : String = binding.userPwd.text.toString()
-                var profileImage: String = getProfileImage()
+                var profileImage: String? = getProfileImage()
 
                 // 유저를 생성
                 lifecycleScope.launch {
@@ -260,9 +260,10 @@ class JoinMembershipFragment : Fragment(){
     }
 
     // 회원가입을 완료할 프로필 이미지를 가져온다.
-    private fun getProfileImage() : String {
+    private fun getProfileImage() : String? {
         if(newProfileImageBitmap == null) { // 새로 선택된 이미지가 없다면
-            return viewModel.userProfileImg.value.toString()
+            if (viewModel.userProfileImg.value != null) return viewModel.userProfileImg.value.toString()
+            else return null
         }else { // 새로 선택된 이미지가 있다면
             // 업로드할 이미지명
             val profileImageName =

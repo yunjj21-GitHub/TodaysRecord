@@ -72,6 +72,7 @@ class EditprofileFragment : Fragment(){
         // 기존 이미지로 프로필 이미지 디스플레이
         Glide.with(binding.root.context)
             .load(viewModel.user.value!!.profileImage)
+            .fallback(R.drawable.ic_profile)
             .circleCrop()
             .into(binding.userProfile)
 
@@ -114,32 +115,58 @@ class EditprofileFragment : Fragment(){
     // 완료 버튼 클릭 이벤트 설정
     private fun initFinishBtn(){
         binding.finishBtn.setOnClickListener {
-            // 입력된 nickname을 받아옴
-            val newUserNickname : String = binding.editTextUserNickname.text.toString()
-
-            // 업로드할 이미지명
-            val profileImageName = viewModel.user.value!!._id + System.currentTimeMillis().toString() + ".jpg"
-            // bitmap으로 MultipartBody.Part 생성
-            val bitmapRequestBody = newProfileImageBitmap.let { WriteReivewFragment.BitmapRequestBody(it!!) }
-            val bitmapMultipartBody = MultipartBody.Part.createFormData("profileImage", profileImageName, bitmapRequestBody)
-
-            lifecycleScope.launch {
-                withContext(IO) {
-                    // 서버에 선택된 이미지 업로드
-                    RetrofitManager.service.profileImageUpload(bitmapMultipartBody)
-                }
-
-                val response = withContext(IO) {
-                    // 로그인된 유저 정보 업데이트
-                    RetrofitManager.service
-                        .patchUserById(_id = viewModel.user.value!!._id,
-                            profileImg = "http:/todaysrecord.co.kr/$profileImageName",
-                            nickname = newUserNickname)
-                }
-
-                (requireContext().applicationContext as MyApplication).user.value = response
-                findNavController().navigateUp() // 뒤로감
+            if(newProfileImageBitmap != null){
+                updateProfileWithNewProfileImage()
+            }else{
+                updateProfile()
             }
+        }
+    }
+
+    fun updateProfileWithNewProfileImage(){
+        // 입력된 nickname을 받아옴
+        val newUserNickname : String = binding.editTextUserNickname.text.toString()
+
+        // 업로드할 이미지명
+        val profileImageName = viewModel.user.value!!._id + System.currentTimeMillis().toString() + ".jpg"
+        // bitmap으로 MultipartBody.Part 생성
+        val bitmapRequestBody = newProfileImageBitmap.let { WriteReivewFragment.BitmapRequestBody(it!!) }
+        val bitmapMultipartBody = MultipartBody.Part.createFormData("profileImage", profileImageName, bitmapRequestBody)
+
+        lifecycleScope.launch {
+            withContext(IO) {
+                // 서버에 선택된 이미지 업로드
+                RetrofitManager.service.profileImageUpload(bitmapMultipartBody)
+            }
+
+            val response = withContext(IO) {
+                // 로그인된 유저 정보 업데이트
+                RetrofitManager.service
+                    .patchUserById(_id = viewModel.user.value!!._id,
+                        profileImg = "http:/todaysrecord.co.kr/$profileImageName",
+                        nickname = newUserNickname)
+            }
+
+            (requireContext().applicationContext as MyApplication).user.value = response
+            findNavController().navigateUp() // 뒤로감
+        }
+    }
+
+    fun updateProfile(){
+        // 입력된 nickname을 받아옴
+        val newUserNickname : String = binding.editTextUserNickname.text.toString()
+
+        lifecycleScope.launch {
+            val response = withContext(IO) {
+                // 로그인된 유저 정보 업데이트
+                RetrofitManager.service
+                    .patchUserById(_id = viewModel.user.value!!._id,
+                        profileImg = viewModel.user.value!!.profileImage,
+                        nickname = newUserNickname)
+            }
+
+            (requireContext().applicationContext as MyApplication).user.value = response
+            findNavController().navigateUp() // 뒤로감
         }
     }
 }
