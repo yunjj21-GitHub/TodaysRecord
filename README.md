@@ -80,3 +80,6 @@
 * Coroutine
 * Gson
 * Navar, KaKao, Google API
+
+---
+### 🔗 Google Play https://play.google.com/store/apps/details?id=com.yunjung.todaysrecord
