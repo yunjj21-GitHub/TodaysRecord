@@ -85,17 +85,23 @@ class ReviewViewModel : ViewModel() {
     }
 
     fun updateStarNum(){
-        if(reviewList.value!!.isEmpty()) return
+        _starNum.value!![0] = 0
+        _starNum.value!![1] = 0
+        _starNum.value!![2] = 0
+        _starNum.value!![3] = 0
+        _starNum.value!![4] = 0
 
         var total = 0
-        for(review in reviewList.value!!) {
-            total += review.rating!!
-            when(review.rating){
-                5 -> _starNum.value!![0]++
-                4 -> _starNum.value!![1]++
-                3 -> _starNum.value!![2]++
-                2 -> _starNum.value!![3]++
-                1 -> _starNum.value!![4]++
+        if(reviewList.value!!.isNotEmpty()) {
+            for(review in reviewList.value!!) {
+                total += review.rating!!
+                when(review.rating){
+                    5 -> _starNum.value!![0]++
+                    4 -> _starNum.value!![1]++
+                    3 -> _starNum.value!![2]++
+                    2 -> _starNum.value!![3]++
+                    1 -> _starNum.value!![4]++
+                }
             }
         }
         updateStarRatio()
@@ -103,21 +109,29 @@ class ReviewViewModel : ViewModel() {
     }
 
     private fun updateStarRatio(){
-        if(reviewList.value!!.isEmpty()) return
-
-        val tmpList : List<Int> = listOf((starNum.value!![0]*100)/reviewList.value!!.size,
-            (starNum.value!![1]*100)/reviewList.value!!.size,
-            (starNum.value!![2]*100)/reviewList.value!!.size,
-            (starNum.value!![3]*100)/reviewList.value!!.size,
-            (starNum.value!![4]*100)/reviewList.value!!.size
-        )
+        val tmpList : List<Int>
+        if(reviewList.value!!.isEmpty()){
+            tmpList = listOf(0, 0, 0, 0, 0)
+        }
+        else {
+            tmpList = listOf(
+                (starNum.value!![0]*100)/reviewList.value!!.size,
+                (starNum.value!![1]*100)/reviewList.value!!.size,
+                (starNum.value!![2]*100)/reviewList.value!!.size,
+                (starNum.value!![3]*100)/reviewList.value!!.size,
+                (starNum.value!![4]*100)/reviewList.value!!.size
+            )
+        }
 
         _starRatio.value = tmpList
     }
 
     private fun updateReviewAvg(total : Int){
-        if(reviewList.value!!.isEmpty()) return
-
-        _reviewAvg.value = total / _reviewList.value!!.size
+        if(reviewList.value!!.isEmpty()){
+            _reviewAvg.value = 0
+        }
+        else{
+            _reviewAvg.value = total / _reviewList.value!!.size
+        }
     }
 }

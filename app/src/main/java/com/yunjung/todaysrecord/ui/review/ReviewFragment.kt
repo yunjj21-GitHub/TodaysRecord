@@ -98,11 +98,13 @@ class ReviewFragment : Fragment() {
         })
 
         viewModel.reviewAvg.observe(viewLifecycleOwner, Observer {
+            Log.e(TAG, "실행1")
             binding.reviewAvg.text = it.toString()
             binding.ratingBar.rating = it.toFloat()
         })
 
         viewModel.starRatio.observe(viewLifecycleOwner, Observer {
+            Log.e(TAG, "실행2")
             binding.fiveStar.progress = it[0]
             binding.fourStar.progress = it[1]
             binding.threeStar.progress = it[2]
@@ -139,19 +141,27 @@ class ReviewFragment : Fragment() {
         }
     }
 
-    private fun initImageReviewPreview(){
-        viewModel.photoReviewList.observe(viewLifecycleOwner, {
-            Log.e(TAG, "실행")
-            if(it.isNotEmpty()){
+    private fun initImageReviewPreview() {
+        viewModel.photoReviewList.observe(viewLifecycleOwner , {
+            if (it.isNotEmpty()) {
                 val preImage1 = it[0].image.toString()
                 Glide.with(binding.root.context)
                     .load(preImage1)
                     .into(binding.preImageView1)
+            } else {
+                Glide.with(binding.root.context)
+                    .load(R.drawable.ic_empty_image)
+                    .into(binding.preImageView1)
             }
-            if(it.size >= 2){
+
+            if (it.size >= 2) {
                 val preImage2 = it[1].image.toString()
                 Glide.with(binding.root.context)
                     .load(preImage2)
+                    .into(binding.preImageView2)
+            } else {
+                Glide.with(binding.root.context)
+                    .load(R.drawable.ic_empty_image)
                     .into(binding.preImageView2)
             }
         })

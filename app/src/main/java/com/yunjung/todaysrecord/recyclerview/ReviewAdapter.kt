@@ -148,14 +148,14 @@ class ReviewViewHolder(private val binding : ItemReviewBinding, private val fm :
         if(loggedUserId == review.userId){
             CoroutineScope(Dispatchers.IO).launch {
                 RetrofitManager.service.deleteReviewById(review._id)
+
+                if(fg is ReviewFragment) fg.viewModel.updateReviewList()
+                if(fg is MyreviewFragment) fg.viewModel.updateReviewList()
             }
             Toast.makeText(binding.root.context, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
         }
         else{
             Toast.makeText(binding.root.context, "권한이 없습니다.", Toast.LENGTH_SHORT).show()
         }
-
-        if(fg is ReviewFragment) fg.viewModel.updateReviewList()
-        if(fg is MyreviewFragment) fg.viewModel.updateReviewList()
     }
 }
