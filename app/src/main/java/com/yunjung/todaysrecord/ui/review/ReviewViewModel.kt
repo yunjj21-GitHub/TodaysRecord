@@ -2,10 +2,7 @@ package com.yunjung.todaysrecord.ui.review
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.yunjung.todaysrecord.models.PhotoStudio
 import com.yunjung.todaysrecord.models.Review
 import com.yunjung.todaysrecord.models.User
@@ -18,6 +15,7 @@ class ReviewViewModel : ViewModel() {
     private val _user = MutableLiveData<User>()
     private val _photoStudio = MutableLiveData<PhotoStudio>()
     private val _reviewList = MutableLiveData<List<Review>>() // 사진관의 리뷰리스트
+    private val _photoReviewList = MutableLiveData<List<Review>>() // 사진관의 사진 리뷰리스트
     private val _reviewNum = MutableLiveData(0) // 리뷰의 개수
     private val _starNum = MutableLiveData<MutableList<Int>>(mutableListOf(0, 0, 0, 0, 0)) // 각 별점의 개수
     private val _starRatio = MutableLiveData<List<Int>>() // 각 별점의 비율을 저장
@@ -31,6 +29,9 @@ class ReviewViewModel : ViewModel() {
 
     val reviewList : LiveData<List<Review>>
         get() = _reviewList
+
+    val photoReviewList : LiveData<List<Review>>
+        get() = _photoReviewList
 
     val reviewNum : LiveData<Int>
         get() = _reviewNum
@@ -65,6 +66,21 @@ class ReviewViewModel : ViewModel() {
             _reviewList.value = response
             _reviewNum.value = response.size
             updateStarNum()
+
+            updatePhotoReviewList()
+        }
+    }
+
+    fun updatePhotoReviewList(){
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                try {
+                    RetrofitManager.service?.getImageReviewByPsId(photoStudio.value !!._id)
+                } catch (e: Throwable) {
+                    listOf()
+                }
+            }
+            _photoReviewList.value = response
         }
     }
 

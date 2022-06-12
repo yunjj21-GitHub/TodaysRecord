@@ -53,20 +53,24 @@ class ConsentFragment : Fragment(){
         }
 
         // '전체동의' 체크박스 클릭 이벤트 설정
-        binding.allConsent.setOnCheckedChangeListener { view , isChecked ->
-            binding.firstConsent.isChecked = isChecked
-            binding.secondConsent.isChecked = isChecked
+        binding.allConsent.setOnClickListener {
+            val isAllConsentChecked = binding.allConsent.isChecked
 
-            isFirstConsentChecked.value = isChecked
-            isSecondConsentChecked.value = isChecked
+            binding.firstConsent.isChecked = isAllConsentChecked
+            binding.secondConsent.isChecked = isAllConsentChecked
+
+            isFirstConsentChecked.value = isAllConsentChecked
+            isSecondConsentChecked.value = isAllConsentChecked
         }
 
         isFirstConsentChecked.observe(viewLifecycleOwner, Observer {
             if(isFirstConsentChecked.value == true
                 && isSecondConsentChecked.value == true) {
+                binding.allConsent.isChecked = true
                 binding.nextStepBtn.setBackgroundColor(Color.parseColor("#512771"))
                 binding.nextStepBtn.isClickable = true
             }else{
+                binding.allConsent.isChecked = false
                 binding.nextStepBtn.setBackgroundColor(Color.parseColor("#AAAAAA"))
                 binding.nextStepBtn.isClickable = false // 아무런 동작을 하지 않음
             }
@@ -75,9 +79,11 @@ class ConsentFragment : Fragment(){
         isSecondConsentChecked.observe(viewLifecycleOwner, Observer {
             if(isFirstConsentChecked.value == true
                 && isSecondConsentChecked.value == true) {
+                binding.allConsent.isChecked = true
                 binding.nextStepBtn.setBackgroundColor(Color.parseColor("#512771"))
                 binding.nextStepBtn.isClickable = true
             }else{
+                binding.allConsent.isChecked = false
                 binding.nextStepBtn.setBackgroundColor(Color.parseColor("#AAAAAA"))
                 binding.nextStepBtn.isClickable = false // 아무런 동작을 하지 않음
             }

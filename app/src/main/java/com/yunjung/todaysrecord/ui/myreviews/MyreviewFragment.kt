@@ -64,7 +64,7 @@ class MyreviewFragment : Fragment(){
 
     // 리사이클러뷰 초기설정
     private fun initRecycler(){
-        binding.recyclerView.adapter = ReviewAdapter(requireFragmentManager())
+        binding.recyclerView.adapter = ReviewAdapter(requireFragmentManager(), this)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
     }
 

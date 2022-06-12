@@ -87,8 +87,14 @@
         <argument
             android:name="psId"
             app:argType="string" />
-    </fragment><action android:id="@+id/action_global_writeReivewFragment" app:destination="@id/writeReivewFragment"/>
-    <action android:id="@+id/action_global_detailFragment" app:destination="@id/detailFragment"/>
+    </fragment>
+    <action
+        android:id="@+id/action_global_writeReivewFragment"
+        app:destination="@id/writeReivewFragment" />
+    <action
+        android:id="@+id/action_global_detailFragment"
+        app:destination="@id/detailFragment"
+        app:popUpTo="@id/studioFragment" />
     <activity
         android:id="@+id/startActivity"
         android:name="com.yunjung.todaysrecord.ui.start.StartActivity"

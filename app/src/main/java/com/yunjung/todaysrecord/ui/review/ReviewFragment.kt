@@ -1,15 +1,19 @@
 package com.yunjung.todaysrecord.ui.review
 
+import android.content.ContentValues.TAG
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -70,8 +74,11 @@ class ReviewFragment : Fragment() {
         // reviewList 업데이트
         viewModel.updateReviewList()
 
-        // 사진 리뷰 프리뷰 디스플레이
-        displayImageReviewPreview()
+        // phtoReviewList 업데이트
+        viewModel.updatePhotoReviewList()
+
+        // 사진리뷰 프리뷰 화면 초기설정
+        initImageReviewPreview()
 
         // 리사이클러뷰 초기 설정
         initRecycler()
@@ -106,7 +113,7 @@ class ReviewFragment : Fragment() {
 
     // 리사이클러뷰에 어댑터를 부착
     private fun initRecycler(){
-        binding.recyclerViewReview.adapter = ReviewAdapter(parentFragmentManager)
+        binding.recyclerViewReview.adapter = ReviewAdapter(parentFragmentManager, this)
         binding.recyclerViewReview.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
     }
 
@@ -132,28 +139,21 @@ class ReviewFragment : Fragment() {
         }
     }
 
-    private fun displayImageReviewPreview(){
-        lifecycleScope.launch {
-            val response = withContext(Dispatchers.IO){
-                try{
-                    RetrofitManager.service?.getImageReviewByPsId(viewModel.photoStudio.value!!._id)
-                }
-                catch (e : Throwable){
-                    listOf()
-                }
-            }
-            if(response.isNotEmpty()){
-                val preImage1 = response[0].image.toString()
+    private fun initImageReviewPreview(){
+        viewModel.photoReviewList.observe(viewLifecycleOwner, {
+            Log.e(TAG, "실행")
+            if(it.isNotEmpty()){
+                val preImage1 = it[0].image.toString()
                 Glide.with(binding.root.context)
                     .load(preImage1)
                     .into(binding.preImageView1)
             }
-            if(response.size >= 2){
-                val preImage2 = response[1].image.toString()
+            if(it.size >= 2){
+                val preImage2 = it[1].image.toString()
                 Glide.with(binding.root.context)
                     .load(preImage2)
                     .into(binding.preImageView2)
             }
-        }
+        })
     }
 }

@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -19,10 +21,12 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.yunjung.todaysrecord.MyApplication
 import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentDetailBinding
+import com.yunjung.todaysrecord.models.Review
 import com.yunjung.todaysrecord.ui.information.InformationFragment
 import com.yunjung.todaysrecord.network.RetrofitManager
 import com.yunjung.todaysrecord.ui.photostudioimg.PhotoStudioImgFragment
 import com.yunjung.todaysrecord.ui.review.ReviewFragment
+import com.yunjung.todaysrecord.ui.review.ReviewViewModel
 import com.yunjung.todaysrecord.viewpager.ViewpagerAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -87,7 +91,6 @@ class DetailFragment : Fragment(){
     private fun initImageViewPager(){
         imageViewPagerAdapter = ViewpagerAdapter(requireActivity())
         for(photoStudioImage in viewModel.photoStudio.value!!.image!!){
-            Log.e(TAG, photoStudioImage)
             imageViewPagerAdapter.addFragment(PhotoStudioImgFragment(photoStudioImage))
         }
         binding.imageViewPager.adapter = imageViewPagerAdapter

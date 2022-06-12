@@ -5,6 +5,7 @@ import android.util.Base64
 import android.view.*
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,12 +17,14 @@ import com.yunjung.todaysrecord.databinding.ItemReviewBinding
 import com.yunjung.todaysrecord.dialog.ReportDialogFragment
 import com.yunjung.todaysrecord.models.Review
 import com.yunjung.todaysrecord.network.RetrofitManager
+import com.yunjung.todaysrecord.ui.myreviews.MyreviewFragment
+import com.yunjung.todaysrecord.ui.review.ReviewFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ReviewAdapter(private val fm: FragmentManager) :
+class ReviewAdapter(private val fm: FragmentManager, private val fg : Fragment) :
     ListAdapter<Review, ReviewViewHolder>(ReviewDiff){
 
     // 뷰홀더가 생성 되었을 때 실행
@@ -33,7 +36,7 @@ class ReviewAdapter(private val fm: FragmentManager) :
         val layoutInflater = LayoutInflater.from(parent.context) // layoutInflater 초기화
         val binding = ItemReviewBinding.inflate(layoutInflater) // binding 초기화
 
-        return ReviewViewHolder(binding, fm)
+        return ReviewViewHolder(binding, fm, fg)
     }
 
     // 뷰와 뷰홀더가 묶였을 때 실행
@@ -55,7 +58,7 @@ class ReviewAdapter(private val fm: FragmentManager) :
 }
 
 // 뷰홀더 정의
-class ReviewViewHolder(private val binding : ItemReviewBinding, private val fm : FragmentManager) :
+class ReviewViewHolder(private val binding : ItemReviewBinding, private val fm : FragmentManager, private val fg : Fragment) :
     RecyclerView.ViewHolder(binding.root), PopupMenu.OnMenuItemClickListener {
 
     lateinit var review : Review
@@ -151,5 +154,8 @@ class ReviewViewHolder(private val binding : ItemReviewBinding, private val fm :
         else{
             Toast.makeText(binding.root.context, "권한이 없습니다.", Toast.LENGTH_SHORT).show()
         }
+
+        if(fg is ReviewFragment) fg.viewModel.updateReviewList()
+        if(fg is MyreviewFragment) fg.viewModel.updateReviewList()
     }
 }

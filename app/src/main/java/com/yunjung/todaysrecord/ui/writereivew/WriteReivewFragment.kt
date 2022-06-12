@@ -26,6 +26,7 @@ import com.yunjung.todaysrecord.R
 import com.yunjung.todaysrecord.databinding.FragmentWriteReviewBinding
 import com.yunjung.todaysrecord.network.RetrofitManager
 import com.yunjung.todaysrecord.network.api.RetrofitService
+import com.yunjung.todaysrecord.ui.detail.DetailFragmentDirections
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -39,6 +40,7 @@ import okhttp3.MultipartBody.Part.*
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okio.BufferedSink
+import retrofit2.Retrofit
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
@@ -110,8 +112,12 @@ class WriteReivewFragment : Fragment() {
                         content = content,
                         image = image)
                 }
-                // 뒤로가기
-                it.findNavController().navigateUp()
+
+                val photostudio = withContext(IO){
+                    RetrofitManager.service.getPhotostudioById(viewModel.psId.value)
+                }
+                val direction = DetailFragmentDirections.actionGlobalDetailFragment(photostudio)
+                it.findNavController().navigate(direction)
             }
         }
     }
