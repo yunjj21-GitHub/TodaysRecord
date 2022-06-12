@@ -1,7 +1,7 @@
 # 오늘의 기록
 
 ### 👀 Screen Preview
-![프리뷰](https://user-images.githubusercontent.com/83576096/160437366-3b057c06-8616-4f43-b33b-8e6d31620f31.PNG)
+![preview](https://user-images.githubusercontent.com/83576096/169955055-94c77bbf-6c44-41fe-a2ed-5287553e5408.PNG)
 
 ### 💡 Main Functions
 * 회원가입 및 로그인
@@ -10,30 +10,30 @@
 * 사진관 리뷰 작성
 * 사진관 이름 검색
 * 사용자의 현재위치에 기반한 인접 사진부스 검색
-* 리뷰 작성
 * 내 정보 관리
 
 ### 🔍 Details of Each Mian function
 
 #### 1. 회원가입 및 로그인
+* 약관 동의
 * 아이디 중복체크
 * 비밀번호 입력 확인
 * 프로필 이미지 등록 및 변경
 * KaKao, Naver, Google 로그인
 * 자동 로그인
 
-![1-1 (회원가입)](https://user-images.githubusercontent.com/83576096/160556188-e33ffe4e-d602-4859-87bd-b2f6025e7c4f.gif)
-![1-2 (로그인)](https://user-images.githubusercontent.com/83576096/160556628-6daaefc6-e9f4-4a2d-92f1-8371ff428654.gif)
+![signup](https://user-images.githubusercontent.com/83576096/169966436-a0ba9560-46b5-44b6-bfac-89c624e08715.gif)
+![signin](https://user-images.githubusercontent.com/83576096/169966883-8b0ef00c-3a45-4e1f-91ff-e93935a3a970.gif)
 
 #### 2. 지역별, 사진 유형별 사진관 검색 및 정렬
 
-![2 (지역, 사진유형별 사진관 검색 및 정렬)](https://user-images.githubusercontent.com/83576096/160557087-7aa6754d-40d7-4ead-9c63-acaf7e6842ea.gif)
+![home](https://user-images.githubusercontent.com/83576096/169961142-d925aa53-1947-4272-86f4-78db95b28759.gif)
 
 #### 3. 각 사진관 상세정보 안내
 * 찜하기
 * 공유하기
 
-![3 (각 사진관 상세정보 안내)](https://user-images.githubusercontent.com/83576096/160557225-c0642b55-bd1a-4e65-af4d-5c16788d89e1.gif)
+![detail](https://user-images.githubusercontent.com/83576096/169962045-c88ef46b-1ced-40ee-ad1e-ed0d224daa6b.gif)
 
 #### 4. 사진관 리뷰 작성
 * 리뷰 이미지 등록
@@ -45,7 +45,7 @@
 
 #### 5. 사진관 이름 검색
 
-![5 (사진관 이름 검색)](https://user-images.githubusercontent.com/83576096/160558382-124f86fb-73c6-450a-991c-228f518ff689.gif)
+![search](https://user-images.githubusercontent.com/83576096/169962667-55e880b8-0771-431a-a5b5-a5888e3feacd.gif)
 
 #### 6. 사용자의 현재위치에 기반한 인접 사진부스 검색
 
@@ -56,7 +56,7 @@
 * 찜한 사진관, 작성한 리뷰 관리
 * 로그아웃
 
-![7 (내 정보 관리)](https://user-images.githubusercontent.com/83576096/160559224-4d742938-d6b5-4e80-bb8a-6a4a8eee5a24.gif)
+![mypage](https://user-images.githubusercontent.com/83576096/169963845-02ca9e78-4d2a-4e23-8820-9251428031f4.gif)
 
 ---
 ### 📌 Tech Stack Used
@@ -80,3 +80,6 @@
 * Coroutine
 * Gson
 * Navar, KaKao, Google API
+
+---
+### 🔗 Google Play https://play.google.com/store/apps/details?id=com.yunjung.todaysrecord
