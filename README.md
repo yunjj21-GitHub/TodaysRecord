@@ -64,10 +64,10 @@
 * Kotlin
 * Amazon EC2
 * JavaScript
-* NodeJs
-* Express
+* Node.js
+* Express.js
 * MongoDB
-* Git
+* Github
 
 ### 📌 Architecture used
 * MVVM 
@@ -79,7 +79,7 @@
 * Retrofit2
 * Coroutine
 * Gson
-* Navar, KaKao, Google API
+* Navar, KaKao, Firebase API
 
 ---
 ### 🔗 Google Play https://play.google.com/store/apps/details?id=com.yunjung.todaysrecord
