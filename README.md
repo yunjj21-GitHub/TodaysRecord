@@ -63,8 +63,8 @@
 * Android
 * Kotlin
 * Amazon EC2
-* JavaScript
 * Node.js
+* JavaScript
 * Express.js
 * MongoDB
 * Github
